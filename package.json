@@ -1,0 +1,33 @@
+{
+  "name": "animaku",
+  "version": "1.0.0",
+  "description": "An anime/manga tracker web app",
+  "keywords": [
+    "postgres",
+    "api",
+    "nodejs",
+    "express",
+    "axios",
+    "javascript",
+    "anime",
+    "manga"
+  ],
+  "license": "ISC",
+  "author": "Chillie",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/server.js",
+    "build:css": "npx @tailwindcss/cli -i ./public/css/styles.css -o ./public/css/tailwind.css --watch"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.14",
+    "axios": "^1.12.2",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "tailwindcss": "^4.1.14"
+  }
+}
