@@ -1,1 +1,65 @@
 @import "tailwindcss";
+
+/* Font Face */
+@font-face {
+  font-family: "Rubik";
+  src: url("/fonts/Rubik-VariableFont_wght.ttf") format("truetype");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Rubik Italic";
+  src: url("/fonts/Rubik-Italic-VariableFont_wght.ttf") format("truetype");
+  font-style: italic;
+}
+
+/* Default Style */
+body {
+  background-color: #2e3440;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a {
+  font-family: "Rubik";
+  color: #eceff4;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Remix Icon */
+.ri-menu-line {
+  color: #eceff4;
+}
+
+/* Navbar Styles */
+.nav-container {
+  background-color: #3b4252;
+}
+
+.nav-item:hover {
+  background-color: #88c0d0;
+  color: #2e3440;
+}
+
+.btn-github {
+  background-color: #3b4252;
+  border: solid 2px #4c566a;
+}
+
+.btn-github:hover {
+  border-color: #88c0d0;
+  color: #88c0d0;
+}
+
+.btn-menu {
+  border: solid 2px #4c566a;
+}
