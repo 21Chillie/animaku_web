@@ -1,10 +1,12 @@
 <nav>
   <div
     class="nav-container flex justify-between items-center max-w-[1200px] w-auto mx-auto p-6 lg:rounded-3xl lg:mt-6 max-md:rounded-0 max-md:px-4 max-md:py-6">
+    <!-- Logo -->
     <div class="navbar-brand">
       <a href="/"><img class="w-auto h-full max-h-12" src="/images/animaku-logo.webp" alt="animaku logo" /></a>
     </div>
 
+    <!-- Desktop Nav -->
     <div class="hidden md:flex items-center gap-12">
       <ul class="nav-list flex gap-4">
         <li>
@@ -26,8 +28,30 @@
       </a>
     </div>
 
+    <!-- Mobile Hamburger Menu Button -->
     <button class="btn-menu px-2 md:hidden rounded-lg">
-      <i class="ri-menu-line ri-2x"></i>
+      <i class="menu-icon ri-menu-line ri-2x"></i>
     </button>
+  </div>
+
+  <div class="mobile-nav md:hidden max-md:hidden flex-col gap-4 px-4 py-4">
+    <ul class="flex flex-col gap-2 w-full">
+      <li>
+        <a href="/" class="block nav-item p-2 text-lg rounded-sm">Home</a>
+      </li>
+      <li>
+        <a href="/" class="block nav-item p-2 text-lg rounded-sm">Browse</a>
+      </li>
+      <li>
+        <a href="/" class="block nav-item p-2 text-lg rounded-sm">My List</a>
+      </li>
+    </ul>
+
+    <a href="https://github.com/21chillie" class="w-full">
+      <button class="btn-github flex gap-1 items-center px-3 rounded-lg w-full">
+        <i class="ri-github-fill ri-2x"></i>
+        <p class="text-lg">@21chillie</p>
+      </button>
+    </a>
   </div>
 </nav>
