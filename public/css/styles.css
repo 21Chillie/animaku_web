@@ -36,7 +36,8 @@ button {
 }
 
 /* Remix Icon */
-.ri-menu-line {
+.ri-menu-line,
+.ri-close-large-line {
   color: #eceff4;
 }
 
@@ -62,4 +63,13 @@ button {
 
 .btn-menu {
   border: solid 2px #4c566a;
+}
+
+/* Mobile Navbar */
+.mobile-nav {
+  background-color: #3b4252;
+}
+
+.mobile-nav {
+  height: 100%;
 }
