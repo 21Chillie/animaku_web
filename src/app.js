@@ -24,4 +24,14 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+app.get("/browse", (req, res) => {
+  res.render("browse", { inputSearch: null, inputType: null, inputCategory: null });
+});
+
+app.post("/browse", async (req, res) => {
+  const { inputSearch, inputType, inputCategory } = req.body;
+
+  res.render("browse", { inputSearch, inputType, inputCategory });
+});
+
 export default app;
