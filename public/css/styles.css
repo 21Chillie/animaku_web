@@ -73,3 +73,39 @@ button {
 .mobile-nav {
   height: 100%;
 }
+
+/* Hero Section */
+.hero-section {
+  background-image: url("/images/hero-image.webp");
+  background-size: cover;
+  background-position: center;
+}
+
+.image-overlay {
+  background-color: #2e343f;
+  opacity: 60%;
+}
+
+.hero-title-blue {
+  color: #88c0d0;
+}
+
+.btn-get-started {
+  background-color: #88c0d0;
+  color: #2e3440;
+}
+
+.btn-get-started:hover {
+  background-color: #94d0e0;
+}
+
+.btn-documentation {
+  background-color: #2e3440;
+  color: #eceff4;
+  border: solid 2px #4c566a;
+}
+
+.btn-documentation:hover {
+  color: #88c0d0;
+  border-color: #88c0d0;
+}
