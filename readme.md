@@ -15,4 +15,4 @@ This project is for learning purpose
 
 1. Finish hero section
    - [x] Navbar section
-   - [ ] Hero Title and description
+   - [x] Hero Title and description
