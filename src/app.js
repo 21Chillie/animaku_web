@@ -9,6 +9,7 @@ const app = express();
 // Helpers for __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const API_URL = "https://kitsu.io/api/edge/";
 
 // Middlewares
 app.use(express.json());
@@ -25,13 +26,39 @@ app.get("/", (req, res) => {
 });
 
 app.get("/browse", (req, res) => {
-  res.render("browse", { inputSearch: null, inputType: null, inputCategory: null });
+  res.render("browse", { animeDataResult: null });
 });
 
-app.post("/browse", async (req, res) => {
+app.post(`/result`, async (req, res) => {
   const { inputSearch, inputType, inputCategory } = req.body;
 
-  res.render("browse", { inputSearch, inputType, inputCategory });
+  let config = {
+    params: {
+      "filter[text]": inputSearch,
+      "filter[subtype]": inputType,
+      "page[limit]": 10,
+    },
+    timeout: 1000,
+  };
+
+  try {
+    const response = await axios.get(`${API_URL}/${inputCategory}`, config);
+
+    const animeDataResult = response.data.data.map((item) => ({
+      id: item.id,
+      title: item.attributes.canonicalTitle,
+      rating: item.attributes.averageRating,
+      episode: item.attributes.episodeCount || item.attributes.chapterCount,
+      type: item.attributes.subtype.toUpperCase(),
+      cover: item.attributes.posterImage.small || "/images/no-img-placeholder.webp",
+      category: inputCategory,
+    }));
+
+    res.render("browse", { animeDataResult });
+  } catch (err) {
+    console.error("Fetch error:", err.message);
+    res.status(500).json({ error: "Oops something went wrong!", err });
+  }
 });
 
 export default app;
