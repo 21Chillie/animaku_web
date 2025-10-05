@@ -21,4 +21,10 @@ This project is for learning purpose
 2. Finish browse anime/manga page
    - [x] Design the page
    - [x] Develop the page
-   - [ ] Page function working
+   - [x] Page function working
+   - [x] Anime result search function is finish
+
+## API
+
+https://kitsu.docs.apiary.io/
+https://docs.api.jikan.moe/
