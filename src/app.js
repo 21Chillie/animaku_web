@@ -29,7 +29,7 @@ app.get("/browse", (req, res) => {
   res.render("browse", { animeDataResult: null });
 });
 
-app.post(`/result`, async (req, res) => {
+app.post(`/browse`, async (req, res) => {
   const { inputSearch, inputType, inputCategory } = req.body;
 
   let config = {
@@ -59,6 +59,13 @@ app.post(`/result`, async (req, res) => {
     console.error("Fetch error:", err.message);
     res.status(500).json({ error: "Oops something went wrong!", err });
   }
+});
+
+app.get("/anime/:id", async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+
+  res.render("anime-data");
 });
 
 export default app;
