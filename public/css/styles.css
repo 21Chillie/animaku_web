@@ -11,6 +11,7 @@
   font-family: "Rubik Italic";
   src: url("/fonts/Rubik-Italic-VariableFont_wght.ttf") format("truetype");
   font-style: italic;
+  font-display: auto;
 }
 
 /* Default Style */
