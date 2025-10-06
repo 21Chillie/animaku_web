@@ -24,6 +24,9 @@ This project is for learning purpose
    - [x] Page function working
    - [x] Anime result search function is finish
 
+3. Finish anime overview page
+   - [] Design the page
+
 ## API
 
 https://kitsu.docs.apiary.io/
