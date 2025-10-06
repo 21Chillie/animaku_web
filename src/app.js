@@ -65,7 +65,7 @@ app.get("/anime/:id", async (req, res) => {
   const id = req.params.id;
   console.log(id);
 
-  res.render("anime-data");
+  res.render("anime-overview");
 });
 
 export default app;
