@@ -21,13 +21,13 @@
     <header><%- include('partials/navbar.ejs') %></header>
 
     <main>
-      <section class="w-screen max-w-screen-xl mx-auto my-12 px-6 xl:px-0 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <section class="w-screen max-w-screen-xl mx-auto my-6 md:my-12 px-6 xl:px-0 grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- LEFT PANEL -->
         <div>
           <div class="panel p-6 rounded-xl shadow-md">
             <h2 class="text-2xl font-semibold mb-4">Search Anime / Manga</h2>
 
-            <form action="/result" method="post">
+            <form action="/browse" method="post">
               <!-- Search Input -->
               <div class="mb-4">
                 <label class="block text-gray-300 mb-2">Title</label>
@@ -71,10 +71,10 @@
           <h2 class="text-2xl font-semibold mb-4 text-white">Results</h2>
 
           <!-- Card Grid -->
-          <div class="grid grid-cols-3 sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
             <!-- Card Result -->
             <% if (!animeDataResult) { %>
-            <p>The search result will be shown here.</p>
+            <p class="col-span-3 sm:col-span-2">The search result will be shown here.</p>
             <% } else { %> <% animeDataResult.forEach(item => {%>
             <article>
               <a href="/<%= item.category %>/<%= item.id %>">
