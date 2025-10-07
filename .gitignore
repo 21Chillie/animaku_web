@@ -1,6 +1,8 @@
 # User added
 .env
 tailwind.css
+.prettierignore
+.prettierrc
 
 # Logs
 logs
