@@ -8,7 +8,10 @@
     <link rel="shortcut icon" href="/images/icons/favicon.ico" type="image/x-icon" />
 
     <!-- Remix Icon -->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
 
     <!-- CSS Stuff -->
     <link rel="stylesheet" href="/css/tailwind.css" />
@@ -21,7 +24,9 @@
     <header><%- include('partials/navbar.ejs') %></header>
 
     <main>
-      <section class="w-screen max-w-screen-xl mx-auto my-6 md:my-12 px-6 xl:px-0 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <section
+        class="w-screen max-w-screen-xl mx-auto my-6 md:my-12 px-4 xl:px-0 grid grid-cols-1 md:grid-cols-2 gap-6"
+      >
         <!-- LEFT PANEL -->
         <div>
           <div class="panel p-6 rounded-xl shadow-md">
@@ -36,13 +41,18 @@
                   placeholder="Search title..."
                   class="search-input w-full p-3 rounded-md text-white outline-none"
                   name="inputSearch"
-                  required />
+                  required
+                />
               </div>
 
               <!-- Dropdown: Category -->
               <div class="mb-4">
                 <label class="block text-gray-300 mb-2">Category</label>
-                <select id="filter-category" class="dropdown-input w-full p-3 rounded-md text-white outline-none" name="inputCategory">
+                <select
+                  id="filter-category"
+                  class="dropdown-input w-full p-3 rounded-md text-white outline-none"
+                  name="inputCategory"
+                >
                   <option value="anime">Anime</option>
                   <option value="manga">Manga</option>
                 </select>
@@ -51,7 +61,11 @@
               <!-- Dropdown: Type -->
               <div class="mb-4">
                 <label class="block text-gray-300 mb-2">Type</label>
-                <select id="filter-type" class="dropdown-input w-full p-3 rounded-md text-white outline-none" name="inputType">
+                <select
+                  id="filter-type"
+                  class="dropdown-input w-full p-3 rounded-md text-white outline-none"
+                  name="inputType"
+                >
                   <option value="TV">TV</option>
                   <option value="movie">Movie</option>
                   <option value="OVA">OVA</option>
@@ -61,7 +75,12 @@
               </div>
 
               <!-- Search Button -->
-              <button class="btn-search w-full transition-colors p-3 rounded-md font-semibold" type="submit">Search</button>
+              <button
+                class="btn-search w-full transition-colors p-3 rounded-md font-semibold"
+                type="submit"
+              >
+                Search
+              </button>
             </form>
           </div>
         </div>
@@ -75,15 +94,24 @@
             <!-- Card Result -->
             <% if (!animeDataResult) { %>
             <p class="col-span-3 sm:col-span-2">The search result will be shown here.</p>
-            <% } else { %> <% animeDataResult.forEach(item => {%>
+            <% } else { %>
+            <% animeDataResult.forEach(item => {%>
             <article>
               <a href="/<%= item.category %>/<%= item.id %>">
-                <div class="bg-[#1f232c] p-3 rounded-lg shadow hover:scale-105 transition-transform flex flex-col">
+                <div
+                  class="bg-[#1f232c] p-3 rounded-lg shadow hover:scale-105 transition-transform flex flex-col"
+                >
                   <div class="w-full aspect-[3/4] overflow-hidden rounded-md mb-2">
-                    <img src="<%= item.cover %>" alt="<%= item.title %> cover image" class="w-full h-full object-cover" />
+                    <img
+                      src="<%= item.cover %>"
+                      alt="<%= item.title %> cover image"
+                      class="w-full h-full object-cover"
+                    />
                   </div>
                   <h3 class="text-white font-medium text-sm truncate"><%= item.title %></h3>
-                  <p class="text-gray-400 text-xs"><%= item.type %> • <%= item.episode || 'N/A' %></p>
+                  <p class="text-gray-400 text-xs">
+                    <%= item.type %> • <%= item.episode || 'N/A' %>
+                  </p>
                   <p class="text-gray-400 text-xs">Scored: <%= item.rating || 'N/A' %></p>
                 </div>
               </a>
