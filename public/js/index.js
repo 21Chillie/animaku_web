@@ -19,7 +19,6 @@ menuBtn.addEventListener("click", () => {
 });
 
 // Change options on type dropdown by category selected
-
 const categorySelect = document.querySelector("#filter-category");
 const typeSelect = document.querySelector("#filter-type");
 
