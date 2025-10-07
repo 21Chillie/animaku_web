@@ -27,34 +27,63 @@
   <body>
     <header><%- include('partials/navbar.ejs') %></header>
 
-    <main class="mx-auto my-6 w-screen max-w-screen-xl md:my-12">
-      <section class="anime-title p-4 xl:p-0">
-        <div
-          class="cover-and-cta flex flex-col items-stretch gap-4 rounded-xl bg-[#3b4252] p-4 shadow-md sm:flex-row"
-        >
-          <!-- Image -->
-          <div class="w-full flex-shrink-0 sm:w-1/3">
-            <img
-              class="aspect-3/4 h-full w-full rounded-md object-cover"
-              src="https://media.kitsu.app/anime/poster_images/7442/small.jpg"
-              alt="anime cover"
-            />
+    <main class="mx-auto my-4 w-screen max-w-screen-xl lg:my-12">
+      <section id="anime-title" class="p-4 xl:p-0">
+        <div class="anime-title-container flex flex-col md:flex-row gap-4">
+          <!-- Cover & Action Button -->
+          <div
+            class="bg-[#3b4252] p-6 rounded-xl shadow-md flex flex-col gap-4 shrink-0"
+          >
+            <!-- Title on mobile, hidden when viewport > 768px -->
+            <div class="title md:hidden">
+              <h1 class="font-semibold text-xl text-[#eceff4]">
+                Attack On Titan
+              </h1>
+            </div>
+            <div class="cover">
+              <!-- Cover Image -->
+              <img
+                class="aspect-3/4 h-full w-full rounded-md object-cover"
+                src="https://media.kitsu.app/anime/poster_images/7442/small.jpg"
+                alt="anime cover"
+              />
+            </div>
+
+            <!-- Button Action -->
+            <div class="actions">
+              <button
+                class="self-start rounded-md bg-[#88c0d0] px-4 py-2 font-medium text-[#3b4252] hover:bg-[#94d0e0] transition-colors w-full"
+              >
+                Add to List
+              </button>
+            </div>
           </div>
 
-          <!-- Right Side: Title + Button -->
-          <div class="flex w-full flex-col justify-between">
-            <h3 class="mb-4 text-lg font-semibold text-white sm:mb-2">
-              Title goes here
-            </h3>
+          <!-- Title & Description -->
+          <div class="bg-[#3b4252] p-6 rounded-xl shadow-md">
+            <!-- Title -->
+            <h1 class="font-semibold text-xl text-[#eceff4] max-md:hidden">
+              Attack On Titan
+            </h1>
+            <h1 class="font-semibold text-xl text-[#eceff4] md:hidden">
+              Description
+            </h1>
 
-            <button
-              class="self-start rounded-md bg-[#88c0d0] px-4 py-2 font-medium text-gray-900 transition-colors hover:bg-[#81a1c1]"
+            <!-- Synopsis -->
+            <div
+              class="mt-2 text-gray-300 text-sm leading-relaxed text-justify"
             >
-              ➕ Add to List
-            </button>
+              <p
+                class="max-h-[20rem] md:max-h-[24rem] overflow-y-auto pr-4 lg:pr-16 scrollbar-thin scrollbar-thumb-[#4c566a] scrollbar-track-[#3b4252]"
+              >
+                <%- synopsis %>
+              </p>
+            </div>
           </div>
         </div>
       </section>
+
+      <section id="meta"></section>
     </main>
   </body>
 </html>
