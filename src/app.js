@@ -38,7 +38,6 @@ app.post(`/browse`, async (req, res) => {
       "filter[subtype]": inputType,
       "page[limit]": 10,
     },
-    timeout: 1000,
   };
 
   try {
