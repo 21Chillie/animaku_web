@@ -14,7 +14,6 @@ This project is for learning purpose
 ## Todo List
 
 1. Finish hero section
-
    - [x] Navbar section
    - [x] Hero Title and description
 
@@ -25,7 +24,11 @@ This project is for learning purpose
    - [x] Anime result search function is finish
 
 3. Finish anime overview page
-   - [] Design the page
+   - [x] Design title and description layout section
+   - [ ] Design layout of meta info section
+   - [ ] Design layout of anime title relation section
+   - [ ] Design layout of anime character
+   - [ ] Design layout of anime trailer and maybe add youtube embed
 
 ## API
 
