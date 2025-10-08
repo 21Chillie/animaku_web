@@ -30,25 +30,26 @@
     <main
       class="mx-auto my-4 w-screen max-w-screen-xl lg:my-12 flex flex-col gap-4"
     >
-      <!-- ANIME TITLE & COVER -->
+      <!-- ANIME TITLE & POSTER -->
       <section id="anime-title" class="px-4 pt-2 xl:p-0">
         <div class="anime-title-container flex flex-col md:flex-row gap-4">
-          <!-- Cover & Action Button -->
+          <!-- Poster & Action Button -->
           <div
             class="bg-[#3b4252] p-6 rounded-xl shadow-md flex flex-col gap-4 shrink-0"
           >
             <!-- Title on mobile, hidden when viewport > 768px -->
             <div class="title md:hidden">
               <h1 class="font-semibold text-xl text-[#eceff4]">
-                Attack On Titan
+                <%= animeTitle.title %>
               </h1>
             </div>
-            <div class="cover">
-              <!-- Cover Image -->
+
+            <!-- Poster Image -->
+            <div class="poster">
               <img
                 class="aspect-3/4 h-full w-full rounded-md object-cover"
-                src="https://media.kitsu.app/anime/poster_images/7442/small.jpg"
-                alt="anime cover"
+                src="<%= animeTitle.poster %>"
+                alt="<%= animeTitle.title %> poster"
               />
             </div>
 
@@ -66,7 +67,7 @@
           <div class="bg-[#3b4252] p-6 rounded-xl shadow-md">
             <!-- Title -->
             <h1 class="font-semibold text-xl text-[#eceff4] max-md:hidden">
-              Attack On Titan
+              <%= animeTitle.title %>
             </h1>
             <h1 class="font-semibold text-xl text-[#eceff4] md:hidden">
               Description
@@ -79,7 +80,7 @@
               <p
                 class="max-h-[20rem] md:max-h-[24rem] overflow-y-auto pr-4 lg:pr-16 scrollbar-thin scrollbar-thumb-[#4c566a] scrollbar-track-[#3b4252]"
               >
-                <%- synopsis %>
+                <%- animeTitle.synopsis %>
               </p>
             </div>
           </div>
@@ -94,63 +95,62 @@
             <!-- Type -->
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Type:</p>
-              <p class="text-[#eceff4]">TV</p>
-            </div>
-
-            <!-- Genre -->
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Genres:</p>
-              <p class="text-[#eceff4]">Action, Drama, Fantasy</p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Episodes:</p>
-              <p class="text-[#eceff4]">87</p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Episode Length:</p>
-              <p class="text-[#eceff4]">24 min</p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Start Date:</p>
-              <p class="text-[#eceff4]">2013-04-07</p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">End Date:</p>
-              <p class="text-[#eceff4]">2023-11-05</p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Status:</p>
-              <p class="text-[#eceff4]">Finished</p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Average Rating:</p>
-              <p class="text-[#eceff4]">94%</p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Rating Rank:</p>
-              <p class="text-[#eceff4]">#1</p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Popularity Rank:</p>
-              <p class="text-[#eceff4]">#2</p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">User Count:</p>
-              <p class="text-[#eceff4]">3.2M</p>
+              <p class="text-[#eceff4]"><%= metaInfo.type %></p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Age Rating:</p>
-              <p class="text-[#eceff4]">R - Violence, Profanity</p>
+              <p class="text-[#eceff4]"><%= metaInfo.ageRating %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Episodes:</p>
+              <p class="text-[#eceff4]"><%= metaInfo.episode %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Episode Length:</p>
+              <p class="text-[#eceff4]"><%= metaInfo.episodeLength %> min</p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Start Date:</p>
+              <p class="text-[#eceff4]"><%= metaInfo.startDate %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">End Date:</p>
+              <p class="text-[#eceff4]"><%= metaInfo.endDate %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Status:</p>
+              <p class="text-[#eceff4]"><%= metaInfo.status %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Average Rating:</p>
+              <p class="text-[#eceff4]"><%= metaInfo.avgRating %>%</p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Rating Rank:</p>
+              <p class="text-[#eceff4]">#<%= metaInfo.ratingRank %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">User Count:</p>
+              <p class="text-[#eceff4]"><%= metaInfo.userCount %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Popularity Rank:</p>
+              <p class="text-[#eceff4]">#<%= metaInfo.popularityRank %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Genres:</p>
+              <p class="text-[#eceff4]"><%= metaInfo.genres %></p>
             </div>
           </div>
         </div>
