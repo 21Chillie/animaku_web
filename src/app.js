@@ -34,7 +34,7 @@ app.post(`/browse`, async (req, res) => {
 
   let config = {
     params: {
-      "filter[text]": inputSearch,
+      "filter[text]": inputSearch.toLowerCase(),
       "filter[subtype]": inputType,
       "page[limit]": 10,
     },
@@ -45,11 +45,13 @@ app.post(`/browse`, async (req, res) => {
 
     const animeDataResult = response.data.data.map((item) => ({
       id: item.id,
-      title: item.attributes.canonicalTitle,
-      rating: item.attributes.averageRating,
-      episode: item.attributes.episodeCount || item.attributes.chapterCount,
-      type: item.attributes.subtype.toUpperCase(),
-      cover: item.attributes.posterImage.small || "/images/no-img-placeholder.webp",
+      title: item.attributes.canonicalTitle || "N/A",
+      rating: item.attributes.averageRating || "N/A",
+      episode:
+        item.attributes.episodeCount || item.attributes.chapterCount || "N/A",
+      type: item.attributes.subtype.toUpperCase() || "NA",
+      cover:
+        item.attributes.posterImage.small || "/images/no-img-placeholder.webp",
       category: inputCategory,
     }));
 
@@ -61,13 +63,101 @@ app.post(`/browse`, async (req, res) => {
 });
 
 app.get("/anime/:id", async (req, res) => {
+  // Anime ID
   const id = req.params.id;
-  console.log(id);
 
-  const synopsis =
-    "Centuries ago, mankind was slaughtered to near extinction by monstrous humanoid creatures called titans, forcing humans to hide in fear behind enormous concentric walls. What makes these giants truly terrifying is that their taste for human flesh is not born out of hunger but what appears to be out of pleasure. To ensure their survival, the remnants of humanity began living within defensive barriers, resulting in one hundred years without a single titan encounter. However, that fragile calm is soon shattered when a colossal titan manages to breach the supposedly impregnable outer wall, reigniting the fight for survival against the man-eating abominations.\n\nAfter witnessing a horrific personal loss at the hands of the invading creatures, Eren Yeager dedicates his life to their eradication by enlisting into the Survey Corps, an elite military unit that combats the merciless humanoids outside the protection of the walls. Based on Hajime Isayama's award-winning manga, Shingeki no Kyojin follows Eren, along with his adopted sister Mikasa Ackerman and his childhood friend Armin Arlert, as they join the brutal war against the titans and race to discover a way of defeating them before the last walls are breached.\n\n(Source: MAL Rewrite)";
+  // Fetch anime data by ID
+  const response = await axios.get(`${API_URL}/anime/${id}`);
 
-  res.render("anime-overview", { synopsis: synopsis.replace(/\n\n/g, "<br><br>") });
+  const synopsisReplace =
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+
+  try {
+    // Function For fetching data For Title, Poster, Synopsis
+    const animeTitle = () => {
+      const item = response.data.data;
+
+      const data = {
+        id: item.id,
+        title: item.attributes.canonicalTitle || "N/A",
+        poster:
+          item.attributes.posterImage.small ||
+          "/images/no-img-placeholder.webp",
+        synopsis:
+          item.attributes.synopsis.replace(/\n\n/g, "<br><br>") ||
+          synopsisReplace,
+      };
+
+      return data;
+    };
+
+    // Function fetching data for Meta Info
+    const metaInfo = async () => {
+      const item = response.data.data;
+
+      // Format Status Data
+      const status =
+        item.attributes.status.charAt(0).toUpperCase() +
+        item.attributes.status.slice(1);
+
+      // Fetch genres data
+      const genreResponse = await axios.get(
+        `${API_URL}/anime/${id}/categories`,
+      );
+
+      try {
+        // Push genres name into array
+        const genres = genreResponse.data.data.map(
+          (genre) => genre.attributes.title,
+        );
+
+        const data = {
+          animeId: item.id,
+          type: item.attributes.subtype || "N/A",
+          ageRating: `${item.attributes.ageRating || "N/A"} - ${item.attributes.ageRatingGuide || "N/A"}`,
+          episode: item.attributes.episodeCount || "-",
+          episodeLength: item.attributes.episodeLength || "-",
+          startDate: item.attributes.startDate || "-",
+          endDate: item.attributes.endDate || "-",
+          status: status || "N/A",
+          avgRating: item.attributes.averageRating || "-",
+          ratingRank: item.attributes.ratingRank || "-",
+          userCount: item.attributes.userCount || "-",
+          popularityRank: item.attributes.popularityRank || "-",
+          genres: genres.join(", ") || "-",
+        };
+
+        return data;
+      } catch {
+        console.log("Error fetch genre data!");
+      }
+    };
+
+    // Function for fetching anime relation data
+    const animeRelation = async () => {
+      const relationResponse = await axios.get(
+        `${API_URL}/anime/${id}/media-relationships`,
+        {
+          params: {
+            "filter[role]":
+              "adaptation,prequel,sequel,parent_story,side_story,spinoff",
+          },
+        },
+      );
+
+      return relationResponse.data.data;
+    };
+
+    console.log(await animeRelation());
+
+    res.render("anime-overview", {
+      animeTitle: animeTitle(),
+      metaInfo: await metaInfo(),
+    });
+  } catch (err) {
+    console.error("Fetch error:", err.message);
+    res.status(500).json({ error: "Oops something went wrong!", err });
+  }
 });
 
 export default app;
