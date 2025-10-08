@@ -25,10 +25,10 @@ This project is for learning purpose
 
 3. Finish anime overview page
    - [x] Design title and description layout section
-   - [ ] Design layout of meta info section
-   - [ ] Design layout of anime title relation section
-   - [ ] Design layout of anime character
-   - [ ] Design layout of anime trailer and maybe add youtube embed
+   - [x] Design layout of meta info section
+   - [x] Design layout of anime title relation section
+   - [x] Design layout of anime character
+   - [x] Design layout of anime trailer and maybe add youtube embed
 
 ## API
 
