@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import axios from "axios";
+import axios, { all } from "axios";
 import pool from "./db.js";
 
 const app = express();
@@ -20,15 +20,17 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 
-// Routes
+// Home Routes
 app.get("/", (req, res) => {
   res.render("index");
 });
 
+// Browse Routes
 app.get("/browse", (req, res) => {
   res.render("browse", { animeDataResult: null });
 });
 
+// Browser Result Routes
 app.post(`/browse`, async (req, res) => {
   const { inputSearch, inputType, inputCategory } = req.body;
 
@@ -45,13 +47,14 @@ app.post(`/browse`, async (req, res) => {
 
     const animeDataResult = response.data.data.map((item) => ({
       id: item.id,
+      type: item.type,
       title: item.attributes.canonicalTitle || "N/A",
       rating: item.attributes.averageRating || "N/A",
       episode:
         item.attributes.episodeCount || item.attributes.chapterCount || "N/A",
-      type: item.attributes.subtype.toUpperCase() || "NA",
+      subType: item.attributes.subtype.toUpperCase() || "NA",
       cover:
-        item.attributes.posterImage.small || "/images/no-img-placeholder.webp",
+        item.attributes.posterImage.tiny || "/images/no-img-placeholder.webp",
       category: inputCategory,
     }));
 
@@ -62,30 +65,32 @@ app.post(`/browse`, async (req, res) => {
   }
 });
 
-app.get("/anime/:id", async (req, res) => {
-  // Anime ID
+// Animaku Overview Routes
+app.get("/overview/:type/:id", async (req, res) => {
+  // Media ID
   const id = req.params.id;
 
-  // Fetch anime data by ID
-  const response = await axios.get(`${API_URL}/anime/${id}`);
-
-  const synopsisReplace =
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+  // Media type
+  const type = req.params.type;
 
   try {
+    // Fetch media data by ID
+    const response = await axios.get(`${API_URL}/${type}/${id}`);
+
     // Function For fetching data For Title, Poster, Synopsis
     const animeTitle = () => {
       const item = response.data.data;
 
       const data = {
         id: item.id,
+        type: item.type,
         title: item.attributes.canonicalTitle || "N/A",
         poster:
           item.attributes.posterImage.small ||
           "/images/no-img-placeholder.webp",
         synopsis:
           item.attributes.synopsis.replace(/\n\n/g, "<br><br>") ||
-          synopsisReplace,
+          "This anime currently does not have a synopsis available. Check back later for updates or explore other details about the series.",
       };
 
       return data;
@@ -96,13 +101,13 @@ app.get("/anime/:id", async (req, res) => {
       const item = response.data.data;
 
       // Format Status Data
-      const status =
+      const statusFormat =
         item.attributes.status.charAt(0).toUpperCase() +
         item.attributes.status.slice(1);
 
       // Fetch genres data
       const genreResponse = await axios.get(
-        `${API_URL}/anime/${id}/categories`,
+        `${API_URL}/${type}/${id}/categories`,
       );
 
       try {
@@ -119,40 +124,112 @@ app.get("/anime/:id", async (req, res) => {
           episodeLength: item.attributes.episodeLength || "-",
           startDate: item.attributes.startDate || "-",
           endDate: item.attributes.endDate || "-",
-          status: status || "N/A",
+          status: statusFormat || "N/A",
           avgRating: item.attributes.averageRating || "-",
           ratingRank: item.attributes.ratingRank || "-",
           userCount: item.attributes.userCount || "-",
           popularityRank: item.attributes.popularityRank || "-",
           genres: genres.join(", ") || "-",
+          youtubeId: item.attributes.youtubeVideoId,
         };
 
         return data;
-      } catch {
-        console.log("Error fetch genre data!");
+      } catch (err) {
+        console.error(`Error fetch genre data! ${data.animeID}: `, err);
+        return null;
       }
     };
 
-    // Function for fetching anime relation data
+    // Function for fetching media relation data
     const animeRelation = async () => {
+      // Fetch data for anime relation based on anime id
       const relationResponse = await axios.get(
-        `${API_URL}/anime/${id}/media-relationships`,
+        `${API_URL}/${type}/${id}/media-relationships`,
         {
           params: {
-            "filter[role]":
-              "adaptation,prequel,sequel,parent_story,side_story,spinoff",
+            "filter[role]": "adaptation,prequel,sequel,parent_story,side_story",
+            sort: "role",
           },
         },
       );
+      // Store each id and role in array object
+      const relationData = relationResponse.data.data.map((item) => ({
+        id: item.id,
+        role: item.attributes.role,
+      }));
 
-      return relationResponse.data.data;
+      // Loop based on each id from relationData variable and fetch response destination
+      const destinationData = await Promise.all(
+        relationData.map(async (relation) => {
+          try {
+            const destResponse = await axios.get(
+              `${API_URL}/media-relationships/${relation.id}/relationships/destination`,
+            );
+
+            const dest = destResponse.data.data;
+
+            // Store each role, id, and type
+            return {
+              role: relation.role,
+              id: dest.id,
+              type: dest.type,
+            };
+          } catch (err) {
+            console.error(
+              `Error fetching destination for ${relation.id}: `,
+              err,
+            );
+            return null;
+          }
+        }),
+      );
+
+      // Loop based on each type (manga/anime) and id from destinationData variable and fetch response anime/manga data
+      const findAnimeData = await Promise.all(
+        destinationData.map(async (data) => {
+          try {
+            const response = await axios.get(
+              `${API_URL}/${data.type}/${data.id}`,
+            );
+
+            const item = response.data.data;
+
+            // Format subtype data
+            const subTypeFormat =
+              item.attributes.subtype.charAt(0).toUpperCase() +
+              item.attributes.subtype.slice(1);
+
+            // Format role data
+            const roleFormat =
+              data.role.charAt(0).toUpperCase() +
+              data.role.slice(1).replace("_", " ");
+
+            // Save each id, type, subtype, title, poster, and role
+            return {
+              animeid: id,
+              relationId: item.id,
+              type: item.type,
+              subtype: subTypeFormat,
+              title: item.attributes.canonicalTitle,
+              poster:
+                item.attributes.posterImage?.tiny ||
+                "/images/no-img-placeholder.webp",
+              role: roleFormat,
+            };
+          } catch (err) {
+            console.error(`Error fetching anime data for ${data.id}: `, err);
+            return null;
+          }
+        }),
+      );
+
+      return findAnimeData;
     };
 
-    console.log(await animeRelation());
-
-    res.render("anime-overview", {
+    res.render("animaku-overview", {
       animeTitle: animeTitle(),
       metaInfo: await metaInfo(),
+      animeRelation: await animeRelation(),
     });
   } catch (err) {
     console.error("Fetch error:", err.message);
