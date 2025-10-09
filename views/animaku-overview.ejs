@@ -162,20 +162,20 @@
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <!-- Relation Card -->
           <% if (animeRelation && animeRelation.length > 0) {%>
-          <%animeRelation.forEach(item => { %>
-          <a href="/overview/<%= item.type %>/<%= item.relationId %>">
+          <%animeRelation.forEach(rel => { %>
+          <a href="/overview/<%= rel.type %>/<%= rel.relationId %>">
             <div
               class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
             >
               <img
-                src="<%= item.poster %>"
-                alt="<%= item.title %> poster"
+                src="<%= rel.poster %>"
+                alt="<%= rel.title %> poster"
                 class="w-16 h-24 object-cover rounded-md"
               />
               <div>
-                <h3 class="text-[#eceff4] font-semibold"><%= item.title %></h3>
+                <h3 class="text-[#eceff4] font-semibold"><%= rel.title %></h3>
                 <p class="text-gray-400 text-sm">
-                  <%= item.subtype %> – <%= item.role %>
+                  <%= rel.subtype %> – <%= rel.role %>
                 </p>
               </div>
             </div>
@@ -189,56 +189,27 @@
       <section id="character" class="px-4 xl:px-0">
         <h2 class="text-xl font-semibold text-[#eceff4] mb-3">Character</h2>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <!-- Character 1 -->
-          <a href="/">
+          <% if (animakuCharacter && animakuCharacter.length > 0) { %>
+          <%animakuCharacter.forEach(char => { %>
+          <a href="/character/<%= char.id %>">
             <div
               class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
             >
               <img
-                src="https://media.kitsu.app/character/38506/image/small-e2f62f20c549e3b0701065e874ed3bce.jpeg"
-                alt="Attack on Titan: No Regrets"
+                src="<%= char.image %>"
+                alt="<%= char.name %> image"
                 class="w-16 h-24 object-cover rounded-md"
               />
               <div>
-                <h3 class="text-[#eceff4] font-semibold">Armin Arlert</h3>
-                <p class="text-gray-400 text-sm">Main</p>
+                <h3 class="text-[#eceff4] font-semibold"><%= char.name %></h3>
+                <h3 class="text-[#eceff4] font-semibold">
+                  <%= char.japanName %>
+                </h3>
+                <p class="text-gray-400 text-sm"><%= char.role %></p>
               </div>
             </div>
           </a>
-
-          <!-- Character 2 -->
-          <a href="/">
-            <div
-              class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
-            >
-              <img
-                src="https://media.kitsu.app/character/38506/image/small-e2f62f20c549e3b0701065e874ed3bce.jpeg"
-                alt="Attack on Titan: No Regrets"
-                class="w-16 h-24 object-cover rounded-md"
-              />
-              <div>
-                <h3 class="text-[#eceff4] font-semibold">Armin Arlert</h3>
-                <p class="text-gray-400 text-sm">Main</p>
-              </div>
-            </div>
-          </a>
-
-          <!-- Character 3 -->
-          <a href="/">
-            <div
-              class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
-            >
-              <img
-                src="https://media.kitsu.app/character/38506/image/small-e2f62f20c549e3b0701065e874ed3bce.jpeg"
-                alt="Attack on Titan: No Regrets"
-                class="w-16 h-24 object-cover rounded-md"
-              />
-              <div>
-                <h3 class="text-[#eceff4] font-semibold">Armin Arlert</h3>
-                <p class="text-gray-400 text-sm">Main</p>
-              </div>
-            </div>
-          </a>
+          <% })} %>
         </div>
       </section>
 
@@ -252,7 +223,6 @@
               src="https://www.youtube.com/embed/<%= metaInfo.youtubeId %>"
               title="Attack on Titan Trailer"
               frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
             ></iframe>
           </div>
