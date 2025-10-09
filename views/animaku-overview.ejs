@@ -95,7 +95,7 @@
             <!-- Type -->
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Type:</p>
-              <p class="text-[#eceff4]"><%= metaInfo.type %></p>
+              <p class="text-[#eceff4]"><%= metaInfo.type.toUpperCase() %></p>
             </div>
 
             <div class="flex flex-col gap-1">
@@ -160,62 +160,28 @@
       <section id="relation" class="px-4 xl:px-0">
         <h2 class="text-xl font-semibold text-[#eceff4] mb-3">Relations</h2>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <!-- Relation 1 -->
-          <a href="/">
+          <!-- Relation Card -->
+          <% if (animeRelation && animeRelation.length > 0) {%>
+          <%animeRelation.forEach(item => { %>
+          <a href="/overview/<%= item.type %>/<%= item.relationId %>">
             <div
               class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
             >
               <img
-                src="https://cdn.myanimelist.net/images/anime/10/47347.jpg"
-                alt="Attack on Titan: No Regrets"
+                src="<%= item.poster %>"
+                alt="<%= item.title %> poster"
                 class="w-16 h-24 object-cover rounded-md"
               />
               <div>
-                <h3 class="text-[#eceff4] font-semibold">
-                  Attack on Titan: No Regrets
-                </h3>
-                <p class="text-gray-400 text-sm">OVA – Prequel</p>
+                <h3 class="text-[#eceff4] font-semibold"><%= item.title %></h3>
+                <p class="text-gray-400 text-sm">
+                  <%= item.subtype %> – <%= item.role %>
+                </p>
               </div>
             </div>
           </a>
-
-          <!-- Relation 2 -->
-          <a href="/">
-            <div
-              class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
-            >
-              <img
-                src="https://cdn.myanimelist.net/images/anime/8/77831.jpg"
-                alt="Attack on Titan Season 2"
-                class="w-16 h-24 object-cover rounded-md"
-              />
-              <div>
-                <h3 class="text-[#eceff4] font-semibold">
-                  Attack on Titan Season 2
-                </h3>
-                <p class="text-gray-400 text-sm">TV – Sequel</p>
-              </div>
-            </div>
-          </a>
-
-          <!-- Relation 3 -->
-          <a href="/">
-            <div
-              class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
-            >
-              <img
-                src="https://cdn.myanimelist.net/images/anime/4/84177.jpg"
-                alt="Attack on Titan: Lost Girls"
-                class="w-16 h-24 object-cover rounded-md"
-              />
-              <div>
-                <h3 class="text-[#eceff4] font-semibold">
-                  Attack on Titan: Lost Girls
-                </h3>
-                <p class="text-gray-400 text-sm">OVA – Side Story</p>
-              </div>
-            </div>
-          </a>
+          <% }); %>
+          <% }; %>
         </div>
       </section>
 
@@ -283,7 +249,7 @@
           <div class="aspect-video rounded-lg overflow-hidden">
             <iframe
               class="w-full h-full rounded-lg"
-              src="https://www.youtube.com/embed/LHtdKWJdif4"
+              src="https://www.youtube.com/embed/<%= metaInfo.youtubeId %>"
               title="Attack on Titan Trailer"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
