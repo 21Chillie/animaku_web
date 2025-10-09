@@ -226,14 +226,73 @@ app.get("/overview/:type/:id", async (req, res) => {
       return findAnimeData;
     };
 
+    // Function to fenching anime/manga characters
+    const animakuCharacter = async () => {
+      try {
+        const characterResponse = await axios.get(
+          `${API_URL}/${type}/${id}/characters`,
+          {
+            params: {
+              "page[limit]": 6,
+              sort: "role",
+            },
+          },
+        );
+
+        const characterIdRole = characterResponse.data.data.map((item) => ({
+          id: item.id,
+          role: item.attributes.role,
+        }));
+
+        const charactersData = await Promise.all(
+          characterIdRole.map(async (char) => {
+            try {
+              const response = await axios.get(
+                `${API_URL}/media-characters/${char.id}/character`,
+              );
+
+              const item = response.data.data;
+
+              return {
+                id: char.id,
+                role: char.role.charAt(0).toUpperCase() + char.role.slice(1),
+                name: item.attributes.canonicalName,
+                japanName: item.attributes.names.ja_jp,
+                otherName: item.attributes.otherName,
+                description:
+                  item.attributes.description ||
+                  "No character description available.",
+                image:
+                  item.attributes.image?.original ||
+                  "/images/no-img-placeholder.webp",
+              };
+            } catch {
+              console.error(`Error fetch character data ID ${char.id}`);
+              return null;
+            }
+          }),
+        );
+
+        return charactersData;
+      } catch (err) {
+        console.error(
+          `Error while fetching all character data by media ID ${id}: `,
+          err.message,
+        );
+
+        return null;
+      }
+    };
+
     res.render("animaku-overview", {
       animeTitle: animeTitle(),
       metaInfo: await metaInfo(),
       animeRelation: await animeRelation(),
+      animakuCharacter: await animakuCharacter(),
     });
   } catch (err) {
     console.error("Fetch error:", err.message);
-    res.status(500).json({ error: "Oops something went wrong!", err });
+    res.status(500).json({ error: "Oops something went wrong!" });
   }
 });
 
