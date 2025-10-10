@@ -29,7 +29,7 @@ This project is for learning purpose
    - [x] Design layout of anime title relation section
    - [x] Design layout of anime character
    - [x] Design layout of anime trailer and maybe add youtube embed
-   - [ ] Fetch data and display to anime overview page
+   - [x] Fetch data and display to anime overview page
 
 ## API
 
