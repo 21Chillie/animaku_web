@@ -264,6 +264,7 @@ app.get("/overview/:type/:id", async (req, res) => {
 
               return {
                 id: char.id,
+                animeId: id,
                 role: char.role.charAt(0).toUpperCase() + char.role.slice(1),
                 name: item.attributes.canonicalName,
                 japanName: item.attributes.names.ja_jp,
@@ -300,7 +301,7 @@ app.get("/overview/:type/:id", async (req, res) => {
       mediaCharacter: await mediaCharacter(),
     });
   } catch (err) {
-    console.error("Fetch error:", err.message);
+    console.error(`Error fetch all media data with id ${id}`);
     res.status(500).json({ error: "Oops something went wrong!" });
   }
 });
