@@ -40,7 +40,7 @@
             <!-- Title on mobile, hidden when viewport > 768px -->
             <div class="title md:hidden">
               <h1 class="font-semibold text-xl text-[#eceff4]">
-                <%= animeTitle.title %>
+                <%= mediaTitle.title %>
               </h1>
             </div>
 
@@ -48,8 +48,8 @@
             <div class="poster">
               <img
                 class="aspect-3/4 h-full w-full rounded-md object-cover"
-                src="<%= animeTitle.poster %>"
-                alt="<%= animeTitle.title %> poster"
+                src="<%= mediaTitle.poster %>"
+                alt="<%= mediaTitle.title %> poster"
               />
             </div>
 
@@ -67,7 +67,7 @@
           <div class="bg-[#3b4252] p-6 rounded-xl shadow-md">
             <!-- Title -->
             <h1 class="font-semibold text-xl text-[#eceff4] max-md:hidden">
-              <%= animeTitle.title %>
+              <%= mediaTitle.title %>
             </h1>
             <h1 class="font-semibold text-xl text-[#eceff4] md:hidden">
               Description
@@ -80,7 +80,7 @@
               <p
                 class="max-h-[20rem] md:max-h-[24rem] overflow-y-auto pr-4 lg:pr-16 scrollbar-thin scrollbar-thumb-[#4c566a] scrollbar-track-[#3b4252]"
               >
-                <%- animeTitle.synopsis %>
+                <%- mediaTitle.synopsis %>
               </p>
             </div>
           </div>
@@ -95,62 +95,62 @@
             <!-- Type -->
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Type:</p>
-              <p class="text-[#eceff4]"><%= metaInfo.type.toUpperCase() %></p>
+              <p class="text-[#eceff4]"><%= mediaMeta.type.toUpperCase() %></p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Age Rating:</p>
-              <p class="text-[#eceff4]"><%= metaInfo.ageRating %></p>
+              <p class="text-[#eceff4]"><%= mediaMeta.ageRating %></p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Episodes:</p>
-              <p class="text-[#eceff4]"><%= metaInfo.episode %></p>
+              <p class="text-[#eceff4]"><%= mediaMeta.episode %></p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Episode Length:</p>
-              <p class="text-[#eceff4]"><%= metaInfo.episodeLength %> min</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.episodeLength %> min</p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Start Date:</p>
-              <p class="text-[#eceff4]"><%= metaInfo.startDate %></p>
+              <p class="text-[#eceff4]"><%= mediaMeta.startDate %></p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">End Date:</p>
-              <p class="text-[#eceff4]"><%= metaInfo.endDate %></p>
+              <p class="text-[#eceff4]"><%= mediaMeta.endDate %></p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Status:</p>
-              <p class="text-[#eceff4]"><%= metaInfo.status %></p>
+              <p class="text-[#eceff4]"><%= mediaMeta.status %></p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Average Rating:</p>
-              <p class="text-[#eceff4]"><%= metaInfo.avgRating %>%</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.avgRating %>%</p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Rating Rank:</p>
-              <p class="text-[#eceff4]">#<%= metaInfo.ratingRank %></p>
+              <p class="text-[#eceff4]">#<%= mediaMeta.ratingRank %></p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">User Count:</p>
-              <p class="text-[#eceff4]"><%= metaInfo.userCount %></p>
+              <p class="text-[#eceff4]"><%= mediaMeta.userCount %></p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Popularity Rank:</p>
-              <p class="text-[#eceff4]">#<%= metaInfo.popularityRank %></p>
+              <p class="text-[#eceff4]">#<%= mediaMeta.popularityRank %></p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Genres:</p>
-              <p class="text-[#eceff4]"><%= metaInfo.genres %></p>
+              <p class="text-[#eceff4]"><%= mediaMeta.genres %></p>
             </div>
           </div>
         </div>
@@ -161,8 +161,8 @@
         <h2 class="text-xl font-semibold text-[#eceff4] mb-3">Relations</h2>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <!-- Relation Card -->
-          <% if (animeRelation && animeRelation.length > 0) {%>
-          <%animeRelation.forEach(rel => { %>
+          <% if (mediaRelation && mediaRelation.length > 0) {%>
+          <%mediaRelation.forEach(rel => { %>
           <a href="/overview/<%= rel.type %>/<%= rel.relationId %>">
             <div
               class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
@@ -189,8 +189,8 @@
       <section id="character" class="px-4 xl:px-0">
         <h2 class="text-xl font-semibold text-[#eceff4] mb-3">Character</h2>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <% if (animakuCharacter && animakuCharacter.length > 0) { %>
-          <%animakuCharacter.forEach(char => { %>
+          <% if (mediaCharacter && mediaCharacter.length > 0) { %>
+          <%mediaCharacter.forEach(char => { %>
           <a href="/character/<%= char.id %>">
             <div
               class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
@@ -220,7 +220,7 @@
           <div class="aspect-video rounded-lg overflow-hidden">
             <iframe
               class="w-full h-full rounded-lg"
-              src="https://www.youtube.com/embed/<%= metaInfo.youtubeId %>"
+              src="https://www.youtube.com/embed/<%= mediaMeta.youtubeId %>"
               title="Attack on Titan Trailer"
               frameborder="0"
               allowfullscreen

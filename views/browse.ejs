@@ -98,12 +98,12 @@
           <!-- Card Grid -->
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
             <!-- Card Result -->
-            <% if (!animeDataResult) { %>
+            <% if (!searchResult) { %>
             <p class="col-span-3 sm:col-span-2 text-[#eceff4]">
               The search result will be shown here.
             </p>
             <% } else { %>
-            <% animeDataResult.forEach(item => {%>
+            <% searchResult.forEach(item => {%>
             <article>
               <a href="/overview/<%= item.type %>/<%= item.id %>">
                 <div
