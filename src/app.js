@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 
 // Browse Routes
 app.get("/browse", (req, res) => {
-  res.render("browse", { animeDataResult: null });
+  res.render("browse", { searchResult: null });
 });
 
 // Browser Result Routes
@@ -45,7 +45,7 @@ app.post(`/browse`, async (req, res) => {
   try {
     const response = await axios.get(`${API_URL}/${inputCategory}`, config);
 
-    const animeDataResult = response.data.data.map((item) => ({
+    const searchResult = response.data.data.map((item) => ({
       id: item.id,
       type: item.type,
       title: item.attributes.canonicalTitle || "N/A",
@@ -58,7 +58,7 @@ app.post(`/browse`, async (req, res) => {
       category: inputCategory,
     }));
 
-    res.render("browse", { animeDataResult });
+    res.render("browse", { searchResult });
   } catch (err) {
     console.error("Fetch error:", err.message);
     res.status(500).json({ error: "Oops something went wrong!", err });
@@ -67,37 +67,39 @@ app.post(`/browse`, async (req, res) => {
 
 // Animaku Overview Routes
 app.get("/overview/:type/:id", async (req, res) => {
-  // Media ID
-  const id = req.params.id;
-
-  // Media type
-  const type = req.params.type;
+  // Media ID and type
+  const { id, type } = req.params;
 
   try {
     // Fetch media data by ID
     const response = await axios.get(`${API_URL}/${type}/${id}`);
 
     // Function For fetching data For Title, Poster, Synopsis
-    const animeTitle = () => {
-      const item = response.data.data;
+    const mediaTitle = () => {
+      try {
+        const item = response.data.data;
 
-      const data = {
-        id: item.id,
-        type: item.type,
-        title: item.attributes.canonicalTitle || "N/A",
-        poster:
-          item.attributes.posterImage.small ||
-          "/images/no-img-placeholder.webp",
-        synopsis:
-          item.attributes.synopsis.replace(/\n\n/g, "<br><br>") ||
-          "This anime currently does not have a synopsis available. Check back later for updates or explore other details about the series.",
-      };
+        const data = {
+          id: item.id,
+          type: item.type,
+          title: item.attributes.canonicalTitle || "N/A",
+          poster:
+            item.attributes.posterImage.small ||
+            "/images/no-img-placeholder.webp",
+          synopsis:
+            item.attributes.synopsis.replace(/\n\n/g, "<br><br>") ||
+            "This anime currently does not have a synopsis available. Check back later for updates or explore other details about the series.",
+        };
 
-      return data;
+        return data;
+      } catch (err) {
+        console.error(`Error fetching media title with id ${id}`);
+        return null;
+      }
     };
 
     // Function fetching data for Meta Info
-    const metaInfo = async () => {
+    const mediaMeta = async () => {
       const item = response.data.data;
 
       // Format Status Data
@@ -105,12 +107,12 @@ app.get("/overview/:type/:id", async (req, res) => {
         item.attributes.status.charAt(0).toUpperCase() +
         item.attributes.status.slice(1);
 
-      // Fetch genres data
-      const genreResponse = await axios.get(
-        `${API_URL}/${type}/${id}/categories`,
-      );
-
       try {
+        // Fetch genres data
+        const genreResponse = await axios.get(
+          `${API_URL}/${type}/${id}/categories`,
+        );
+
         // Push genres name into array
         const genres = genreResponse.data.data.map(
           (genre) => genre.attributes.title,
@@ -141,93 +143,100 @@ app.get("/overview/:type/:id", async (req, res) => {
     };
 
     // Function for fetching media relation data
-    const animeRelation = async () => {
-      // Fetch data for anime relation based on anime id
-      const relationResponse = await axios.get(
-        `${API_URL}/${type}/${id}/media-relationships`,
-        {
-          params: {
-            "filter[role]": "adaptation,prequel,sequel,parent_story,side_story",
-            sort: "role",
+    const mediaRelation = async () => {
+      try {
+        // Fetch data for anime relation based on anime id
+        const relationResponse = await axios.get(
+          `${API_URL}/${type}/${id}/media-relationships`,
+          {
+            params: {
+              "filter[role]":
+                "adaptation,prequel,sequel,parent_story,side_story",
+              sort: "role",
+            },
           },
-        },
-      );
-      // Store each id and role in array object
-      const relationData = relationResponse.data.data.map((item) => ({
-        id: item.id,
-        role: item.attributes.role,
-      }));
+        );
 
-      // Loop based on each id from relationData variable and fetch response destination
-      const destinationData = await Promise.all(
-        relationData.map(async (relation) => {
-          try {
-            const destResponse = await axios.get(
-              `${API_URL}/media-relationships/${relation.id}/relationships/destination`,
-            );
+        // Store each id and role in array object
+        const relationData = relationResponse.data.data.map((item) => ({
+          id: item.id,
+          role: item.attributes.role,
+        }));
 
-            const dest = destResponse.data.data;
+        // Loop based on each id from relationData variable and fetch response destination
+        const destinationData = await Promise.all(
+          relationData.map(async (relation) => {
+            try {
+              const destResponse = await axios.get(
+                `${API_URL}/media-relationships/${relation.id}/relationships/destination`,
+              );
 
-            // Store each role, id, and type
-            return {
-              role: relation.role,
-              id: dest.id,
-              type: dest.type,
-            };
-          } catch (err) {
-            console.error(
-              `Error fetching destination for ${relation.id}: `,
-              err,
-            );
-            return null;
-          }
-        }),
-      );
+              const dest = destResponse.data.data;
 
-      // Loop based on each type (manga/anime) and id from destinationData variable and fetch response anime/manga data
-      const findAnimeData = await Promise.all(
-        destinationData.map(async (data) => {
-          try {
-            const response = await axios.get(
-              `${API_URL}/${data.type}/${data.id}`,
-            );
+              // Store each role, id, and type
+              return {
+                role: relation.role,
+                id: dest.id,
+                type: dest.type,
+              };
+            } catch (err) {
+              console.error(
+                `Error fetching destination for ${relation.id}: `,
+                err,
+              );
+              return null;
+            }
+          }),
+        );
 
-            const item = response.data.data;
+        // Loop based on each type (manga/anime) and id from destinationData variable and fetch response anime/manga data
+        const findAnimeData = await Promise.all(
+          destinationData.map(async (data) => {
+            try {
+              const response = await axios.get(
+                `${API_URL}/${data.type}/${data.id}`,
+              );
 
-            // Format subtype data
-            const subTypeFormat =
-              item.attributes.subtype.charAt(0).toUpperCase() +
-              item.attributes.subtype.slice(1);
+              const item = response.data.data;
 
-            // Format role data
-            const roleFormat =
-              data.role.charAt(0).toUpperCase() +
-              data.role.slice(1).replace("_", " ");
+              // Format subtype data
+              const subTypeFormat =
+                item.attributes.subtype.charAt(0).toUpperCase() +
+                item.attributes.subtype.slice(1);
 
-            // Save each id, type, subtype, title, poster, and role
-            return {
-              animeid: id,
-              relationId: item.id,
-              type: item.type,
-              subtype: subTypeFormat,
-              title: item.attributes.canonicalTitle,
-              poster:
-                item.attributes.posterImage?.tiny ||
-                "/images/no-img-placeholder.webp",
-              role: roleFormat,
-            };
-          } catch (err) {
-            console.error(`Error fetching anime data for ${data.id}: `, err);
-            return null;
-          }
-        }),
-      );
+              // Format role data
+              const roleFormat =
+                data.role.charAt(0).toUpperCase() +
+                data.role.slice(1).replace("_", " ");
 
-      return findAnimeData;
+              // Save each id, type, subtype, title, poster, and role
+              return {
+                animeid: id,
+                relationId: item.id,
+                type: item.type,
+                subtype: subTypeFormat,
+                title: item.attributes.canonicalTitle,
+                poster:
+                  item.attributes.posterImage?.tiny ||
+                  "/images/no-img-placeholder.webp",
+                role: roleFormat,
+              };
+            } catch (err) {
+              console.error(`Error fetching anime data for ${data.id}: `, err);
+              return null;
+            }
+          }),
+        );
+
+        return findAnimeData;
+      } catch (err) {
+        console.error(`Error while fetch all media relation with id ${id}`);
+        return null;
+      }
     };
 
     // Function to fenching anime/manga characters
-    const animakuCharacter = async () => {
+    const mediaCharacter = async () => {
       try {
         const characterResponse = await axios.get(
           `${API_URL}/${type}/${id}/characters`,
@@ -285,10 +294,10 @@ app.get("/overview/:type/:id", async (req, res) => {
     };
 
     res.render("animaku-overview", {
-      animeTitle: animeTitle(),
-      metaInfo: await metaInfo(),
-      animeRelation: await animeRelation(),
-      animakuCharacter: await animakuCharacter(),
+      mediaTitle: mediaTitle(),
+      mediaMeta: await mediaMeta(),
+      mediaRelation: await mediaRelation(),
+      mediaCharacter: await mediaCharacter(),
     });
   } catch (err) {
     console.error("Fetch error:", err.message);
