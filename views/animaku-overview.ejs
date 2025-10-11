@@ -48,7 +48,7 @@
             <div class="poster">
               <img
                 class="aspect-3/4 h-full w-full rounded-md object-cover"
-                src="<%= mediaTitle.poster %>"
+                src="<%= mediaTitle.image %>"
                 alt="<%= mediaTitle.title %> poster"
               />
             </div>
@@ -92,15 +92,83 @@
         <h2 class="text-xl font-semibold text-[#eceff4] mb-3">Meta Info</h2>
         <div class="bg-[#3b4252] p-6 rounded-xl">
           <div class="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-2 text-sm">
-            <!-- Type -->
+            <% if (mediaTitle.type === "manga") { %>
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Type:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.type.toUpperCase() %></p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.subType.toUpperCase() %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Age Rating:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.ageRating %></p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.ageRating %> - <%= mediaMeta.ageRatingGuide %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Volume:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.volumeCount %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Chapter:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.chapterCount %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Start Date:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.startDate %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">End Date:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.endDate %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Status:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.status %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Average Rating:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.avgRating %>%</p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Rating Rank:</p>
+              <p class="text-[#eceff4]">#<%= mediaMeta.ratingRank %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">User Count:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.userCount %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Popularity Rank:</p>
+              <p class="text-[#eceff4]">#<%= mediaMeta.popularityRank %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Genres:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.genres %></p>
+            </div>
+            <% } else {%>
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Type:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.subType.toUpperCase() %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Age Rating:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.ageRating %> - <%= mediaMeta.ageRatingGuide %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
@@ -152,6 +220,7 @@
               <p class="text-gray-400">Genres:</p>
               <p class="text-[#eceff4]"><%= mediaMeta.genres %></p>
             </div>
+            <% } %>
           </div>
         </div>
       </section>
@@ -168,14 +237,14 @@
               class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
             >
               <img
-                src="<%= rel.poster %>"
+                src="<%= rel.image %>"
                 alt="<%= rel.title %> poster"
                 class="w-16 h-24 object-cover rounded-md"
               />
               <div>
                 <h3 class="text-[#eceff4] font-semibold"><%= rel.title %></h3>
                 <p class="text-gray-400 text-sm">
-                  <%= rel.subtype %> – <%= rel.role %>
+                  <%= rel.subType %> – <%= rel.role %>
                 </p>
               </div>
             </div>
@@ -191,7 +260,7 @@
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <% if (mediaCharacter && mediaCharacter.length > 0) { %>
           <%mediaCharacter.forEach(char => { %>
-          <a href="/overview/character/<%= char.id %>">
+          <a href="/overview/character/<%= char.charId %>">
             <div
               class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
             >
@@ -213,6 +282,7 @@
         </div>
       </section>
 
+      <% if (mediaTitle.type === "anime") { %>
       <section id="trailer" class="px-4 xl:p-0">
         <div class="bg-[#3b4252] p-4 rounded-xl shadow-md">
           <h2 class="text-xl font-semibold text-[#eceff4] mb-3">🎬 Trailer</h2>
@@ -228,6 +298,7 @@
           </div>
         </div>
       </section>
+      <% } %>
     </main>
   </body>
 </html>
