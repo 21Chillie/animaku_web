@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import axios, { all } from "axios";
 import pool from "./db.js";
+import { log } from "console";
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.post(`/browse`, async (req, res) => {
       "filter[subtype]": inputType,
       "page[limit]": 10,
     },
+    timeout: 2000,
   };
 
   try {
@@ -62,6 +64,40 @@ app.post(`/browse`, async (req, res) => {
   } catch (err) {
     console.error("Fetch error:", err.message);
     res.status(500).json({ error: "Oops something went wrong!", err });
+  }
+});
+
+// Routes Get Character Data
+app.get("/overview/character/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const characterResponse = await axios.get(
+      `${API_URL}/media-characters/${id}/character`,
+    );
+
+    const item = characterResponse.data.data;
+
+    const otherName = item.attributes.otherNames.join(", ");
+
+    const characterDetail = {
+      id: id,
+      slug: item.attributes.slug,
+      canonicalName: item.attributes.canonicalName,
+      ja_jp: item.attributes.names.ja_jp,
+      otherNames: otherName || "-",
+      description:
+        item.attributes.description
+          .replace(/\n\n/g, "<br><br>")
+          .split(/\s{2,}|\n+/)
+          .filter((p) => p.trim().length > 0) ||
+        "No character information available for this anime.",
+      image: item.attributes.image.original,
+    };
+
+    res.render("animaku-character", { characterDetail });
+  } catch (err) {
+    res.status(500).json({ error: "Oops something went wrong", log: err });
   }
 });
 
@@ -154,6 +190,7 @@ app.get("/overview/:type/:id", async (req, res) => {
                 "adaptation,prequel,sequel,parent_story,side_story",
               sort: "role",
             },
+            timeout: 1000,
           },
         );
 
