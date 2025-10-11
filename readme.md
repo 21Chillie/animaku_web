@@ -31,6 +31,10 @@ This project is for learning purpose
    - [x] Design layout of anime trailer and maybe add youtube embed
    - [x] Fetch data and display to anime overview page
 
+4. Finish Character Detail Page
+   - [x] Design character layout page
+   - [x] Fetch data and display it to character page
+
 ## API
 
 https://kitsu.docs.apiary.io/
