@@ -3,7 +3,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import axios, { all } from "axios";
 import pool from "./db.js";
-import { log } from "console";
 
 const app = express();
 
@@ -119,7 +118,7 @@ app.get("/overview/:type/:id", async (req, res) => {
           id: item.id,
           type: item.type,
           title: item.attributes.canonicalTitle || "N/A",
-          poster:
+          image:
             item.attributes.posterImage.small ||
             "/images/no-img-placeholder.webp",
           synopsis:
@@ -156,10 +155,13 @@ app.get("/overview/:type/:id", async (req, res) => {
 
         const data = {
           animeId: item.id,
-          type: item.attributes.subtype || "N/A",
-          ageRating: `${item.attributes.ageRating || "N/A"} - ${item.attributes.ageRatingGuide || "N/A"}`,
+          subType: item.attributes.subtype || "N/A",
+          ageRating: item.attributes.ageRating || "N/A",
+          ageRatingGuide: item.attributes.ageRatingGuide || "N/A",
           episode: item.attributes.episodeCount || "-",
           episodeLength: item.attributes.episodeLength || "-",
+          volumeCount: item.attributes.volumeCount,
+          chapterCount: item.attributes.chapterCount,
           startDate: item.attributes.startDate || "-",
           endDate: item.attributes.endDate || "-",
           status: statusFormat || "N/A",
@@ -168,7 +170,7 @@ app.get("/overview/:type/:id", async (req, res) => {
           userCount: item.attributes.userCount || "-",
           popularityRank: item.attributes.popularityRank || "-",
           genres: genres.join(", ") || "-",
-          youtubeId: item.attributes.youtubeVideoId,
+          youtubeId: item.attributes.youtubeVideoId || "-",
         };
 
         return data;
@@ -251,9 +253,9 @@ app.get("/overview/:type/:id", async (req, res) => {
                 animeid: id,
                 relationId: item.id,
                 type: item.type,
-                subtype: subTypeFormat,
+                subType: subTypeFormat,
                 title: item.attributes.canonicalTitle,
-                poster:
+                image:
                   item.attributes.posterImage?.tiny ||
                   "/images/no-img-placeholder.webp",
                 role: roleFormat,
@@ -264,6 +266,8 @@ app.get("/overview/:type/:id", async (req, res) => {
             }
           }),
         );
+
+        console.log(findAnimeData);
 
         return findAnimeData;
       } catch (err) {
@@ -300,12 +304,13 @@ app.get("/overview/:type/:id", async (req, res) => {
               const item = response.data.data;
 
               return {
-                id: char.id,
+                charId: char.id,
                 animeId: id,
+                slug: item.attributes.slug || "-",
                 role: char.role.charAt(0).toUpperCase() + char.role.slice(1),
                 name: item.attributes.canonicalName,
-                japanName: item.attributes.names.ja_jp,
-                otherName: item.attributes.otherName,
+                japanName: item.attributes.names.ja_jp || "-",
+                otherNames: item.attributes.otherNames,
                 description:
                   item.attributes.description ||
                   "No character description available.",
