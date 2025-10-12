@@ -1,6 +1,6 @@
 CREATE DATABASE animaku_db;
 
-CREATE TABLE mediaTitle (
+CREATE TABLE title (
     id INT PRIMARY KEY,
     "type" VARCHAR(50) NOT NULL,
     title VARCHAR(255) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE mediaTitle (
     synopsis TEXT
 );
 
-CREATE TABLE mediaMeta (
+CREATE TABLE meta (
     id SERIAL PRIMARY KEY,
     animeId INT NOT NULL,
     subType VARCHAR(50),
@@ -26,10 +26,15 @@ CREATE TABLE mediaMeta (
     userCount INT,
     popularityRank INT,
     genres TEXT,
-    youtubeId TEXT
+    youtubeId TEXT,
+
+    CONSTRAINT fk_meta_animeid
+    FOREIGN KEY (animeId)
+    REFERENCES title (id)
+    ON DELETE CASCADE
 );
 
-CREATE TABLE mediaRelation (
+CREATE TABLE relation (
     id SERIAL PRIMARY KEY,
     animeId INT NOT NULL,
     relationId INT NOT NULL,
@@ -37,10 +42,15 @@ CREATE TABLE mediaRelation (
     subType VARCHAR(50),
     title TEXT,
     image TEXT,
-    "role" VARCHAR(50)
+    "role" VARCHAR(50),
+
+    CONSTRAINT fk_relation_animeid
+    FOREIGN KEY (animeId)
+    REFERENCES title (id)
+    ON DELETE CASCADE
 );
 
-CREATE TABLE mediaCharacter (
+CREATE TABLE character (
     id SERIAL PRIMARY KEY,
     charId INT NOT NULL,
     animeId INT NOT NULL,
@@ -50,5 +60,10 @@ CREATE TABLE mediaCharacter (
     japanName VARCHAR(255),
     otherNames TEXT[],
     description TEXT,
-    image TEXT
+    image TEXT,
+
+    CONSTRAINT fk_character_animeid
+    FOREIGN KEY (animeId)
+    REFERENCES title (id)
+    ON DELETE CASCADE
 );
