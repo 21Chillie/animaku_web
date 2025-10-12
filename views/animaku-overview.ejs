@@ -96,35 +96,44 @@
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Type:</p>
               <p class="text-[#eceff4]">
-                <%= mediaMeta.subType.toUpperCase() %>
+                <%= mediaMeta.subtype || mediaMeta.subType %>
               </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Age Rating:</p>
               <p class="text-[#eceff4]">
-                <%= mediaMeta.ageRating %> - <%= mediaMeta.ageRatingGuide %>
+                <%= mediaMeta.agerating || mediaMeta.ageRating %> - <%=
+                mediaMeta.ageratingguide || mediaMeta.ageRatingGuide %>
               </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Volume:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.volumeCount %></p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.volumecount || mediaMeta.volumeCount %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Chapter:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.chapterCount %></p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.chaptercount || mediaMeta.chapterCount %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Start Date:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.startDate %></p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.startdate || mediaMeta.startDate %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">End Date:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.endDate %></p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.enddate || mediaMeta.endDate %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
@@ -134,22 +143,30 @@
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Average Rating:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.avgRating %>%</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.avgrating || mediaMeta.avgRating %>%
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Rating Rank:</p>
-              <p class="text-[#eceff4]">#<%= mediaMeta.ratingRank %></p>
+              <p class="text-[#eceff4]">
+                #<%= mediaMeta.ratingrank || mediaMeta.ratingRank %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">User Count:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.userCount %></p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.usercount || mediaMeta.userCount %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Popularity Rank:</p>
-              <p class="text-[#eceff4]">#<%= mediaMeta.popularityRank %></p>
+              <p class="text-[#eceff4]">
+                #<%= mediaMeta.popularityrank || mediaMeta.popularityRank %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
@@ -160,14 +177,15 @@
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Type:</p>
               <p class="text-[#eceff4]">
-                <%= mediaMeta.subType.toUpperCase() %>
+                <%= mediaMeta.subtype || mediaMeta.subType %>
               </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Age Rating:</p>
               <p class="text-[#eceff4]">
-                <%= mediaMeta.ageRating %> - <%= mediaMeta.ageRatingGuide %>
+                <%= mediaMeta.agerating || mediaMeta.ageRating %> - <%=
+                mediaMeta.ageratingguide || mediaMeta.ageRatingGuide %>
               </p>
             </div>
 
@@ -178,17 +196,23 @@
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Episode Length:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.episodeLength %> min</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.episodelength || mediaMeta.episodeLength %> min
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Start Date:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.startDate %></p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.startdate || mediaMeta.startDate %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">End Date:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.endDate %></p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.enddate || mediaMeta.endDate %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
@@ -198,22 +222,30 @@
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Average Rating:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.avgRating %>%</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.avgrating || mediaMeta.avgRating %>%
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Rating Rank:</p>
-              <p class="text-[#eceff4]">#<%= mediaMeta.ratingRank %></p>
+              <p class="text-[#eceff4]">
+                #<%= mediaMeta.ratingrank || mediaMeta.ratingRank %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">User Count:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.userCount %></p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.usercount || mediaMeta.userCount %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Popularity Rank:</p>
-              <p class="text-[#eceff4]">#<%= mediaMeta.popularityRank %></p>
+              <p class="text-[#eceff4]">
+                #<%= mediaMeta.popularityrank || mediaMeta.popularityRank %>
+              </p>
             </div>
 
             <div class="flex flex-col gap-1">
@@ -232,7 +264,9 @@
           <!-- Relation Card -->
           <% if (mediaRelation && mediaRelation.length > 0) {%>
           <%mediaRelation.forEach(rel => { %>
-          <a href="/overview/<%= rel.type %>/<%= rel.relationId %>">
+          <a
+            href="/overview/<%= rel.type %>/<%= rel.relationid || rel.relationId %>"
+          >
             <div
               class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
             >
@@ -244,7 +278,7 @@
               <div>
                 <h3 class="text-[#eceff4] font-semibold"><%= rel.title %></h3>
                 <p class="text-gray-400 text-sm">
-                  <%= rel.subType %> – <%= rel.role %>
+                  <%= rel.subtype || rel.subType %> – <%= rel.role %>
                 </p>
               </div>
             </div>
@@ -260,7 +294,7 @@
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <% if (mediaCharacter && mediaCharacter.length > 0) { %>
           <%mediaCharacter.forEach(char => { %>
-          <a href="/overview/character/<%= char.charId %>">
+          <a href="/overview/character/<%= char.charid || char.charId %>">
             <div
               class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
             >
@@ -272,7 +306,7 @@
               <div>
                 <h3 class="text-[#eceff4] font-semibold"><%= char.name %></h3>
                 <h3 class="text-[#eceff4] font-semibold">
-                  <%= char.japanName %>
+                  <%= char.japanname || char.japanName %>
                 </h3>
                 <p class="text-gray-400 text-sm"><%= char.role %></p>
               </div>
@@ -290,7 +324,7 @@
           <div class="aspect-video rounded-lg overflow-hidden">
             <iframe
               class="w-full h-full rounded-lg"
-              src="https://www.youtube.com/embed/<%= mediaMeta.youtubeId %>"
+              src="https://www.youtube.com/embed/<%= mediaMeta.youtubeid || mediaMeta.youtubeId %>"
               title="Attack on Titan Trailer"
               frameborder="0"
               allowfullscreen
