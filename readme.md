@@ -35,6 +35,43 @@ This project is for learning purpose
    - [x] Design character layout page
    - [x] Fetch data and display it to character page
 
+5. PostgreSQL Integration For Overview And Character Page
+   - [x] Make the PostgreSQL database
+   - [x] Add caching for overview page (check DB before API request)
+   - [x] Store anime/manga title and metadata
+   - [x] Store media relations (sequel, prequel, adaptation, etc) in database
+   - [x] Store media character in database
+
+## System Architecture Overview
+
+```bash
+               ┌──────────────────────────────┐
+               │         User (Browser)       │
+               │  Visit and Search /browse    │
+               └──────────────┬───────────────┘
+                              │
+                              ▼
+               ┌──────────────────────────────┐
+               │         User (Browser)       │
+               │  Visits /overview/:type/:id  │
+               └──────────────┬───────────────┘
+                              │
+                              ▼
+           ┌────────────────────────────────────┐
+           │       Express.js Server (Node)     │
+           │  Routes, Controllers, EJS Rendering│
+           └────────────────────────────────────┘
+                              │
+                              │
+     ┌────────────────────────────────────────────────┐
+     │                                                 │
+     ▼                                                 ▼
+┌────────────────────┐                      ┌────────────────────────┐
+│   PostgreSQL DB     │                     │    Kitsu API (Remote)  │
+│ (title, meta, etc.) │                     │    https://kitsu.io/   │
+└────────────────────┘                      └────────────────────────┘
+```
+
 ## API
 
 https://kitsu.docs.apiary.io/
