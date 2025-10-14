@@ -676,4 +676,8 @@ app.get("/overview/:type/:id", async (req, res) => {
   }
 });
 
+app.get("/mylist", (req, res) => {
+  res.render("animaku-list");
+});
+
 export default app;
