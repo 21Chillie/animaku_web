@@ -25,3 +25,16 @@ addListModal.addEventListener("click", function (e) {
     closeModalFunc();
   }
 });
+
+// Add save and delete button event listeners
+saveListBtn?.addEventListener("click", function () {
+  // Add save logic here
+  closeModalFunc();
+});
+
+deleteListBtn?.addEventListener("click", function () {
+  if (confirm("Are you sure you want to delete this entry?")) {
+    // Add delete logic here
+    closeModalFunc();
+  }
+});
