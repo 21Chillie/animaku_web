@@ -43,7 +43,7 @@ This project is for learning purpose
    - [x] Store media character in database
 
 6. Add To List And My List Page
-   - [ ] Make the add to list button on overview page functioning
+   - [x] Make the add to list button on overview page functioning
    - [ ] Design layout for my list page
    - [ ] Display all the related data to my list page
 
