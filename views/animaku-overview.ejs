@@ -207,7 +207,8 @@
                   id="volumeProgress"
                   name="volumeProgress"
                   min="0"
-                  placeholder="0"
+                  max="<%= mediaMeta.volumeCount || mediaMeta.volumecount %>"
+                  placeholder="0 - <%= mediaMeta.volumeCount || mediaMeta.volumecount %>"
                   class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
                 />
               </div>
@@ -222,7 +223,8 @@
                   id="chapterProgress"
                   name="chapterProgress"
                   min="0"
-                  placeholder="0"
+                  max="<%= mediaMeta.chapterCount || mediaMeta.chaptercount %>"
+                  placeholder="0 - <%= mediaMeta.chapterCount || mediaMeta.chaptercount %>"
                   class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
                 />
               </div>
