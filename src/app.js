@@ -3,6 +3,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import axios, { all } from "axios";
 import pool from "./db.js";
+import { error } from "console";
+import { text } from "stream/consumers";
 
 const app = express();
 
@@ -10,6 +12,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const API_URL = "https://kitsu.io/api/edge/";
+const userId = "1";
 
 // Middlewares
 app.use(express.json());
@@ -203,7 +206,7 @@ app.get("/overview/:type/:id", async (req, res) => {
           );
 
           const data = {
-            animeId: item.id,
+            mediaId: item.id,
             subType: item.attributes.subtype.toUpperCase() || "N/A",
             ageRating: item.attributes.ageRating || "N/A",
             ageRatingGuide: item.attributes.ageRatingGuide || "N/A",
@@ -225,12 +228,12 @@ app.get("/overview/:type/:id", async (req, res) => {
           // Insert meta data into database
           const insertMeta = await pool.query(
             `
-            INSERT INTO meta (animeid, subtype, agerating, ageratingguide, episode, episodelength, volumecount, chaptercount, startdate, enddate, status, avgrating, ratingrank, usercount, popularityrank, genres, youtubeid)
+            INSERT INTO meta (mediaid, subtype, agerating, ageratingguide, episode, episodelength, volumecount, chaptercount, startdate, enddate, status, avgrating, ratingrank, usercount, popularityrank, genres, youtubeid)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
             RETURNING *
             `,
             [
-              data.animeId,
+              data.mediaId,
               data.subType,
               data.ageRating,
               data.ageRatingGuide,
@@ -253,22 +256,22 @@ app.get("/overview/:type/:id", async (req, res) => {
           // Check if meta data inserted successfully
           if (insertMeta.rowCount > 0) {
             console.log(
-              `Success inserting meta data for anime ID ${insertMeta.rows[0].animeid}`,
+              `Success inserting meta data for Media ID ${insertMeta.rows[0].mediaid}`,
             );
           } else {
             console.log(
-              `Meta data for anime ID ${data.animeId} already exists — skipped.`,
+              `Meta data for Media ID ${data.mediaId} already exists — skipped.`,
             );
           }
 
           // Debug
           console.log(
-            `Success fetching meta data from API with id ${data.animeId}`,
+            `Success fetching meta data from API with id ${data.mediaId}`,
           );
 
           return data;
         } catch (err) {
-          console.error(`Error fetch genre data! ${data.animeID}: `, err);
+          console.error(`Error fetch genre data! ${data.mediaId}: `, err);
           return null;
         }
       };
@@ -344,7 +347,7 @@ app.get("/overview/:type/:id", async (req, res) => {
                 // Save each id, type, subtype, title, poster, and role
 
                 return {
-                  animeId: id,
+                  mediaId: id,
                   relationId: item.id,
                   type: item.type,
                   subType: subTypeFormat,
@@ -369,12 +372,12 @@ app.get("/overview/:type/:id", async (req, res) => {
               try {
                 const query = await pool.query(
                   `
-                INSERT INTO relation (animeid, relationid, type, subtype, title, image, role)
+                INSERT INTO relation (mediaid, relationid, type, subtype, title, image, role)
                 VALUES ($1, $2, $3, $4, $5, $6, $7)
                 RETURNING *
                 `,
                   [
-                    rel.animeId,
+                    rel.mediaId,
                     rel.relationId,
                     rel.type,
                     rel.subType,
@@ -434,7 +437,7 @@ app.get("/overview/:type/:id", async (req, res) => {
 
                 return {
                   charId: char.id,
-                  animeId: id,
+                  mediaId: id,
                   slug: item.attributes.slug || "-",
                   role: char.role.charAt(0).toUpperCase() + char.role.slice(1),
                   name: item.attributes.canonicalName,
@@ -459,13 +462,13 @@ app.get("/overview/:type/:id", async (req, res) => {
               try {
                 const query = await pool.query(
                   `
-                  INSERT INTO character (charid, animeid, slug, role, name, japanname, othernames, description, image)
+                  INSERT INTO character (charid, mediaid, slug, role, name, japanname, othernames, description, image)
                   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
                   RETURNING *
                   `,
                   [
                     char.charId,
-                    char.animeId,
+                    char.mediaId,
                     char.slug,
                     char.role,
                     char.name,
@@ -542,7 +545,7 @@ app.get("/overview/:type/:id", async (req, res) => {
             `
             SELECT
                 m.id,
-                t.id AS animeid,
+                t.id AS mediaid,
                 m.subtype,
                 m.agerating,
                 m.ageratingguide,
@@ -550,8 +553,8 @@ app.get("/overview/:type/:id", async (req, res) => {
                 m.episodelength,
                 m.volumecount,
                 m.chaptercount,
-                m.startdate,
-                m.enddate,
+                TO_CHAR(m.startdate, 'YYYY-MM-DD') AS startdate,
+                TO_CHAR(m.enddate, 'YYYY-MM-DD') AS enddate,
                 m.status,
                 m.avgrating,
                 m.ratingrank,
@@ -563,16 +566,16 @@ app.get("/overview/:type/:id", async (req, res) => {
                 meta m
             JOIN title t
             ON
-                m.animeid = t.id
+                m.mediaid = t.id
             WHERE
-                m.animeid = $1
+                m.mediaid = $1
 
             `,
             [id],
           );
 
           console.log(
-            `Success fetch meta data from database with id ${query.rows[0].animeid}`,
+            `Success fetch meta data from database with id ${query.rows[0].mediaid}`,
           );
 
           return query.rows[0];
@@ -590,7 +593,7 @@ app.get("/overview/:type/:id", async (req, res) => {
           const query = await pool.query(
             `
             SELECT
-                t.id AS animeid,
+                t.id AS mediaid,
                 r.relationid,
                 r."type",
                 r.subtype,
@@ -601,7 +604,7 @@ app.get("/overview/:type/:id", async (req, res) => {
                 relation r
             JOIN title t
             ON
-                r.animeid = t.id
+                r.mediaid = t.id
             WHERE
                 t.id = $1
             `,
@@ -627,7 +630,7 @@ app.get("/overview/:type/:id", async (req, res) => {
             `
             SELECT
                 c.charid,
-                t.id AS animeid,
+                t.id AS mediaid,
                 c.slug,
                 c."role",
                 c."name",
@@ -639,7 +642,7 @@ app.get("/overview/:type/:id", async (req, res) => {
                 "character" c
             JOIN title t
             ON
-                c.animeid = t.id
+                c.mediaid = t.id
             WHERE
                 t.id = $1
             ORDER BY
@@ -678,6 +681,56 @@ app.get("/overview/:type/:id", async (req, res) => {
 
 app.get("/mylist", (req, res) => {
   res.render("animaku-list");
+});
+
+app.post("/mylist/added", async (req, res) => {
+  const {
+    idInput,
+    typeInput,
+    statusSelect,
+    scoreInput,
+    episodeProgress,
+    volumeProgress,
+    chapterProgress,
+    startDate,
+    finishDate,
+    notesInput,
+  } = req.body;
+
+  try {
+    const query = {
+      text: ` INSERT INTO user_list (
+      userid, mediaid, mediatype, status, score,
+      episode_progress, volume_progress, chapter_progress,
+      start_date, finish_date, notes)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      RETURNING *
+      `,
+      values: [
+        userId,
+        idInput,
+        typeInput,
+        statusSelect,
+        scoreInput,
+        episodeProgress,
+        volumeProgress,
+        chapterProgress,
+        startDate,
+        finishDate,
+        notesInput,
+      ],
+    };
+
+    const result = await pool.query(query);
+
+    // DEBUG
+    console.log(`Success added to the list`);
+    console.log(result.rows[0]);
+
+    res.redirect("/mylist");
+  } catch (err) {
+    res.status(500).json({ error: "Oops Something went wrong!", err });
+  }
 });
 
 export default app;
