@@ -10,7 +10,7 @@ CREATE TABLE title (
 
 CREATE TABLE meta (
     id SERIAL PRIMARY KEY,
-    animeId INT NOT NULL,
+    mediaId INT NOT NULL,
     subType VARCHAR(50),
     ageRating VARCHAR(50),
     ageRatingGuide VARCHAR(255),
@@ -18,42 +18,48 @@ CREATE TABLE meta (
     episodeLength INT,
     volumeCount INT,
     chapterCount INT,
-    startDate VARCHAR(15),
-    endDate VARCHAR(15),
+    startDate DATE,
+    endDate DATE,
     status VARCHAR(50),
-    avgRating VARCHAR(10),
+    avgRating DECIMAL(3,1),
     ratingRank INT,
     userCount INT,
     popularityRank INT,
     genres TEXT,
     youtubeId TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_meta_animeid
-    FOREIGN KEY (animeId)
+    CONSTRAINT fk_meta_mediaId
+    FOREIGN KEY (mediaId)
     REFERENCES title (id)
     ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE relation (
     id SERIAL PRIMARY KEY,
-    animeId INT NOT NULL,
+    mediaId INT NOT NULL,
     relationId INT NOT NULL,
     "type" VARCHAR(50),
     subType VARCHAR(50),
     title TEXT,
     image TEXT,
     "role" VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_relation_animeid
-    FOREIGN KEY (animeId)
+    CONSTRAINT fk_relation_mediaId
+    FOREIGN KEY (mediaId)
     REFERENCES title (id)
     ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE character (
     id SERIAL PRIMARY KEY,
     charId INT NOT NULL,
-    animeId INT NOT NULL,
+    mediaId INT NOT NULL,
     slug TEXT,
     "role" VARCHAR(50),
     name VARCHAR(255),
@@ -61,9 +67,51 @@ CREATE TABLE character (
     otherNames TEXT[],
     description TEXT,
     image TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_character_animeid
-    FOREIGN KEY (animeId)
+    CONSTRAINT fk_character_mediaId
+    FOREIGN KEY (mediaId)
     REFERENCES title (id)
     ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE "user" (
+id SERIAL PRIMARY KEY,
+username VARCHAR(50),
+email VARCHAR(255),
+password_hash TEXT,
+display_name VARCHAR(100),
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE user_list (
+id SERIAL PRIMARY KEY,
+userId INT NOT NULL,
+mediaId INT NOT NULL,
+mediaType VARCHAR(20),
+status VARCHAR(50),
+score INT DEFAULT 0,
+episode_progress INT DEFAULT 0,
+volume_progress INT DEFAULT 0,
+chapter_progress INT DEFAULT 0,
+start_date DATE,
+finish_date DATE,
+notes TEXT,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+CONSTRAINT fk_user_list_userid
+    FOREIGN KEY (userId)
+    REFERENCES "user" (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+
+CONSTRAINT fk_user_list_mediaid
+    FOREIGN KEY (mediaId)
+    REFERENCES title (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
