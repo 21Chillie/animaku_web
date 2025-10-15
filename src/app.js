@@ -3,8 +3,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import axios, { all } from "axios";
 import pool from "./db.js";
-import { error } from "console";
-import { text } from "stream/consumers";
 
 const app = express();
 
@@ -679,7 +677,7 @@ app.get("/overview/:type/:id", async (req, res) => {
   }
 });
 
-app.get("/mylist", (req, res) => {
+app.get("/mylist", async (req, res) => {
   res.render("animaku-list");
 });
 
