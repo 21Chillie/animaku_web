@@ -121,109 +121,173 @@
             </button>
           </div>
 
-          <!-- Body -->
-          <div class="p-6 space-y-4">
-            <!-- Status -->
-            <div>
-              <label class="block text-sm font-medium text-gray-300 mb-1"
-                >Status</label
-              >
-              <select
-                id="statusSelect"
-                class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
-              >
-                <option value="planning">Planning</option>
-                <option value="watching">Watching</option>
-                <option value="completed">Completed</option>
-                <option value="on_hold">On Hold</option>
-                <option value="dropped">Dropped</option>
-              </select>
-            </div>
-
-            <!-- Score -->
-            <div>
-              <label class="block text-sm font-medium text-gray-300 mb-1"
-                >Score</label
-              >
+          <!-- Form Add To List -->
+          <form action="/mylist/added" method="post">
+            <div class="p-6 space-y-4">
+              <!-- Hidden Input -->
               <input
-                type="number"
-                id="scoreInput"
-                min="0"
-                max="10"
-                step="0.5"
-                placeholder="0-10"
-                class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                type="text"
+                name="idInput"
+                id="idInput"
+                value="<%= mediaTitle.id %>"
+                class="hidden"
               />
-            </div>
 
-            <!-- Episode Progress -->
-            <div>
-              <label class="block text-sm font-medium text-gray-300 mb-1"
-                >Episode Progress</label
-              >
               <input
-                type="number"
-                id="episodeProgress"
-                min="0"
-                placeholder="0"
-                class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                type="text"
+                name="typeInput"
+                id="typeInput"
+                value="<%= mediaTitle.type %>"
+                class="hidden"
               />
-            </div>
 
-            <!-- Dates -->
-            <div class="grid grid-cols-2 gap-4">
+              <!-- Status -->
               <div>
                 <label class="block text-sm font-medium text-gray-300 mb-1"
-                  >Start Date</label
+                  >Status</label
+                >
+                <select
+                  id="statusSelect"
+                  name="statusSelect"
+                  class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                >
+                  <option value="planning">Planning</option>
+                  <% if (mediaTitle.type === "anime") { %>
+                  <option value="watching">Watching</option>
+                  <% } else { %>
+                  <option value="reading">Reading</option>
+                  <% } %>
+                  <option value="completed">Completed</option>
+                  <option value="on_hold">On Hold</option>
+                  <option value="dropped">Dropped</option>
+                </select>
+              </div>
+
+              <!-- Score -->
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1"
+                  >Score</label
                 >
                 <input
-                  type="date"
-                  id="startDate"
+                  type="number"
+                  id="scoreInput"
+                  name="scoreInput"
+                  min="0"
+                  max="10"
+                  step="0.5"
+                  placeholder="0-10"
                   class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
                 />
               </div>
+
+              <% if (mediaTitle.type === "anime") { %>
+              <!-- Episode Progress -->
               <div>
                 <label class="block text-sm font-medium text-gray-300 mb-1"
-                  >Finish Date</label
+                  >Episode Progress</label
                 >
                 <input
-                  type="date"
-                  id="finishDate"
+                  type="number"
+                  id="episodeProgress"
+                  name="episodeProgress"
+                  min="0"
+                  max="<%= mediaMeta.episode %>"
+                  placeholder="0 - <%= mediaMeta.episode %>"
                   class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
                 />
               </div>
+              <% } else { %>
+              <!-- Volume Progress -->
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1"
+                  >Volume Progress</label
+                >
+                <input
+                  type="number"
+                  id="volumeProgress"
+                  name="volumeProgress"
+                  min="0"
+                  placeholder="0"
+                  class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                />
+              </div>
+
+              <!-- Chapter Progress -->
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1"
+                  >Chapter Progress</label
+                >
+                <input
+                  type="number"
+                  id="chapterProgress"
+                  name="chapterProgress"
+                  min="0"
+                  placeholder="0"
+                  class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                />
+              </div>
+              <% } %>
+
+              <!-- Dates -->
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-300 mb-1"
+                    >Start Date</label
+                  >
+                  <input
+                    type="date"
+                    name="startDate"
+                    id="startDate"
+                    class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-300 mb-1"
+                    >Finish Date</label
+                  >
+                  <input
+                    type="date"
+                    name="finishDate"
+                    id="finishDate"
+                    class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                  />
+                </div>
+              </div>
+
+              <!-- Notes -->
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1"
+                  >Notes</label
+                >
+                <textarea
+                  name="notesInput"
+                  id="notesInput"
+                  rows="3"
+                  class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0] resize-none"
+                ></textarea>
+              </div>
             </div>
 
-            <!-- Notes -->
-            <div>
-              <label class="block text-sm font-medium text-gray-300 mb-1"
-                >Notes</label
-              >
-              <textarea
-                id="notesInput"
-                rows="3"
-                class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0] resize-none"
-              ></textarea>
-            </div>
-          </div>
-
-          <!-- Footer with Save + Delete buttons -->
-          <div class="px-6 pb-6 pt-4 border-t border-gray-700 flex gap-6">
-            <button
-              id="deleteListBtn"
-              class="border border-red-600 hover:bg-red-600 hover:text-[#eceff4] text-red-600 font-medium py-2 px-4 rounded transition"
-            >
-              Delete
-            </button>
-            <div class="space-x-3">
+            <!-- Footer with Save + Delete buttons -->
+            <div class="px-6 pb-6 pt-4 border-t border-gray-700 flex gap-6">
               <button
-                id="saveListBtn"
-                class="bg-[#88c0d0] hover:bg-[#94d0e0] text-[#3b4252] font-medium py-2 px-4 rounded transition"
+                id="deleteListBtn"
+                class="border border-red-600 hover:bg-red-600 hover:text-[#eceff4] text-red-600 font-medium py-2 px-4 rounded transition"
+                value="yes"
               >
-                Save
+                Delete
               </button>
+              <div class="space-x-3">
+                <button
+                  id="saveListBtn"
+                  type="submit"
+                  class="bg-[#88c0d0] hover:bg-[#94d0e0] text-[#3b4252] font-medium py-2 px-4 rounded transition"
+                >
+                  Save
+                </button>
+              </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
 
@@ -232,7 +296,6 @@
         <h2 class="text-xl font-semibold text-[#eceff4] mb-3">Meta Info</h2>
         <div class="bg-[#3b4252] p-6 rounded-xl">
           <div class="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-2 text-sm">
-            <% if (mediaTitle.type === "manga") { %>
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Type:</p>
               <p class="text-[#eceff4]">
@@ -248,6 +311,19 @@
               </p>
             </div>
 
+            <% if (mediaTitle.type === "anime" ) { %>
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Episodes:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.episode %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Episode Length:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.episodelength || mediaMeta.episodeLength %> min
+              </p>
+            </div>
+            <% } else {%>
             <div class="flex flex-col gap-1">
               <p class="text-gray-400">Volume:</p>
               <p class="text-[#eceff4]">
@@ -261,138 +337,59 @@
                 <%= mediaMeta.chaptercount || mediaMeta.chapterCount %>
               </p>
             </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Start Date:</p>
-              <p class="text-[#eceff4]">
-                <%= mediaMeta.startdate || mediaMeta.startDate %>
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">End Date:</p>
-              <p class="text-[#eceff4]">
-                <%= mediaMeta.enddate || mediaMeta.endDate %>
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Status:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.status %></p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Average Rating:</p>
-              <p class="text-[#eceff4]">
-                <%= mediaMeta.avgrating || mediaMeta.avgRating %>%
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Rating Rank:</p>
-              <p class="text-[#eceff4]">
-                #<%= mediaMeta.ratingrank || mediaMeta.ratingRank %>
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">User Count:</p>
-              <p class="text-[#eceff4]">
-                <%= mediaMeta.usercount || mediaMeta.userCount %>
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Popularity Rank:</p>
-              <p class="text-[#eceff4]">
-                #<%= mediaMeta.popularityrank || mediaMeta.popularityRank %>
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Genres:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.genres %></p>
-            </div>
-            <% } else {%>
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Type:</p>
-              <p class="text-[#eceff4]">
-                <%= mediaMeta.subtype || mediaMeta.subType %>
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Age Rating:</p>
-              <p class="text-[#eceff4]">
-                <%= mediaMeta.agerating || mediaMeta.ageRating %> - <%=
-                mediaMeta.ageratingguide || mediaMeta.ageRatingGuide %>
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Episodes:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.episode %></p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Episode Length:</p>
-              <p class="text-[#eceff4]">
-                <%= mediaMeta.episodelength || mediaMeta.episodeLength %> min
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Start Date:</p>
-              <p class="text-[#eceff4]">
-                <%= mediaMeta.startdate || mediaMeta.startDate %>
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">End Date:</p>
-              <p class="text-[#eceff4]">
-                <%= mediaMeta.enddate || mediaMeta.endDate %>
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Status:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.status %></p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Average Rating:</p>
-              <p class="text-[#eceff4]">
-                <%= mediaMeta.avgrating || mediaMeta.avgRating %>%
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Rating Rank:</p>
-              <p class="text-[#eceff4]">
-                #<%= mediaMeta.ratingrank || mediaMeta.ratingRank %>
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">User Count:</p>
-              <p class="text-[#eceff4]">
-                <%= mediaMeta.usercount || mediaMeta.userCount %>
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Popularity Rank:</p>
-              <p class="text-[#eceff4]">
-                #<%= mediaMeta.popularityrank || mediaMeta.popularityRank %>
-              </p>
-            </div>
-
-            <div class="flex flex-col gap-1">
-              <p class="text-gray-400">Genres:</p>
-              <p class="text-[#eceff4]"><%= mediaMeta.genres %></p>
-            </div>
             <% } %>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Start Date:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.startdate || mediaMeta.startDate %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">End Date:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.enddate || mediaMeta.endDate %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Status:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.status %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Average Rating:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.avgrating || mediaMeta.avgRating %>%
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Rating Rank:</p>
+              <p class="text-[#eceff4]">
+                #<%= mediaMeta.ratingrank || mediaMeta.ratingRank %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">User Count:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.usercount || mediaMeta.userCount %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Popularity Rank:</p>
+              <p class="text-[#eceff4]">
+                #<%= mediaMeta.popularityrank || mediaMeta.popularityRank %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Genres:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.genres %></p>
+            </div>
           </div>
         </div>
       </section>
