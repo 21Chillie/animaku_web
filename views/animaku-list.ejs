@@ -28,5 +28,115 @@
   </head>
   <body>
     <header><%- include('partials/navbar.ejs') %></header>
+
+    <main class="mx-auto my-4 w-screen max-w-screen-xl lg:my-12 min-h-screen">
+      <div class="text-gray-200">
+        <!-- Main Content Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 px-4 pt-2 xl:p-0">
+          <!-- Main Content -->
+          <div class="lg:col-span-3 bg-[#3b4252] rounded-xl overflow-hidden">
+            <!-- Table Header -->
+            <div class="bg-[#3b4252] px-4 py-3 border-b border-[#4c566a]">
+              <div
+                class="grid grid-cols-12 gap-4 text-sm font-medium text-gray-300"
+              >
+                <div class="col-span-6">Title</div>
+                <div class="col-span-2">Score</div>
+                <div class="col-span-2">Progress</div>
+                <div class="col-span-2">Type</div>
+              </div>
+            </div>
+
+            <!-- Table Body -->
+            <div class="divide-y divide-[#4c566a]">
+              <!-- Row -->
+              <div
+                class="px-4 py-3 hover:bg-[#88c0d0] hover:text-[#3b4252] transition-colors"
+              >
+                <div class="grid grid-cols-12 gap-6 items-center">
+                  <div class="col-span-6 flex items-center gap-3">
+                    <img
+                      src="/images/no-img-placeholder.webp"
+                      alt="Cover"
+                      class="w-14 h-18 rounded object-cover"
+                    />
+                    <a href="#" class="font-medium underline block truncate"
+                      >Attack on Titan Final Season</a
+                    >
+                  </div>
+                  <div class="col-span-2">-</div>
+                  <div class="col-span-2">16</div>
+                  <div class="col-span-2">TV</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar Filters -->
+          <div class="lg:col-span-1">
+            <div class="filter-container bg-[#3b4252] rounded-xl p-4">
+              <!-- Category -->
+              <div class="mb-6">
+                <h3 class="text-sm font-medium text-gray-300 mb-2">Category</h3>
+                <div class="flex flex-col gap-2">
+                  <button
+                    class="w-full text-left px-3 py-2 rounded bg-[#88c0d0] text-[#3b4252] hover:bg-[#88c0d0] hover:text-[#3b4252]"
+                  >
+                    Anime
+                  </button>
+                  <button
+                    class="w-full text-left px-3 py-2 rounded hover:bg-[#88c0d0] hover:text-[#3b4252]"
+                  >
+                    Manga
+                  </button>
+                </div>
+              </div>
+
+              <!-- Lists -->
+              <div class="mb-6">
+                <h3 class="text-sm font-medium text-gray-300 mb-2">Lists</h3>
+                <div class="flex flex-col gap-2 text-left">
+                  <button
+                    class="w-full text-left px-3 py-2 rounded bg-[#88c0d0] text-[#3b4252] hover:bg-[#88c0d0] hover:text-[#3b4252]"
+                  >
+                    All
+                  </button>
+                  <button
+                    class="w-full text-left px-3 py-2 rounded hover:bg-[#88c0d0] hover:text-[#3b4252]"
+                  >
+                    Watching
+                  </button>
+                  <button
+                    class="w-full text-left px-3 py-2 rounded hover:bg-[#88c0d0] hover:text-[#3b4252]"
+                  >
+                    Completed
+                  </button>
+                </div>
+              </div>
+
+              <!-- Sort -->
+              <div class="mb-6">
+                <h3 class="text-sm font-medium text-gray-400 mb-2">Sort</h3>
+                <select
+                  class="w-full bg-[#4c566a] border border-gray-600 rounded px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                >
+                  <option>Score</option>
+                  <option>Title</option>
+                  <option>Progress</option>
+                  <option>Date Added</option>
+                </select>
+              </div>
+
+              <!-- Reset Button -->
+              <button
+                class="w-full bg-[#88c0d0] hover:bg-[#94d0e0] text-[#3b4252] font-medium py-2 px-4 rounded transition flex items-center justify-center gap-2"
+              >
+                Reset Filters
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   </body>
 </html>
