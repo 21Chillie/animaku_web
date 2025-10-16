@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnimaKu - Anime/Manga Tracker</title>
+    <!-- Favicon -->
+    <link
+      rel="shortcut icon"
+      href="/images/icons/favicon.ico"
+      type="image/x-icon"
+    />
+
+    <!-- Remix Icon -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+
+    <!-- CSS Stuff -->
+    <link rel="stylesheet" href="/css/tailwind.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+
+    <!-- Static JS -->
+    <script src="/js/navbar.js" defer></script>
+    <script src="/js/browse.js" defer></script>
+    <script src="/js/modal.js" defer></script>
+  </head>
+  <body>
+    <header><%- include('partials/navbar.ejs') %></header>
+
+    <main
+      class="mx-auto my-4 w-screen max-w-screen-xl lg:my-12 grid grid-cols-1 lg:grid-cols-2 gap-8 px-4 pt-2 xl:p-0"
+    >
+      <!-- LEFT PANEL: Edit Form -->
+      <section
+        class="bg-[#3b4252] rounded-xl shadow-lg p-6 lg:p-8 flex flex-col justify-between"
+      >
+        <form
+          action="/mylist/edit/updated-list/<%= userList.id %>"
+          method="post"
+          class="space-y-6"
+        >
+          <h2 class="text-xl font-semibold text-[#88c0d0] mb-4">
+            Edit Your List Entry
+          </h2>
+
+          <!-- Status -->
+          <div>
+            <label for="status" class="block text-sm mb-1 text-gray-300"
+              >Status (Required)</label
+            >
+            <select
+              id="statusInput"
+              name="statusInput"
+              class="w-full bg-[#4c566a] border border-gray-600 rounded-md px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+            >
+              <option value="">Select an option</option>
+              <% if (userList.mediatype === "anime") { %>
+              <option value="watching">Watching</option>
+              <% } else { %>
+              <option value="reading">Reading</option>
+              <% } %>
+              <option value="completed">Completed</option>
+              <option value="planning">Planning</option>
+              <option value="dropped">Dropped</option>
+            </select>
+          </div>
+
+          <!-- Score -->
+          <div>
+            <label for="score" class="block text-sm mb-1 text-gray-300"
+              >Score</label
+            >
+            <input
+              type="number"
+              id="scoreInput"
+              name="scoreInput"
+              min="0"
+              max="10"
+              value="<%= userList.score || 0 %>"
+              class="w-full bg-[#4c566a] border border-gray-600 rounded-md px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+            />
+          </div>
+
+          <!-- Episode Progress -->
+          <% if (userList.mediatype === "anime") { %>
+          <div>
+            <label for="progress" class="block text-sm mb-1 text-gray-300"
+              >Episode Progress</label
+            >
+            <input
+              type="number"
+              id="episodeInput"
+              name="episodeInput"
+              min="0"
+              max="<%= userList.episode || 0 %>"
+              value="<%= userList.episode_progress %>"
+              placeholder="0 - <%= userList.episode || 0 %>"
+              class="w-full bg-[#4c566a] border border-gray-600 rounded-md px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+            />
+          </div>
+          <% } else { %>
+          <!-- Volume Progress -->
+          <div>
+            <label for="progress" class="block text-sm mb-1 text-gray-300"
+              >Episode Progress</label
+            >
+            <input
+              type="number"
+              id="volumeInput"
+              name="volumeInput"
+              min="0"
+              max="<%= userList.volumecount || 0 %>"
+              value="<%= userList.volume_progress %>"
+              placeholder="0 - <%= userList.volumecount || 0 %>"
+              class="w-full bg-[#4c566a] border border-gray-600 rounded-md px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+            />
+          </div>
+
+          <!-- Chapter Progress -->
+          <div>
+            <label for="progress" class="block text-sm mb-1 text-gray-300"
+              >Episode Progress</label
+            >
+            <input
+              type="number"
+              id="chapterInput"
+              name="chapterInput"
+              min="0"
+              max="<%= userList.chapterCount || 0 %>"
+              value="<%= userList.chapter_progress || 0 %>"
+              placeholder="0 - <%= userList.chapterCount || 0 %>"
+              class="w-full bg-[#4c566a] border border-gray-600 rounded-md px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+            />
+          </div>
+          <% } %>
+
+          <!-- Dates -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="start_date" class="block text-sm mb-1 text-gray-300"
+                >Start Date</label
+              >
+              <input
+                type="date"
+                id="start_date"
+                name="start_date"
+                value="<%= userList.start_date || '' %>"
+                class="w-full bg-[#4c566a] border border-gray-600 rounded-md px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+              />
+            </div>
+
+            <div>
+              <label for="finish_date" class="block text-sm mb-1 text-gray-300"
+                >Finish Date</label
+              >
+              <input
+                type="date"
+                id="finish_date"
+                name="finish_date"
+                value="<%= userList.finish_date || '' %>"
+                class="w-full bg-[#4c566a] border border-gray-600 rounded-md px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+              />
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div>
+            <label for="notes" class="block text-sm mb-1 text-gray-300"
+              >Notes</label
+            >
+            <textarea
+              id="notes"
+              name="notes"
+              rows="3"
+              class="w-full bg-[#4c566a] border border-gray-600 rounded-md px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+              placeholder="Add your notes here..."
+            >
+<%= userList.notes %>
+            </textarea>
+          </div>
+          <!-- Buttons -->
+          <div class="flex items-center mb-4">
+            <button
+              type="submit"
+              class="flex-1 bg-[#88c0d0] hover:bg-[#94d0e0] text-[#2e3440] font-semibold py-2 px-6 rounded-md transition-colors"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+
+        <form
+          action="/mylist/edit/deleted-list/<%= userList.id %>"
+          method="post"
+          onsubmit="return confirm('Delete this entry?');"
+          class="flex items-center"
+        >
+          <button
+            type="submit"
+            class="flex-1 bg-transparent border border-red-600 text-red-600 hover:bg-red-600 hover:text-white font-semibold py-2 px-6 rounded-md transition-colors"
+          >
+            Delete
+          </button>
+        </form>
+      </section>
+
+      <!-- RIGHT PANEL: Anime Info -->
+      <section
+        class="bg-[#3b4252] rounded-xl shadow-lg p-6 lg:p-8 flex flex-col items-center text-center"
+      >
+        <img
+          src="<%= userList.image %>"
+          alt="Anime Poster"
+          class="w-52 h-72 object-cover rounded-lg shadow-lg mb-5"
+        />
+
+        <h2 class="text-2xl font-semibold mb-2 text-[#eceff4]">
+          <%= userList.title %> (<%= userList.mediatype.toUpperCase() %>)
+        </h2>
+
+        <p
+          class="text-gray-300 text-sm leading-relaxed max-w-md mb-6 line-clamp-8 overflow-hidden text-ellipsis"
+        >
+          <%- userList.synopsis %>
+        </p>
+
+        <a
+          href="/overview/<%= userList.mediatype %>/<%= userList.mediaid %>"
+          class="inline-block bg-[#88c0d0] hover:bg-[#94d0e0] text-[#2e3440] font-medium py-2 px-6 rounded-md shadow transition"
+        >
+          Visit Overview
+        </a>
+      </section>
+    </main>
+  </body>
+</html>
