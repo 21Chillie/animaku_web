@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnimaKu - Anime/Manga Tracker</title>
+    <!-- Favicon -->
+    <link
+      rel="shortcut icon"
+      href="/images/icons/favicon.ico"
+      type="image/x-icon"
+    />
+
+    <!-- Remix Icon -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+
+    <!-- CSS Stuff -->
+    <link rel="stylesheet" href="/css/tailwind.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+
+    <!-- Static JS -->
+    <script src="/js/navbar.js" defer></script>
+    <script src="/js/browse.js" defer></script>
+    <script src="/js/modal.js" defer></script>
+  </head>
+  <body>
+    <header><%- include('partials/navbar.ejs') %></header>
+
+    <main
+      class="mx-auto my-4 w-screen max-w-screen-xl lg:my-12 flex flex-col gap-4"
+    >
+      <!-- ANIME TITLE & POSTER -->
+      <section id="anime-title" class="px-4 pt-2 xl:p-0">
+        <div class="anime-title-container flex flex-col md:flex-row gap-4">
+          <!-- Poster & Action Button -->
+          <div
+            class="bg-[#3b4252] p-6 rounded-xl shadow-md flex flex-col gap-4 shrink-0"
+          >
+            <!-- Title on mobile, hidden when viewport > 768px -->
+            <div class="title md:hidden">
+              <h1 class="font-semibold text-xl text-[#eceff4]">
+                <%= mediaTitle.title %>
+              </h1>
+            </div>
+
+            <!-- Poster Image -->
+            <div class="poster">
+              <img
+                class="aspect-3/4 h-full w-full rounded-md object-cover"
+                src="<%= mediaTitle.image %>"
+                alt="<%= mediaTitle.title %> poster"
+              />
+            </div>
+
+            <!-- Button Action -->
+            <div class="actions">
+              <button
+                id="btn-addlist"
+                class="self-start rounded-md bg-[#88c0d0] px-4 py-2 font-medium text-[#3b4252] hover:bg-[#94d0e0] transition-colors w-full"
+              >
+                Add to List
+              </button>
+            </div>
+          </div>
+
+          <!-- Title & Description -->
+          <div class="bg-[#3b4252] p-6 rounded-xl shadow-md">
+            <!-- Title -->
+            <h1 class="font-semibold text-xl text-[#eceff4] max-md:hidden">
+              <%= mediaTitle.title %>
+            </h1>
+            <h1 class="font-semibold text-xl text-[#eceff4] md:hidden">
+              Description
+            </h1>
+
+            <!-- Synopsis -->
+            <div
+              class="mt-2 text-gray-300 text-sm leading-relaxed text-justify"
+            >
+              <p
+                class="max-h-[20rem] md:max-h-[24rem] overflow-y-auto pr-4 lg:pr-16 scrollbar-thin scrollbar-thumb-[#4c566a] scrollbar-track-[#3b4252]"
+              >
+                <%- mediaTitle.synopsis %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Modal Overlay -->
+      <div
+        id="addListModal"
+        class="fixed inset-0 bg-[#2e344091] invisible z-50 flex items-center justify-center p-4"
+      >
+        <div
+          class="bg-[#2e3440] rounded-lg w-full max-w-md shadow-xl overflow-hidden"
+        >
+          <!-- Header -->
+          <div
+            class="flex items-center justify-between px-6 py-4 border-b border-gray-700"
+          >
+            <div class="flex items-center space-x-3">
+              <img
+                id="modalCover"
+                src="<%= mediaTitle.image %>"
+                alt="Anime Cover"
+                class="w-12 h-16 rounded object-cover"
+              />
+              <h2 id="modalTitle" class="text-xl font-semibold text-[#eceff4]">
+                <%= mediaTitle.title %>
+              </h2>
+            </div>
+            <button
+              id="closeModal"
+              class="text-gray-400 hover:text-[#eceff4]text-2xl"
+            >
+              <i class="ri-close-large-line"></i>
+            </button>
+          </div>
+
+          <!-- Form Add To List -->
+          <form action="/overview/list-added/" method="post">
+            <div class="p-6 space-y-4">
+              <!-- Hidden Input -->
+              <input
+                type="text"
+                name="idInput"
+                id="idInput"
+                value="<%= mediaTitle.id %>"
+                class="hidden"
+              />
+
+              <input
+                type="text"
+                name="typeInput"
+                id="typeInput"
+                value="<%= mediaTitle.type %>"
+                class="hidden"
+              />
+
+              <!-- Status -->
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1"
+                  >Status</label
+                >
+                <select
+                  id="statusSelect"
+                  name="statusSelect"
+                  class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                >
+                  <option value="planning">Planning</option>
+                  <% if (mediaTitle.type === "anime") { %>
+                  <option value="watching">Watching</option>
+                  <% } else { %>
+                  <option value="reading">Reading</option>
+                  <% } %>
+                  <option value="completed">Completed</option>
+                  <option value="dropped">Dropped</option>
+                </select>
+              </div>
+
+              <!-- Score -->
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1"
+                  >Score</label
+                >
+                <input
+                  type="number"
+                  id="scoreInput"
+                  name="scoreInput"
+                  min="0"
+                  max="10"
+                  step="0.5"
+                  placeholder="0-10"
+                  class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                />
+              </div>
+
+              <% if (mediaTitle.type === "anime") { %>
+              <!-- Episode Progress -->
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1"
+                  >Episode Progress</label
+                >
+                <input
+                  type="number"
+                  id="episodeProgress"
+                  name="episodeProgress"
+                  min="0"
+                  max="<%= mediaMeta.episode %>"
+                  placeholder="0 - <%= mediaMeta.episode %>"
+                  class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                />
+              </div>
+              <% } else { %>
+              <!-- Volume Progress -->
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1"
+                  >Volume Progress</label
+                >
+                <input
+                  type="number"
+                  id="volumeProgress"
+                  name="volumeProgress"
+                  min="0"
+                  max="<%= mediaMeta.volumecount || mediaMeta.volumeCount || 0 %>"
+                  placeholder="0 - <%= mediaMeta.volumecount || mediaMeta.volumeCount || 0 %>"
+                  class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                />
+              </div>
+
+              <!-- Chapter Progress -->
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1"
+                  >Chapter Progress</label
+                >
+                <input
+                  type="number"
+                  id="chapterProgress"
+                  name="chapterProgress"
+                  min="0"
+                  max="<%= mediaMeta.chapterCount || mediaMeta.chaptercount || 0 %>"
+                  placeholder="0 - <%= mediaMeta.chapterCount || mediaMeta.chaptercount || 0 %>"
+                  class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                />
+              </div>
+              <% } %>
+
+              <!-- Dates -->
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-300 mb-1"
+                    >Start Date</label
+                  >
+                  <input
+                    type="date"
+                    name="startDate"
+                    id="startDate"
+                    class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-300 mb-1"
+                    >Finish Date</label
+                  >
+                  <input
+                    type="date"
+                    name="finishDate"
+                    id="finishDate"
+                    class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0]"
+                  />
+                </div>
+              </div>
+
+              <!-- Notes -->
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1"
+                  >Notes</label
+                >
+                <textarea
+                  name="notesInput"
+                  id="notesInput"
+                  rows="3"
+                  class="w-full bg-[#3b4252] border border-[#4c566a] rounded px-3 py-2 text-[#eceff4] focus:outline-none focus:ring-2 focus:ring-[#88c0d0] resize-none"
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Footer with Save + Delete buttons -->
+            <div class="px-6 pb-6 pt-4 border-t border-gray-700 flex gap-6">
+              <div class="space-x-3">
+                <button
+                  id="saveListBtn"
+                  type="submit"
+                  class="bg-[#88c0d0] hover:bg-[#94d0e0] text-[#3b4252] font-medium py-2 px-4 rounded transition"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- META INFO SECTION -->
+      <section id="meta-info" class="px-4 xl:px-0">
+        <h2 class="text-xl font-semibold text-[#eceff4] mb-3">Meta Info</h2>
+        <div class="bg-[#3b4252] p-6 rounded-xl">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-2 text-sm">
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Type:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.subtype || mediaMeta.subType %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Age Rating:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.agerating || mediaMeta.ageRating %> - <%=
+                mediaMeta.ageratingguide || mediaMeta.ageRatingGuide %>
+              </p>
+            </div>
+
+            <% if (mediaTitle.type === "anime" ) { %>
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Episodes:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.episode || "N/A" %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Episode Length:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.episodelength || mediaMeta.episodeLength || "N/A"
+                %> min
+              </p>
+            </div>
+            <% } else {%>
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Volume:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.volumecount || mediaMeta.volumeCount || "N/A" %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Chapter:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.chaptercount || mediaMeta.chapterCount || "N/A" %>
+              </p>
+            </div>
+            <% } %>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Start Date:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.startdate || mediaMeta.startDate %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">End Date:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.enddate || mediaMeta.endDate || "N/A" %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Status:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.status %></p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Average Rating:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.avgrating || mediaMeta.avgRating %>%
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Rating Rank:</p>
+              <p class="text-[#eceff4]">
+                #<%= mediaMeta.ratingrank || mediaMeta.ratingRank %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">User Count:</p>
+              <p class="text-[#eceff4]">
+                <%= mediaMeta.usercount || mediaMeta.userCount %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Popularity Rank:</p>
+              <p class="text-[#eceff4]">
+                #<%= mediaMeta.popularityrank || mediaMeta.popularityRank %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-gray-400">Genres:</p>
+              <p class="text-[#eceff4]"><%= mediaMeta.genres %></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RELATIONS SECTION -->
+      <section id="relation" class="px-4 xl:px-0">
+        <h2 class="text-xl font-semibold text-[#eceff4] mb-3">Relations</h2>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- Relation Card -->
+          <% if (mediaRelation && mediaRelation.length > 0) {%>
+          <%mediaRelation.forEach(rel => { %>
+          <a
+            href="/overview/<%= rel.type %>/<%= rel.relationid || rel.relationId %>"
+          >
+            <div
+              class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
+            >
+              <img
+                src="<%= rel.image %>"
+                alt="<%= rel.title %> poster"
+                class="w-16 h-24 object-cover rounded-md"
+              />
+              <div>
+                <h3 class="text-[#eceff4] font-semibold"><%= rel.title %></h3>
+                <p class="text-gray-400 text-sm">
+                  <%= rel.subtype || rel.subType %> – <%= rel.role %>
+                </p>
+              </div>
+            </div>
+          </a>
+          <% }); %>
+          <% }; %>
+        </div>
+      </section>
+
+      <!-- CHARACTER SECTION -->
+      <section id="character" class="px-4 xl:px-0">
+        <h2 class="text-xl font-semibold text-[#eceff4] mb-3">Character</h2>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <% if (mediaCharacter && mediaCharacter.length > 0) { %>
+          <%mediaCharacter.forEach(char => { %>
+          <a href="/overview/character/<%= char.charid || char.charId %>">
+            <div
+              class="bg-[#3b4252] p-4 rounded-xl shadow-md flex items-center gap-4 hover:bg-[#434c5e] transition"
+            >
+              <img
+                src="<%= char.image %>"
+                alt="<%= char.name %> image"
+                class="w-16 h-24 object-cover rounded-md"
+              />
+              <div>
+                <h3 class="text-[#eceff4] font-semibold"><%= char.name %></h3>
+                <h3 class="text-[#eceff4] font-semibold">
+                  <%= char.japanname || char.japanName %>
+                </h3>
+                <p class="text-gray-400 text-sm"><%= char.role %></p>
+              </div>
+            </div>
+          </a>
+          <% })} %>
+        </div>
+      </section>
+
+      <% if (mediaTitle.type === "anime") { %>
+      <section id="trailer" class="px-4 xl:p-0">
+        <div class="bg-[#3b4252] p-4 rounded-xl shadow-md">
+          <h2 class="text-xl font-semibold text-[#eceff4] mb-3">🎬 Trailer</h2>
+
+          <div class="aspect-video rounded-lg overflow-hidden">
+            <iframe
+              class="w-full h-full rounded-lg"
+              src="https://www.youtube.com/embed/<%= mediaMeta.youtubeid || mediaMeta.youtubeId %>"
+              title="Attack on Titan Trailer"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </section>
+      <% } %>
+    </main>
+  </body>
+</html>
