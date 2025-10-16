@@ -54,7 +54,7 @@ app.post(`/browse`, async (req, res) => {
       rating: item.attributes.averageRating || "N/A",
       episode:
         item.attributes.episodeCount || item.attributes.chapterCount || "N/A",
-      subType: item.attributes.subtype.toUpperCase() || "NA",
+      subType: item.attributes.subtype.toUpperCase() || "N/A",
       cover:
         item.attributes.posterImage.tiny || "/images/no-img-placeholder.webp",
       category: inputCategory,
@@ -106,7 +106,7 @@ app.get("/overview/character/:id", async (req, res) => {
       description: descriptionParagraphs,
     };
 
-    res.render("animaku-character", { characterDetail });
+    res.render("character", { characterDetail });
   } catch (err) {
     res.status(500).json({ error: "No character found in database", log: err });
   }
@@ -208,12 +208,12 @@ app.get("/overview/:type/:id", async (req, res) => {
             subType: item.attributes.subtype.toUpperCase() || "N/A",
             ageRating: item.attributes.ageRating || "N/A",
             ageRatingGuide: item.attributes.ageRatingGuide || "N/A",
-            episode: item.attributes.episodeCount,
-            episodeLength: item.attributes.episodeLength,
-            volumeCount: item.attributes.volumeCount,
-            chapterCount: item.attributes.chapterCount,
-            startDate: item.attributes.startDate || "-",
-            endDate: item.attributes.endDate || "-",
+            episode: item.attributes.episodeCount || 0,
+            episodeLength: item.attributes.episodeLength || 0,
+            volumeCount: item.attributes.volumeCount || 0,
+            chapterCount: item.attributes.chapterCount || 0,
+            startDate: item.attributes.startDate,
+            endDate: item.attributes.endDate,
             status: statusFormat || "N/A",
             avgRating: item.attributes.averageRating || "-",
             ratingRank: item.attributes.ratingRank || "-",
@@ -503,7 +503,7 @@ app.get("/overview/:type/:id", async (req, res) => {
         }
       };
 
-      res.render("animaku-overview", {
+      res.render("overview", {
         mediaTitle: await mediaTitle(),
         mediaMeta: await mediaMeta(),
         mediaRelation: await mediaRelation(),
@@ -664,7 +664,7 @@ app.get("/overview/:type/:id", async (req, res) => {
         }
       };
 
-      res.render("animaku-overview", {
+      res.render("overview", {
         mediaTitle: await mediaTitle(),
         mediaMeta: await mediaMeta(),
         mediaRelation: await mediaRelation(),
@@ -677,11 +677,7 @@ app.get("/overview/:type/:id", async (req, res) => {
   }
 });
 
-app.get("/mylist", async (req, res) => {
-  res.render("animaku-list");
-});
-
-app.post("/mylist/added", async (req, res) => {
+app.post("/overview/list-added/", async (req, res) => {
   const {
     idInput,
     typeInput,
@@ -690,10 +686,12 @@ app.post("/mylist/added", async (req, res) => {
     episodeProgress,
     volumeProgress,
     chapterProgress,
-    startDate,
-    finishDate,
+
     notesInput,
   } = req.body;
+
+  const startDate = req.body.startDate || null;
+  const finishDate = req.body.finishDate || null;
 
   try {
     const query = {
@@ -709,10 +707,10 @@ app.post("/mylist/added", async (req, res) => {
         idInput,
         typeInput,
         statusSelect,
-        scoreInput,
-        episodeProgress,
-        volumeProgress,
-        chapterProgress,
+        scoreInput || 0,
+        episodeProgress || 0,
+        volumeProgress || 0,
+        chapterProgress || 0,
         startDate,
         finishDate,
         notesInput,
@@ -722,12 +720,194 @@ app.post("/mylist/added", async (req, res) => {
     const result = await pool.query(query);
 
     // DEBUG
-    console.log(`Success added to the list`);
-    console.log(result.rows[0]);
+    if (result.rows[0]) {
+      console.log(`Success added to the list`);
+      console.log(result.rows[0]);
+    } else {
+      console.log("Fail to added to the list");
+    }
 
     res.redirect("/mylist");
   } catch (err) {
     res.status(500).json({ error: "Oops Something went wrong!", err });
+  }
+});
+
+app.get("/mylist", async (req, res) => {
+  const { type, status, sort } = req.query;
+
+  try {
+    let query = `
+    SELECT ul.id, ul.userid, t."type", ul.mediaid, t.title, t.image,
+    ul.score, ul.status, ul.episode_progress, ul.volume_progress,
+    ul.chapter_progress, ul.start_date, ul.finish_date, ul.notes
+    FROM user_list ul
+    JOIN title t ON ul.mediaid = t.id
+    WHERE ul.userid = $1
+  `;
+
+    // Base parameters
+    const params = [userId];
+
+    // Add filters dynamically
+    const conditions = [];
+
+    if (type) {
+      conditions.push(`t."type" = $${params.length + 1}`);
+      params.push(type);
+    }
+
+    if (status) {
+      conditions.push(`ul.status = $${params.length + 1}`);
+      params.push(status);
+    }
+
+    // Add extra conditions (if any)
+    if (conditions.length > 0) {
+      query += " AND " + conditions.join(" AND ");
+    }
+
+    // Add sorting
+    if (sort === "score") query += " ORDER BY ul.score DESC";
+    else if (sort === "title") query += " ORDER BY t.title ASC";
+    else if (sort === "progress") query += " ORDER BY ul.episode_progress DESC";
+    else query += " ORDER BY ul.id DESC"; // default (Date Added)
+
+    // Execute query
+    const list = await pool.query(query, params);
+
+    res.render("list", { list: list.rows });
+  } catch {
+    res.status(500).json({ error: "Oops Something went wrong!", err });
+  }
+});
+
+app.get("/mylist/edit/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const query = {
+    text: `
+      SELECT
+          ul.id,
+          ul.mediaid,
+          ul.mediatype,
+          t.title,
+          t.synopsis,
+          t.image,
+          m.episode,
+          m.volumecount,
+          m.chaptercount,
+          ul.score,
+          ul.episode_progress,
+          ul.volume_progress,
+          ul.chapter_progress,
+          TO_CHAR(start_date, 'YYYY-MM-DD') AS start_date,
+          TO_CHAR(finish_date, 'YYYY-MM-DD') AS finish_date,
+          ul.notes
+      FROM
+          title t
+      JOIN user_list ul
+      ON
+          t.id = ul.mediaid
+      JOIN meta m
+          ON t.id = m.mediaid
+      WHERE ul.id = $1
+    `,
+    values: [id],
+  };
+
+  try {
+    const result = await pool.query(query);
+
+    console.log(`✅ Success fetch user list with id ${id}`);
+    console.log(result.rows[0]);
+
+    res.render("edit-list", { userList: result.rows[0] });
+  } catch (err) {
+    console.error(`❌ ERROR: ${err.message}`);
+    res.status(500).json({ error: "Oops something went wrong!", err });
+  }
+});
+
+app.post("/mylist/edit/updated-list/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const {
+    statusInput,
+    scoreInput,
+    episodeInput,
+    volumeInput,
+    chapterInput,
+    start_date,
+    finish_date,
+    notes,
+  } = req.body;
+
+  const query = {
+    text: `
+      UPDATE user_list
+      SET
+          status = $1,
+          score = $2,
+          episode_progress = $3,
+          volume_progress = $4,
+          chapter_progress = $5,
+          start_date = $6,
+          finish_date = $7,
+          notes = $8,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = $9
+      RETURNING *
+    `,
+    values: [
+      statusInput,
+      scoreInput,
+      episodeInput,
+      volumeInput,
+      chapterInput,
+      start_date,
+      finish_date,
+      notes,
+      id,
+    ],
+  };
+
+  try {
+    const result = await pool.query(query);
+
+    console.log(`Success update user list with id ${id}`);
+    console.log(result.rows[0]);
+
+    res.redirect("/mylist");
+  } catch (err) {
+    console.error(`ERROR: ${err.message}`);
+    res.status(500).json({ error: "Ooops something went wrong!", err });
+  }
+});
+
+app.post("/mylist/edit/deleted-list/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const result = await pool.query(
+      `
+      DELETE
+      FROM
+          user_list
+      WHERE
+          id = $1
+      RETURNING *
+      `,
+      [id],
+    );
+
+    console.log(`Success deleted user list with id ${id}`);
+    console.log(result.rows[0]);
+
+    res.redirect("/mylist");
+  } catch (err) {
+    console.err(`ERROR: ${err.message}`);
+    res.status(500).json({ error: "Oops something went wrong!", err });
   }
 });
 
