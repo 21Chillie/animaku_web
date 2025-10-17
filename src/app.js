@@ -9,7 +9,7 @@ const app = express();
 // Helpers for __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const API_URL = "https://kitsu.io/api/edge/";
+const API_URL = process.env.KITSU_API_URL;
 const userId = "1";
 
 // Middlewares
@@ -911,8 +911,8 @@ app.post("/mylist/edit/updated-list/:id", async (req, res) => {
       episodeInput,
       volumeInput,
       chapterInput,
-      start_date,
-      finish_date,
+      start_date || null,
+      finish_date || null,
       notes,
       id,
     ],
