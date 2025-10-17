@@ -35,53 +35,77 @@ This project is for learning purpose
      ┌────────────────────────────────────────────────┐
      │                                                │
      ▼                                                ▼
-┌────────────────────┐                      ┌────────────────────────┐
-│   PostgreSQL DB     │                     │    Kitsu API (Remote)  │
-│ (title, meta, etc.) │                     │    https://kitsu.io/   │
-└────────────────────┘                      └────────────────────────┘
+┌────────────────────┐                     ┌────────────────────────┐
+│   PostgreSQL DB    │                     │    Kitsu API (Remote)  │
+│ (title, meta, etc.)│                     │    https://kitsu.io/   │
+└────────────────────┘                     └────────────────────────┘
 ```
 
 ## API
 
 https://kitsu.docs.apiary.io/
 
-## Todo List
+## Project Progress — AnimaKu
 
-1. Finish hero section
-   - [x] Navbar section
-   - [x] Hero Title and description
+#### 1. Hero Section
 
-2. Finish browse anime/manga page
-   - [x] Design the page
-   - [x] Develop the page
-   - [x] Page function working
-   - [x] Anime result search function is finish
+- [x] Complete the navigation bar
+- [x] Add hero title and description
 
-3. Finish anime overview page
-   - [x] Design title and description layout section
-   - [x] Design layout of meta info section
-   - [x] Design layout of anime title relation section
-   - [x] Design layout of anime character
-   - [x] Design layout of anime trailer and maybe add youtube embed
-   - [x] Fetch data and display to anime overview page
+---
 
-4. Finish Character Detail Page
-   - [x] Design character layout page
-   - [x] Fetch data and display it to character page
+#### 2. Browse Anime/Manga Page
 
-5. PostgreSQL Integration For Overview And Character Page
-   - [x] Make the PostgreSQL database
-   - [x] Add caching for overview page (check DB before API request)
-   - [x] Store anime/manga title and metadata
-   - [x] Store media relations (sequel, prequel, adaptation, etc) in database
-   - [x] Store media character in database
+- [x] Design the page layout
+- [x] Develop the page functionality
+- [x] Ensure all features work properly
+- [x] Implement anime search functionality
 
-6. Add To List And My List Page (EDIT/DELETE Entries)
-   - [x] Make the add to list button on overview page functioning
-   - [x] Fix Some Null/0 Values
-   - [x] Design layout for my list page
-   - [x] Display all the related data to my list page
-   - [x] Make filters panel function
-   - [x] Design layout for edit list page
-   - [x] Make the all input can update the user list value
-   - [x] Delete button now can delete user list entries
+---
+
+#### 3. Anime Overview Page
+
+- [x] Design title and description section
+- [x] Design metadata information section
+- [x] Design related titles section (prequel, sequel, adaptation, etc.)
+- [x] Design character list section
+- [x] Design trailer section with YouTube embed
+- [x] Fetch and display anime data on the overview page
+
+---
+
+#### 4. Character Detail Page
+
+- [x] Design character detail layout
+- [x] Fetch and display character data
+
+---
+
+#### 5. PostgreSQL Integration (Overview & Character Pages)
+
+- [x] Set up the PostgreSQL database
+- [x] Add caching for the overview page (check DB before API request)
+- [x] Store anime/manga titles and metadata in the database
+- [x] Store media relations (sequel, prequel, adaptation, etc.) in the database
+- [x] Store character data in the database
+
+---
+
+#### 6. Add to List & My List Pages (Edit/Delete Entries)
+
+- [x] Implement “Add to List” button functionality on the overview page
+- [x] Fix null value issues
+- [x] Design layout for the “My List” page
+- [x] Display all relevant user list data
+- [x] Implement functional filters panel
+- [x] Design layout for the “Edit List” page
+- [x] Enable form inputs to update user list values
+- [x] Implement delete functionality for list entries
+
+---
+
+#### 7. Finishing Touches
+
+- [x] Clean up and refactor code
+- [x] Improve error handling
+- [x] Create custom error pages for broken or invalid routes
