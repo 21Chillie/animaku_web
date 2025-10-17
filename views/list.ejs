@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AnimaKu - Anime/Manga Tracker</title>
+    <title>My List | AnimaKu</title>
     <!-- Favicon -->
     <link
       rel="shortcut icon"
@@ -38,7 +38,9 @@
             class="lg:col-span-3 bg-[#3b4252] rounded-xl overflow-hidden shadow-lg"
           >
             <!-- Table Header -->
-            <div class="bg-[#3b4252] px-4 py-3 border-b border-[#4c566a]">
+            <div
+              class="bg-[#3b4252] px-4 py-3 border-b border-[#4c566a] max-md:hidden"
+            >
               <div
                 class="grid grid-cols-12 gap-4 text-sm font-medium text-gray-300"
               >
@@ -55,7 +57,7 @@
               <% if (list) { %>
               <% list.forEach(item => {%>
               <div
-                class="<%= item.type %> px-4 py-3 hover:bg-[#88c0d0] hover:text-[#3b4252] transition-colors"
+                class="<%= item.type %> px-4 py-3 hover:bg-[#88c0d0] hover:text-[#3b4252] transition-colors max-md:hidden"
               >
                 <div class="grid grid-cols-12 gap-6 items-center">
                   <div class="col-span-6 flex items-center gap-3">
@@ -81,6 +83,40 @@
                   <div class="col-span-2">
                     <%= item.status.charAt(0).toUpperCase() +
                     item.status.slice(1) %>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mobile View -->
+              <div
+                class="md:hidden bg-[#3b4252] rounded-lg p-4 mb-4 hover:bg-[#88c0d0] hover:text-[#3b4252] transition-colors"
+              >
+                <div class="flex gap-3">
+                  <img
+                    src="<%= item.image %>"
+                    alt="Cover"
+                    class="w-20 h-28 rounded-md object-cover flex-shrink-0"
+                  />
+                  <div class="flex flex-col justify-between text-sm">
+                    <div>
+                      <a
+                        href="/mylist/edit/<%= item.id %>"
+                        class="font-semibold text-base hover:underline block truncate"
+                      >
+                        <%= item.title %>
+                      </a>
+                      <p class="text-gray-400 mt-1">
+                        <span class="font-medium">Category:</span>
+                        <%= item.type.charAt(0).toUpperCase() + item.type.slice(1) %>
+                      </p>
+                      <p class="text-gray-400">
+                        <span class="font-medium">Status:</span>
+                        <%= item.status.charAt(0).toUpperCase() + item.status.slice(1) %>
+                      </p>
+                    </div>
+                    <div class="mt-2 text-[#88c0d0] font-medium">
+                      ⭐ <%= item.score %>
+                    </div>
                   </div>
                 </div>
               </div>
