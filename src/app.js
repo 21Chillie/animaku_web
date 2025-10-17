@@ -35,18 +35,20 @@ app.get("/browse", (req, res) => {
 app.post(`/browse`, async (req, res) => {
   const { inputSearch, inputType, inputCategory } = req.body;
 
+  // Parameters
   let config = {
     params: {
       "filter[text]": inputSearch.toLowerCase(),
       "filter[subtype]": inputType,
       "page[limit]": 10,
     },
-    timeout: 2000,
   };
 
   try {
+    // Fetch media data from API with the required parameter
     const response = await axios.get(`${API_URL}/${inputCategory}`, config);
 
+    // Store search result
     const searchResult = response.data.data.map((item) => ({
       id: item.id,
       type: item.type,
@@ -62,8 +64,13 @@ app.post(`/browse`, async (req, res) => {
 
     res.render("browse", { searchResult });
   } catch (err) {
-    console.error("Fetch error:", err.message);
-    res.status(500).json({ error: "Oops something went wrong!", err });
+    console.error(`ERROR LOG: ${err}`);
+
+    res.status(500).render("error", {
+      code: 500,
+      error: "Internal Server Error",
+      description: `Something went wrong on our side. Please try again later. ${err.message}.`,
+    });
   }
 });
 
@@ -108,7 +115,13 @@ app.get("/overview/character/:id", async (req, res) => {
 
     res.render("character", { characterDetail });
   } catch (err) {
-    res.status(500).json({ error: "No character found in database", log: err });
+    console.error(`ERROR LOG: ${err}`);
+
+    res.status(500).render("error", {
+      code: 500,
+      error: "Internal Server Error",
+      description: `Something went wrong while fetching media character data.`,
+    });
   }
 });
 
@@ -127,12 +140,20 @@ app.get("/overview/:type/:id", async (req, res) => {
       [id],
     );
 
+    // If not found in database, fetch media data from API
     if (checkMedia.rowCount === 0) {
-      // DEBUG
-      console.log(`No title found in database for ID ${id}`);
+      // DEBUG if data not found in database
+      console.log(
+        `Title with id ${id} not found in database, fetching data from API then insert them into database`,
+      );
 
-      // Fetch media data by ID
+      // Fetch media data from API by ID
       const response = await axios.get(`${API_URL}/${type}/${id}`);
+
+      // DEBUG: Fetch data for media title
+      if (response) {
+        console.log(`Success fetching media data from API with id ${id}`);
+      }
 
       // Function For fetching data For Title, Poster, Synopsis
       const mediaTitle = async () => {
@@ -162,7 +183,7 @@ app.get("/overview/:type/:id", async (req, res) => {
             [data.id, data.type, data.title, data.image, data.synopsis],
           );
 
-          // Check if the data was inserted successfully
+          // DEBUG: Check if the data was inserted successfully
           if (insertTitle.rowCount > 0) {
             console.log(
               `Success inserting media title data with id ${insertTitle.rows[0].id} to database`,
@@ -170,11 +191,6 @@ app.get("/overview/:type/:id", async (req, res) => {
           } else {
             console.log(`Title with id ${data.id} already exists — skipped.`);
           }
-
-          // Debug media title fetch
-          console.log(
-            `Success fetching media title data from API with id ${id}`,
-          );
 
           return data;
         } catch (err) {
@@ -197,6 +213,11 @@ app.get("/overview/:type/:id", async (req, res) => {
           const genreResponse = await axios.get(
             `${API_URL}/${type}/${id}/categories`,
           );
+
+          // DEBUG: Check if fetching genre data success
+          if (genreResponse) {
+            console.log(`Success fetching genre's data from API with id ${id}`);
+          }
 
           // Push genres name into array
           const genres = genreResponse.data.data.map(
@@ -251,21 +272,16 @@ app.get("/overview/:type/:id", async (req, res) => {
             ],
           );
 
-          // Check if meta data inserted successfully
+          // DEBUG: Check if meta data inserted successfully
           if (insertMeta.rowCount > 0) {
             console.log(
-              `Success inserting meta data for Media ID ${insertMeta.rows[0].mediaid}`,
+              `Success fetching meta data, inserting meta data for media with id ${insertMeta.rows[0].mediaid} to database`,
             );
           } else {
             console.log(
               `Meta data for Media ID ${data.mediaId} already exists — skipped.`,
             );
           }
-
-          // Debug
-          console.log(
-            `Success fetching meta data from API with id ${data.mediaId}`,
-          );
 
           return data;
         } catch (err) {
@@ -286,7 +302,6 @@ app.get("/overview/:type/:id", async (req, res) => {
                   "adaptation,prequel,sequel,parent_story,side_story",
                 sort: "role",
               },
-              timeout: 1000,
             },
           );
 
@@ -343,7 +358,6 @@ app.get("/overview/:type/:id", async (req, res) => {
                   data.role.slice(1).replace("_", " ");
 
                 // Save each id, type, subtype, title, poster, and role
-
                 return {
                   mediaId: id,
                   relationId: item.id,
@@ -395,10 +409,6 @@ app.get("/overview/:type/:id", async (req, res) => {
             }),
           );
 
-          console.log(
-            `Success fetching all media relation from API with id ${id}`,
-          );
-
           return findAnimeData;
         } catch (err) {
           console.error(`Error while fetch all media relation with id ${id}`);
@@ -406,9 +416,10 @@ app.get("/overview/:type/:id", async (req, res) => {
         }
       };
 
-      // Function to fenching anime/manga characters
+      // Function to fetching media characters
       const mediaCharacter = async () => {
         try {
+          // Get character role and id from API
           const characterResponse = await axios.get(
             `${API_URL}/${type}/${id}/characters`,
             {
@@ -419,11 +430,13 @@ app.get("/overview/:type/:id", async (req, res) => {
             },
           );
 
+          // Store each character id and role in array
           const characterIdRole = characterResponse.data.data.map((item) => ({
             id: item.id,
             role: item.attributes.role,
           }));
 
+          // Loop to find each character data by id
           const charactersData = await Promise.all(
             characterIdRole.map(async (char) => {
               try {
@@ -433,6 +446,7 @@ app.get("/overview/:type/:id", async (req, res) => {
 
                 const item = response.data.data;
 
+                // Store data
                 return {
                   charId: char.id,
                   mediaId: id,
@@ -455,6 +469,7 @@ app.get("/overview/:type/:id", async (req, res) => {
             }),
           );
 
+          // Inserting media character data into database
           await Promise.all(
             charactersData.map(async (char) => {
               try {
@@ -510,9 +525,10 @@ app.get("/overview/:type/:id", async (req, res) => {
         mediaCharacter: await mediaCharacter(),
       });
     } else {
-      // DEBUG
+      // DEBUG: if data found in database
       console.log(`Title found in database for ID ${id}`);
 
+      // Function for fetch media title from database
       const mediaTitle = async () => {
         try {
           const query = await pool.query(
@@ -523,6 +539,7 @@ app.get("/overview/:type/:id", async (req, res) => {
             [id],
           );
 
+          // DEBUG: if success
           console.log(
             `Success fetch title data from database with id ${query.rows[0].id}`,
           );
@@ -537,6 +554,7 @@ app.get("/overview/:type/:id", async (req, res) => {
         }
       };
 
+      // Function for fetch media meta from database
       const mediaMeta = async () => {
         try {
           const query = await pool.query(
@@ -572,6 +590,7 @@ app.get("/overview/:type/:id", async (req, res) => {
             [id],
           );
 
+          // DEBUG: if fetch media meta success
           console.log(
             `Success fetch meta data from database with id ${query.rows[0].mediaid}`,
           );
@@ -586,6 +605,7 @@ app.get("/overview/:type/:id", async (req, res) => {
         }
       };
 
+      // Function for fetch media relation from database
       const mediaRelation = async () => {
         try {
           const query = await pool.query(
@@ -609,6 +629,7 @@ app.get("/overview/:type/:id", async (req, res) => {
             [id],
           );
 
+          // If fetch media relation success
           console.log(
             `Success fetch relation data from database with id ${id}`,
           );
@@ -622,6 +643,7 @@ app.get("/overview/:type/:id", async (req, res) => {
         }
       };
 
+      // Function for fetch media character from database
       const mediaCharacter = async () => {
         try {
           const query = await pool.query(
@@ -673,7 +695,12 @@ app.get("/overview/:type/:id", async (req, res) => {
     }
   } catch (err) {
     console.error(`Error fetch all media data with id ${id}`);
-    res.status(500).json({ error: "Oops something went wrong!" });
+    console.error(`ERROR LOG: ${err}`);
+    res.status(500).render("error", {
+      code: 500,
+      error: "Internal Server Error",
+      description: `Something went wrong while fetching media data. ${err.message}.`,
+    });
   }
 });
 
@@ -729,7 +756,13 @@ app.post("/overview/list-added/", async (req, res) => {
 
     res.redirect("/mylist");
   } catch (err) {
-    res.status(500).json({ error: "Oops Something went wrong!", err });
+    console.error(`ERROR LOG: ${err}`);
+
+    res.status(500).render("error", {
+      code: 500,
+      error: "Internal Server Error",
+      description: `Something went wrong on our side. Please try again later.`,
+    });
   }
 });
 
@@ -778,7 +811,13 @@ app.get("/mylist", async (req, res) => {
 
     res.render("list", { list: list.rows });
   } catch {
-    res.status(500).json({ error: "Oops Something went wrong!", err });
+    console.error(`ERROR LOG: ${err}`);
+
+    res.status(500).render("error", {
+      code: 500,
+      error: "Internal Server Error",
+      description: `Something went wrong on our side. Please try again later.`,
+    });
   }
 });
 
@@ -819,13 +858,20 @@ app.get("/mylist/edit/:id", async (req, res) => {
   try {
     const result = await pool.query(query);
 
-    console.log(`✅ Success fetch user list with id ${id}`);
-    console.log(result.rows[0]);
+    // DEBUG: success get user list from database
+    if (result) {
+      console.log(`Success fetch user list with id ${id}`);
+    }
 
     res.render("edit-list", { userList: result.rows[0] });
   } catch (err) {
-    console.error(`❌ ERROR: ${err.message}`);
-    res.status(500).json({ error: "Oops something went wrong!", err });
+    console.error(`ERROR LOG: ${err}`);
+
+    res.status(500).render("error", {
+      code: 500,
+      error: "Internal Server Error",
+      description: `Something went wrong on our side. Please try again later.`,
+    });
   }
 });
 
@@ -875,13 +921,19 @@ app.post("/mylist/edit/updated-list/:id", async (req, res) => {
   try {
     const result = await pool.query(query);
 
-    console.log(`Success update user list with id ${id}`);
-    console.log(result.rows[0]);
+    if (result) {
+      console.log(`Success update user list with id ${id}`);
+    }
 
     res.redirect("/mylist");
   } catch (err) {
-    console.error(`ERROR: ${err.message}`);
-    res.status(500).json({ error: "Ooops something went wrong!", err });
+    console.error(`ERROR LOG: ${err}`);
+
+    res.status(500).render("error", {
+      code: 500,
+      error: "Internal Server Error",
+      description: `Something went wrong on our side. Please try again later.`,
+    });
   }
 });
 
@@ -901,14 +953,29 @@ app.post("/mylist/edit/deleted-list/:id", async (req, res) => {
       [id],
     );
 
-    console.log(`Success deleted user list with id ${id}`);
-    console.log(result.rows[0]);
+    if (result) {
+      console.log(`Success deleted user list with id ${id}`);
+      console.log(result.rows[0]);
+    }
 
     res.redirect("/mylist");
   } catch (err) {
-    console.err(`ERROR: ${err.message}`);
-    res.status(500).json({ error: "Oops something went wrong!", err });
+    console.error(`ERROR LOG: ${err}`);
+
+    res.status(500).render("error", {
+      code: 500,
+      error: "Internal Server Error",
+      description: `Something went wrong on our side. Please try again later.`,
+    });
   }
+});
+
+app.use((req, res) => {
+  res.status(404).render("error", {
+    code: 404,
+    error: "Page Not Found",
+    description: "Sorry, we couldn’t find the page you’re looking for.",
+  });
 });
 
 export default app;
