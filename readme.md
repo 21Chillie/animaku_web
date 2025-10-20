@@ -200,6 +200,14 @@ KITSU_API_URL=https://kitsu.io/api/edge/
 
 ### 5. Run the server
 
+Build css first:
+
+```bash
+npm run build:css
+```
+
+then start the server:
+
 ```bash
 npm start
 ```
