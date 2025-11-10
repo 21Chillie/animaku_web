@@ -1,4 +1,4 @@
-# AnimaKu — Anime & Manga Tracker
+# AnimaKu v1.0.0 — Anime & Manga Tracker
 
 **AnimaKu** is a web application built with **Node.js**, **Express**, **EJS**, **TailwindCSS**, and **PostgreSQL** that allows users to search, browse, and manage their personal anime or manga lists.
 It integrates with the **Kitsu API** to fetch up-to-date anime/manga data while caching information in PostgreSQL for faster performance.
