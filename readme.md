@@ -23,5 +23,15 @@ Node.js or Bun, Express or Hono, EJS, TailwindCSS.
 
 Todo List:
 
-- Do something
-- Then, do something
+- [x] Setup project
+- [x] Testing the Jikan API
+- [x] Design the database
+
+Redesign homepage:
+
+- [x] Navbar
+- [x] Navbar logic for collapse
+- [x] Toggle dark/light colors
+- [x] Hero section
+- [ ] Top anime
+- [ ] Popular anime this season
