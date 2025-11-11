@@ -2,10 +2,10 @@ import express from "express";
 import path from "path";
 import dotenv from "dotenv";
 import cors from "cors";
-import axios from "axios";
 
 // Import Config
 import { basicSecurityHeaders } from "./config/basicSecurity.config";
+import { indexRoute } from "./routes/index.routes";
 
 // Load environment variables
 dotenv.config();
@@ -26,8 +26,9 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 
-app.get("/", (req, res) => {
-	res.render("index");
-});
+// Routes
+// 	Index Route
+
+app.use(indexRoute);
 
 export default app;
