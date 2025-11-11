@@ -4,6 +4,7 @@ tailwind.css
 .prettierignore
 .prettierrc
 todo-list.md
+.vscode
 
 # Logs
 logs
