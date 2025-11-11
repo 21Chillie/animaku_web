@@ -1,0 +1,49 @@
+{
+	"name": "animaku_web",
+	"version": "1.0.0",
+	"description": "11/11/2025 to ??",
+	"main": "src/app.ts",
+	"scripts": {
+		"dev": "nodemon --watch src --exec ts-node src/server.ts",
+		"build": "npx tsc",
+		"build:css": "npx @tailwindcss/cli -i ./public/css/index.css -o ./public/css/tailwind.css --watch",
+		"start": "node dist/server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/21Chillie/animaku_web.git"
+	},
+	"keywords": [],
+	"author": "Chillie",
+	"license": "ISC",
+	"type": "commonjs",
+	"bugs": {
+		"url": "https://github.com/21Chillie/animaku_web/issues"
+	},
+	"homepage": "https://github.com/21Chillie/animaku_web#readme",
+	"dependencies": {
+		"@tailwindcss/cli": "^4.1.17",
+		"axios": "^1.13.2",
+		"cors": "^2.8.5",
+		"dotenv": "^17.2.3",
+		"ejs": "^3.1.10",
+		"express": "^5.1.0",
+		"pg": "^8.16.3",
+		"tailwindcss": "^4.1.17"
+	},
+	"devDependencies": {
+		"@tsconfig/node24": "^24.0.1",
+		"@types/cors": "^2.8.19",
+		"@types/ejs": "^3.1.5",
+		"@types/express": "^5.0.5",
+		"@types/node": "^24.10.0",
+		"@types/pg": "^8.15.6",
+		"@typescript-eslint/eslint-plugin": "^8.46.4",
+		"@typescript-eslint/parser": "^8.46.4",
+		"eslint": "^9.39.1",
+		"nodemon": "^3.1.10",
+		"prettier": "^3.6.2",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.9.3"
+	}
+}
