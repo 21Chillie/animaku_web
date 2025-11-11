@@ -1,16 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+	lang="en"
+	data-theme="dark">
 	<head>
 		<meta charset="UTF-8" />
 		<meta
 			name="viewport"
 			content="width=device-width, initial-scale=1.0" />
+		<!-- Favicon -->
+		<link
+			rel="shortcut icon"
+			href="/images/icons/favicon.ico"
+			type="image/x-icon" />
+
+		<!-- Favicon -->
+		<link
+			href="https://cdn.jsdelivr.net/npm/remixicon@latest/fonts/remixicon.css"
+			rel="stylesheet" />
+
+		<!-- CSS -->
 		<link
 			rel="stylesheet"
 			href="/css/tailwind.css" />
-		<title>Document</title>
+		<link
+			rel="stylesheet"
+			href="/css/index.css" />
+		<title>AnimaKu - Anime/Manga Tracker</title>
 	</head>
 	<body>
-    <h1>Hello World</h1>
-  </body>
+		<header><%- include('partials/navbar.ejs') %></header>
+
+		<main>
+			<section class="hero-section relative w-full my-14 md:my-28">
+				<!-- Overlay for darkening image -->
+				<div class="image-overlay absolute inset-0"></div>
+
+				<div class="relative z-10 mx-auto w-screen max-w-screen-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32 flex flex-col gap-6">
+					<!-- Hero Title and Description -->
+					<div class="hero-title mx-auto max-w-prose text-center flex flex-col gap-4">
+						<div class="hero-badge flex items-center gap-2 rounded-full px-4 py-2 text-sm border w-fit mx-auto">
+							<i class="ri-clipboard-line"></i>
+							<p class="font-medium inline">Track Your Favorite Titles</p>
+						</div>
+
+						<h1 class="text-3xl md:text-5xl font-bold max-w mx-auto">
+							No more
+							<span class="hero-title-blue">lost title,</span>
+							just manage your list.
+						</h1>
+
+						<p class="text-sm md:text-base text-pretty sm:text-lg/relaxed">
+							Create your personal watch list and read list with AnimaKU. Easily track the anime or manga you’ve finished and discover
+							what’s next on your journey, all in one organized list.
+						</p>
+					</div>
+
+					<!-- CTA Button -->
+					<div class="flex justify-center items-center gap-4">
+						<a href="/browse">
+							<button class="btn-get-started px-5 py-3 shadow-md">Get Started</button>
+						</a>
+
+						<a
+							href="https://github.com/21Chillie/animaku_web"
+							target="_blank">
+							<button class="btn-documentation px-5 py-3 shadow-md">Documentation</button>
+						</a>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<script src="/js/navbar.js"></script>
+	</body>
 </html>
