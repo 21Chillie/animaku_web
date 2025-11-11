@@ -1,1 +1,77 @@
-@import "tailwindcss"
+@import "tailwindcss";
+@import url("fonts.css");
+@import url("colors.css");
+@import url("navbar.css");
+
+body {
+	font-family: "JetBrains Mono", monospace;
+	background-color: var(--bg-primary);
+}
+
+button {
+	cursor: pointer;
+}
+
+/* Hero Section */
+.hero-section {
+	background-image: url("/images/hero-image.webp");
+	background-size: cover;
+	background-position: center;
+}
+
+.image-overlay {
+	background-color: var(--bg-primary);
+	opacity: 80%;
+}
+
+.hero-title h1 {
+	color: var(--text-primary);
+}
+
+.hero-title p {
+	color: var(--text-secondary);
+	font-weight: 600;
+}
+
+.hero-title-blue {
+	color: var(--text-accent);
+}
+
+.hero-badge {
+	background: var(--primary);
+	color: var(--text-accent);
+	border-color: var(--text-accent);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	background: rgba(var(--primary-rgb), 0.2);
+	box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+	transition:
+		background-color 0.3s ease,
+		box-shadow 0.3s ease,
+		color 0.3s ease;
+}
+
+.btn-get-started {
+	background-color: var(--primary);
+	color: var(--bg-primary);
+	font-weight: 700;
+	border-radius: 0.5rem;
+	transition: filter 0.2s ease;
+}
+
+.btn-get-started:hover {
+	filter: brightness(1.1);
+}
+
+.btn-documentation {
+	background-color: var(--bg-secondary);
+	border: 1px solid var(--border-color);
+	color: var(--text-primary);
+	font-weight: 700;
+	border-radius: 0.5rem;
+	transition: filter 0.2s ease;
+}
+
+.btn-documentation:hover {
+	filter: brightness(1.1);
+}
