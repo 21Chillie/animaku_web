@@ -24,3 +24,5 @@ pool.on("connect", () => {
 pool.on("error", (err) => {
 	console.log("Database connection error: ", err);
 });
+
+export default pool;
