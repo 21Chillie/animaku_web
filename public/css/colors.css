@@ -58,14 +58,14 @@
 /* Light Theme */
 [data-theme="light"] {
 	/* Background colors */
-	--bg-primary: var(--nord6);
-	--bg-secondary: var(--nord5);
-	--bg-tertiary: var(--nord4);
+	--bg-primary: var(--nord5);
+	--bg-secondary: var(--nord4);
+	--bg-tertiary: var(--nord6);
 	--bg-card: var(--nord5);
 
 	/* Text colors */
 	--text-primary: var(--nord0);
-	--text-secondary: var(--nord1);
+	--text-secondary: var(--nord2);
 	--text-muted: var(--nord3);
 	--text-accent: var(--nord10);
 
