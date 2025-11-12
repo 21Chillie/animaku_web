@@ -5,7 +5,8 @@ import cors from "cors";
 
 // Import Config
 import { basicSecurityHeaders } from "./config/basicSecurity.config";
-import { indexRoute } from "./routes/index.routes";
+import { indexRoute } from "./routes/index.route";
+import { animeRoutes } from "./routes/anime.route";
 
 // Load environment variables
 dotenv.config();
@@ -27,8 +28,10 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 
 // Routes
-// 	Index Route
 
-app.use(indexRoute);
+// 	Index Route
+app.use("/", indexRoute);
+
+app.use("/api/anime", animeRoutes);
 
 export default app;
