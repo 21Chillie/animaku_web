@@ -17,6 +17,7 @@ button {
 	background-image: url("/images/hero-image.webp");
 	background-size: cover;
 	background-position: center;
+	border-bottom: solid 1px var(--border-color);
 }
 
 .image-overlay {
@@ -38,7 +39,6 @@ button {
 }
 
 .hero-badge {
-	background: var(--primary);
 	color: var(--text-accent);
 	border-color: var(--text-accent);
 	backdrop-filter: blur(8px);
@@ -74,4 +74,69 @@ button {
 
 .btn-documentation:hover {
 	filter: brightness(1.1);
+}
+
+/* Trending Anime Section */
+.trending-anime-title {
+	color: var(--text-primary);
+}
+
+.trending-anime-title p {
+	color: var(--text-secondary);
+	opacity: 80%;
+}
+
+.anime-card {
+	background: var(--bg-secondary);
+	color: var(--text-primary);
+	border: 2px solid;
+	border-color: var(--border-color);
+	position: relative;
+	overflow: hidden;
+	backdrop-filter: blur(6px);
+}
+
+.floating-status {
+	opacity: 0;
+	transform: translateY(10px);
+	transition:
+		opacity 0.3s ease,
+		transform 0.3s ease;
+	pointer-events: none; /* prevent accidental hover flicker */
+}
+
+.icon-star {
+	color: var(--primary);
+}
+
+.anime-card:hover {
+	.floating-status {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
+	}
+	border-color: var(--primary);
+}
+
+.anime-card-info h3 {
+	color: var(--text-primary);
+}
+
+.anime-card-info p {
+	color: var(--text-secondary);
+	opacity: 80%;
+}
+
+/* Floating badges (rating & status) */
+.bg-float {
+	background: rgba(0, 0, 0, 0.35);
+	color: var(--text-primary);
+	backdrop-filter: blur(8px);
+	border: 1px solid var(--border-color);
+}
+
+/* For light theme adjustment */
+[data-theme="light"] .bg-float {
+	background: rgba(255, 255, 255, 0.55);
+	color: var(--text-primary);
 }
