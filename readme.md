@@ -33,5 +33,9 @@ Redesign homepage:
 - [x] Navbar logic for collapse
 - [x] Toggle dark/light colors
 - [x] Hero section
-- [ ] Top anime
-- [ ] Popular anime this season
+- [x] Popular anime section :
+  - [x] Write logic for fetch data
+  - [x] Write logic for storing the data
+  - [x] Get the data and render for this section
+- [ ] Top anime section
+- [ ] Top manga section
