@@ -1,5 +1,3 @@
-const htmlEl = document.documentElement;
-
 // Mobile menu toggle
 const menuToggle = document.getElementById("menuToggle");
 const mobileMenu = document.getElementById("mobileMenu");
@@ -25,32 +23,3 @@ menuToggle.addEventListener("click", () => {
 		}, 5); // small delay for smooth transition
 	}
 });
-
-// Theme toggle (desktop and mobile)
-const themeToggle = document.getElementById("themeToggle");
-const sunIcon = document.getElementById("sunIcon");
-const moonIcon = document.getElementById("moonIcon");
-
-const themeToggleMobile = document.getElementById("themeToggleMobile");
-const sunIconMobile = document.getElementById("sunIconMobile");
-const moonIconMobile = document.getElementById("moonIconMobile");
-
-const navbarBrand = document.getElementById("navbarBrand");
-
-function toggleTheme() {
-	const currentTheme = htmlEl.getAttribute("data-theme");
-	const isDark = currentTheme === "dark";
-	htmlEl.setAttribute("data-theme", isDark ? "light" : "dark");
-
-	if (currentTheme === "dark") {
-		navbarBrand.src = "/images/animaku-logo-light.webp";
-	} else {
-		navbarBrand.src = "/images/animaku-logo-dark.webp";
-	}
-
-	[sunIcon, sunIconMobile].forEach((el) => el.classList.toggle("hidden", !isDark));
-	[moonIcon, moonIconMobile].forEach((el) => el.classList.toggle("hidden", isDark));
-}
-
-themeToggle.addEventListener("click", toggleTheme);
-themeToggleMobile.addEventListener("click", toggleTheme);
