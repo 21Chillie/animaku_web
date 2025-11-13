@@ -21,6 +21,8 @@ Node.js or Bun, Express or Hono, EJS, TailwindCSS.
 | **public/**      | Static files (CSS, JS, images)           | `/css/style.css`       |
 | **views/**       | EJS templates for UI                     | `anime.ejs`, `404.ejs` |
 
+---
+
 Todo List:
 
 - [x] Setup project
@@ -37,5 +39,21 @@ Redesign homepage:
   - [x] Write logic for fetch data
   - [x] Write logic for storing the data
   - [x] Get the data and render for this section
-- [ ] Top anime section
+- [x] Top anime section :
+  - [x] Write logic for fetch data
+  - [x] Write logic for storing the data
+  - [x] Get the data and render for this section
 - [ ] Top manga section
+
+API and Database:
+
+- [x] Fetch and store it to database trending anime (max 100)
+- [x] Fetch and store it to database top anime (max 100)
+- [x] Fetch and store it to database top manga (max 100)
+- [ ] Filter query trending anime api data
+- [ ] Filter query top anime api data
+- [ ] Filter query top manga api data
+
+---
+
+Tired af ....
