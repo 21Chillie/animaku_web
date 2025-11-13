@@ -1,7 +1,21 @@
-@import "tailwindcss";
-@import url("fonts.css");
 @import url("colors.css");
-@import url("navbar.css");
+
+/* Font Setup */
+@font-face {
+	font-family: "JetBrains Mono";
+	src: url(../fonts/JetBrainsMono.ttf);
+	font-weight: 100 800;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "JetBrains Mono";
+	src: url(../fonts/JetBrainsMono-Italic.ttf);
+	font-weight: 100 800;
+	font-style: italic;
+	font-display: swap;
+}
 
 body {
 	font-family: "JetBrains Mono", monospace;
@@ -10,6 +24,92 @@ body {
 
 button {
 	cursor: pointer;
+}
+
+/* Navbar */
+.navbar {
+	background: rgba(var(--bg-secondary-rgb), 0.85);
+	color: var(--text-primary);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border-bottom: 1px solid var(--border-color);
+}
+
+/* Logo */
+.logo {
+	text-decoration: none;
+}
+
+/* Links */
+.nav-link,
+.mobile-link {
+	color: var(--text-secondary);
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.5rem;
+	transition: color 0.2s ease, background-color 0.2s ease;
+}
+.nav-link:hover,
+.mobile-link:hover {
+	background-color: var(--bg-tertiary);
+	color: var(--text-accent);
+}
+
+/* Buttons */
+.btn-outline {
+	border: 1px solid var(--border-color);
+	background: transparent;
+	color: var(--text-primary);
+	padding: 0.4rem 0.9rem;
+	border-radius: 0.5rem;
+	transition: background-color 0.2s ease, color 0.2s ease;
+}
+.btn-outline:hover {
+	background-color: var(--bg-tertiary);
+	color: var(--text-accent);
+}
+
+.btn-filled {
+	background-color: var(--primary);
+	color: var(--bg-primary);
+	padding: 0.4rem 0.9rem;
+	border-radius: 0.5rem;
+	font-weight: 500;
+	transition: filter 0.2s ease;
+}
+.btn-filled:hover {
+	filter: brightness(1.1);
+}
+
+/* Theme Button */
+.theme-btn {
+	background-color: var(--bg-tertiary);
+	border: 1px solid var(--border-color);
+	border-radius: 0.5rem;
+	color: var(--text-accent);
+	transition: color 0.3s ease;
+}
+.theme-btn:hover {
+	color: var(--primary);
+	filter: brightness(1.1);
+}
+
+/* Mobile Menu Transition */
+#mobileMenu {
+	background-color: var(--bg-secondary);
+	color: var(--text-primary);
+	border-top: 1px solid var(--border-color);
+	overflow: hidden;
+	max-height: 0;
+	opacity: 0;
+	transition: max-height 0.4s ease, opacity 0.2s ease;
+}
+
+/* When menu is open */
+#mobileMenu.open {
+	padding-top: 0.5rem;
+	padding-bottom: 0.75rem;
+	max-height: 500px; /* enough space for all items */
+	opacity: 1;
 }
 
 /* Hero Section */
@@ -45,10 +145,7 @@ button {
 	-webkit-backdrop-filter: blur(8px);
 	background: rgba(var(--primary-rgb), 0.2);
 	box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
-	transition:
-		background-color 0.3s ease,
-		box-shadow 0.3s ease,
-		color 0.3s ease;
+	transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
 }
 
 .btn-get-started {
@@ -76,7 +173,7 @@ button {
 	filter: brightness(1.1);
 }
 
-/* Trending Anime Section */
+/* Trending and Top Anime/Manga Section */
 .trending-anime-title {
 	color: var(--text-primary);
 }
@@ -84,6 +181,16 @@ button {
 .trending-anime-title p {
 	color: var(--text-secondary);
 	opacity: 80%;
+}
+
+.view-more-link {
+	text-decoration: underline;
+	text-decoration-color: transparent;
+	transition: text-decoration-color 0.3s ease;
+}
+
+.view-more-link:hover {
+	text-decoration-color: var(--primary);
 }
 
 .anime-card {
@@ -99,9 +206,7 @@ button {
 .floating-status {
 	opacity: 0;
 	transform: translateY(10px);
-	transition:
-		opacity 0.3s ease,
-		transform 0.3s ease;
+	transition: opacity 0.3s ease, transform 0.3s ease;
 	pointer-events: none; /* prevent accidental hover flicker */
 }
 
