@@ -2,6 +2,8 @@
 	/*  RGB values for transparency effects */
 	--nord8-rgb: 136, 192, 208; /* from #88c0d0 */
 	--nord10-rgb: 94, 129, 172; /* from #5e81ac */
+	--nord4-rgb: 216, 222, 233;
+	--nord1-rgb: 59, 66, 82;
 
 	/* Polar Night (dark) */
 	--nord0: #2e3440;
@@ -33,6 +35,7 @@
 	/* Background colors */
 	--bg-primary: var(--nord0);
 	--bg-secondary: var(--nord1);
+	--bg-secondary-rgb: var(--nord1-rgb);
 	--bg-tertiary: var(--nord2);
 	--bg-card: var(--nord1);
 
@@ -60,6 +63,7 @@
 	/* Background colors */
 	--bg-primary: var(--nord5);
 	--bg-secondary: var(--nord4);
+	--bg-secondary-rgb: var(--nord4-rgb);
 	--bg-tertiary: var(--nord6);
 	--bg-card: var(--nord5);
 
