@@ -6,7 +6,7 @@ import cors from "cors";
 // Import Config
 import { basicSecurityHeaders } from "./config/basicSecurity.config";
 import { indexRoute } from "./routes/index.route";
-import { animeRoutes } from "./routes/anime.route";
+import { animeRoutes } from "./routes/apiAnime.route";
 
 // Load environment variables
 dotenv.config();
