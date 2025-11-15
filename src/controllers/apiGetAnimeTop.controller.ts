@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import { DatabaseAnimeTypes } from "../types/database.types";
-import { getOldAnimeTop, deleteOldAnimeTop, getAllAnimeTop } from "../models/animeTopModel";
-import { fetchTopAnimeBatch } from "../services/fetchTopAnime.service";
-import { seedTableAnimeTop } from "../models/animeTopSeedTable";
+import { Request, Response } from 'express';
+import { deleteOldAnimeTop, getAllAnimeTop, getOldAnimeTop } from '../models/animeTopModel';
+import { seedTableAnimeTop } from '../models/animeTopSeedTable';
+import { fetchTopAnimeBatch } from '../services/fetchTopAnime.service';
+import { DatabaseAnimeTypes } from '../types/database.types';
 
 export async function getAnimeTop(req: Request, res: Response) {
 	// 30 days or 1 month
@@ -23,7 +23,7 @@ export async function getAnimeTop(req: Request, res: Response) {
 		const animeTopDB = await getAllAnimeTop();
 
 		if (animeTopDB.length === 0) {
-			console.log("Database empty, fetching from api...");
+			console.log('Database empty, fetching from api...');
 
 			const dataFromAPI = await fetchTopAnimeBatch(maxPage);
 
@@ -42,14 +42,16 @@ export async function getAnimeTop(req: Request, res: Response) {
 				updated_at: new Date().toISOString(),
 			}));
 
-			console.log("Showing data from API");
-			return res.status(200).json({ success: true, data: transformedDataAPI, source: "API" });
+			console.log('Showing data from API');
+			return res.status(200).json({ success: true, data: transformedDataAPI, source: 'API' });
 		}
 
-		console.log("Showing data from database");
-		res.status(200).json({ success: true, data: animeTopDB, source: "Database" });
+		console.log('Showing data from database');
+		res.status(200).json({ success: true, data: animeTopDB, source: 'Database' });
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ success: false, error: "Something went wrong while getting top anime data" });
+		res
+			.status(500)
+			.json({ success: false, error: 'Something went wrong while getting top anime data' });
 	}
 }

@@ -1,14 +1,18 @@
-import type { Request, Response } from "express";
-import { fetchAnimeTrendingBatch } from "../services/fetchAnimeTrending.service";
-import { seedTableAnimeTrending } from "../models/animeTrendingSeedTable";
-import { DatabaseAnimeTypes, DatabaseMangaTypes } from "../types/database.types";
-import { getOldAnimeTrending, deleteOldAnimeTrending, getAnimeTrendingLimit } from "../models/animeTrendingModel";
-import { deleteOldAnimeTop, getAnimeTopLimit, getOldAnimeTop } from "../models/animeTopModel";
-import { fetchTopAnimeBatch } from "../services/fetchTopAnime.service";
-import { seedTableAnimeTop } from "../models/animeTopSeedTable";
-import { getMangaTopLimit, getOldMangaTop } from "../models/mangaTopModel";
-import { fetchTopMangaBatch } from "../services/fetchTopManga.service";
-import { seedTableMangaTop } from "../models/mangaTopSeedTable";
+import type { Request, Response } from 'express';
+import { deleteOldAnimeTop, getAnimeTopLimit, getOldAnimeTop } from '../models/animeTopModel';
+import { seedTableAnimeTop } from '../models/animeTopSeedTable';
+import {
+	deleteOldAnimeTrending,
+	getAnimeTrendingLimit,
+	getOldAnimeTrending,
+} from '../models/animeTrendingModel';
+import { seedTableAnimeTrending } from '../models/animeTrendingSeedTable';
+import { getMangaTopLimit, getOldMangaTop } from '../models/mangaTopModel';
+import { seedTableMangaTop } from '../models/mangaTopSeedTable';
+import { fetchAnimeTrendingBatch } from '../services/fetchAnimeTrending.service';
+import { fetchTopAnimeBatch } from '../services/fetchTopAnime.service';
+import { fetchTopMangaBatch } from '../services/fetchTopManga.service';
+import { DatabaseAnimeTypes, DatabaseMangaTypes } from '../types/database.types';
 
 async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 	const daysThreshold = 30;
@@ -45,8 +49,8 @@ async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 				updated_at: new Date().toISOString(),
 			}));
 
-			console.log("Showing data from API");
-			animeTrendingData.push(...transformedDataAPI);
+			console.log('Showing data from API');
+			animeTrendingData.push(...transformedDataAPI.slice(0, maxRecords));
 		}
 
 		animeTrendingData.push(...animeTrendingDatabase);
@@ -54,7 +58,7 @@ async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 		return animeTrendingData;
 	} catch (err) {
 		console.error(err);
-		throw new Error("Something went wrong while fetching anime trending data");
+		throw new Error('Something went wrong while fetching anime trending data');
 	}
 }
 
@@ -93,17 +97,17 @@ async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 				updated_at: new Date().toISOString(),
 			}));
 
-			console.log("Showing data from API");
-			animeTopData.push(...transformedDataAPI);
+			console.log('Showing data from API');
+			animeTopData.push(...transformedDataAPI.slice(0, maxRecords));
 		}
 
-		console.log("Showing data from Database");
+		console.log('Showing data from Database');
 		animeTopData.push(...animeTopDB);
 
 		return animeTopData;
 	} catch (err) {
 		console.error(err);
-		throw new Error("Something went wrong while fetching anime trending data");
+		throw new Error('Something went wrong while fetching anime trending data');
 	}
 }
 
@@ -141,17 +145,17 @@ async function getMangaTop(): Promise<DatabaseMangaTypes[]> {
 				updated_at: new Date().toISOString(),
 			}));
 
-			console.log("Showing data from API");
-			mangaTopData.push(...transformedDataAPI);
+			console.log('Showing data from API');
+			mangaTopData.push(...transformedDataAPI.slice(0, maxRecords));
 		}
 
-		console.log("Showing data from Database");
+		console.log('Showing data from Database');
 		mangaTopData.push(...mangaTopDB);
 
 		return mangaTopData;
 	} catch (err) {
 		console.error(err);
-		throw new Error("Something went wrong while fetching anime trending data");
+		throw new Error('Something went wrong while fetching anime trending data');
 	}
 }
 
@@ -161,9 +165,13 @@ export async function renderDataIndex(req: Request, res: Response) {
 		const listTopAnime = await getAnimeTop();
 		const listTopManga = await getMangaTop();
 
-		res.status(200).render("index", { trendingAnime: listTrendingAnime, topAnime: listTopAnime, topManga: listTopManga });
+		res.status(200).render('index', {
+			trendingAnime: listTrendingAnime,
+			topAnime: listTopAnime,
+			topManga: listTopManga,
+		});
 	} catch (err) {
-		console.error("Error while rendering index page:", err);
-		return res.status(500).send("Internal Server Error");
+		console.error('Error while rendering index page:', err);
+		return res.status(500).send('Internal Server Error');
 	}
 }
