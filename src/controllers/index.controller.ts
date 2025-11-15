@@ -159,7 +159,7 @@ async function getMangaTop(): Promise<DatabaseMangaTypes[]> {
 	}
 }
 
-export async function renderDataIndex(req: Request, res: Response) {
+export async function renderIndex(req: Request, res: Response) {
 	try {
 		const listTrendingAnime = await getAnimeTrending();
 		const listTopAnime = await getAnimeTop();

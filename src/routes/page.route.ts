@@ -1,6 +1,11 @@
-import express from "express";
-import { renderDataIndex } from "../controllers/index.controller";
+import express from 'express';
+import { renderIndex } from '../controllers/index.controller';
+import { renderOverview } from '../controllers/overview.controller';
 
-export const indexRoute = express.Router();
+export const pageRoute = express.Router();
 
-indexRoute.get("/", renderDataIndex);
+// Index route
+pageRoute.get('/', renderIndex);
+
+// Overview route
+pageRoute.get('/overview/:type/:id', renderOverview);
