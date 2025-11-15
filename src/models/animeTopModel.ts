@@ -1,6 +1,6 @@
 import pool from "../config/database.config";
 import { QueryResult } from "pg";
-import { DatabaseAnimeTypes } from "../types/databaseAnime.types";
+import { DatabaseAnimeTypes } from "../types/database.types";
 
 export async function getOldAnimeTop(daysThreshold: number): Promise<DatabaseAnimeTypes[]> {
 	const result: QueryResult<DatabaseAnimeTypes> = await pool.query(
