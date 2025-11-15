@@ -48,6 +48,8 @@
 	/* Border colors */
 	--border-color: var(--nord2);
 	--border-hover: var(--nord3);
+	--border-accent: hsla(193.3, 42.4%, 66.7%, 0.5);
+	--border-accent-hover: hsla(193.3, 42.4%, 75%, 0.9);
 
 	/* Accent colors */
 	--primary: var(--nord8);
@@ -76,6 +78,8 @@
 	/* Border colors */
 	--border-color: var(--nord4);
 	--border-hover: var(--nord3);
+	--border-accent: #7697c1;
+	--border-accent-hover: #8db0d7;
 
 	/* Accent colors */
 	--primary: var(--nord10);
