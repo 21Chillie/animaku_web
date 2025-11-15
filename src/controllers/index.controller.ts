@@ -1,14 +1,14 @@
 import type { Request, Response } from "express";
 import { fetchAnimeTrendingBatch } from "../services/fetchAnimeTrending.service";
 import { seedTableAnimeTrending } from "../models/animeTrendingSeedTable";
-import dotenv from "dotenv";
-import { DatabaseAnimeTypes } from "../types/databaseAnime.types";
+import { DatabaseAnimeTypes, DatabaseMangaTypes } from "../types/database.types";
 import { getOldAnimeTrending, deleteOldAnimeTrending, getAnimeTrendingLimit } from "../models/animeTrendingModel";
 import { deleteOldAnimeTop, getAnimeTopLimit, getOldAnimeTop } from "../models/animeTopModel";
 import { fetchTopAnimeBatch } from "../services/fetchTopAnime.service";
 import { seedTableAnimeTop } from "../models/animeTopSeedTable";
-
-dotenv.config();
+import { getMangaTopLimit, getOldMangaTop } from "../models/mangaTopModel";
+import { fetchTopMangaBatch } from "../services/fetchTopManga.service";
+import { seedTableMangaTop } from "../models/mangaTopSeedTable";
 
 async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 	const daysThreshold = 30;
@@ -107,12 +107,61 @@ async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 	}
 }
 
+async function getMangaTop(): Promise<DatabaseMangaTypes[]> {
+	const dayThreshold = 30;
+	const maxRecords = 10;
+	const maxPage = 4;
+
+	try {
+		const mangaTopData: DatabaseMangaTypes[] = [];
+		const oldMangaDB = await getOldMangaTop(dayThreshold);
+
+		if (oldMangaDB.length > 0) {
+			console.log(`Found ${oldMangaDB.length} records older than 30 days, deleting...`);
+			const deleteResult = await deleteOldAnimeTop(dayThreshold);
+			console.log(`Deleted ${deleteResult} old records.`);
+		}
+
+		const mangaTopDB = await getMangaTopLimit(maxRecords);
+
+		if (mangaTopDB.length === 0) {
+			const dataFromAPI = await fetchTopMangaBatch(maxPage);
+			await seedTableMangaTop(dataFromAPI);
+
+			// Transform data from API, so the structure is same as from database
+			const transformedDataAPI: DatabaseMangaTypes[] = dataFromAPI.map((manga, index) => ({
+				id: index + 1, // Temporary ID since it doesn't have real DB ID yet
+				mal_id: manga.mal_id,
+				data: manga, // Entire anime object goes in data field
+				title: manga.title,
+				score: manga.score,
+				type: manga.type,
+				status: manga.status,
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString(),
+			}));
+
+			console.log("Showing data from API");
+			mangaTopData.push(...transformedDataAPI);
+		}
+
+		console.log("Showing data from Database");
+		mangaTopData.push(...mangaTopDB);
+
+		return mangaTopData;
+	} catch (err) {
+		console.error(err);
+		throw new Error("Something went wrong while fetching anime trending data");
+	}
+}
+
 export async function renderDataIndex(req: Request, res: Response) {
 	try {
 		const listTrendingAnime = await getAnimeTrending();
 		const listTopAnime = await getAnimeTop();
+		const listTopManga = await getMangaTop();
 
-		res.status(200).render("index", { trendingAnime: listTrendingAnime, topAnime: listTopAnime });
+		res.status(200).render("index", { trendingAnime: listTrendingAnime, topAnime: listTopAnime, topManga: listTopManga });
 	} catch (err) {
 		console.error("Error while rendering index page:", err);
 		return res.status(500).send("Internal Server Error");
