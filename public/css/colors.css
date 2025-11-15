@@ -31,7 +31,7 @@
 }
 
 /* Dark Theme (Default) */
-[data-theme="dark"] {
+[data-theme='dark'] {
 	/* Background colors */
 	--bg-primary: var(--nord0);
 	--bg-secondary: var(--nord1);
@@ -59,7 +59,7 @@
 }
 
 /* Light Theme */
-[data-theme="light"] {
+[data-theme='light'] {
 	/* Background colors */
 	--bg-primary: var(--nord5);
 	--bg-secondary: var(--nord4);
