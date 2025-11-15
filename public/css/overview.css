@@ -1,0 +1,41 @@
+@import url('colors.css');
+@import url('global.css');
+
+.image-poster {
+	border-color: var(--primary);
+}
+
+.btn-add-to-list {
+	background-color: var(--primary);
+	color: var(--bg-primary);
+	transition: filter 0.2s ease;
+}
+
+.btn-add-to-list:hover {
+	filter: brightness(1.1);
+}
+
+.title-info h1 {
+	color: var(--text-primary);
+}
+
+.title-rating {
+	background-color: var(--primary);
+}
+
+.title-rating i,
+.title-rating p {
+	color: var(--bg-primary);
+}
+
+.title-status,
+.title-type {
+	color: var(--text-primary);
+	background-color: var(--bg-secondary);
+	border: 1px solid var(--border-color);
+}
+
+.title-synopsis {
+	color: var(--text-secondary);
+	opacity: 85%;
+}
