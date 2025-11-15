@@ -6,7 +6,7 @@ import path from 'path';
 import { basicSecurityHeaders } from './config/basicSecurity.config';
 import { animeRoutes } from './routes/apiAnime.route';
 import { mangaRoutes } from './routes/apiManga.route';
-import { indexRoute } from './routes/page.route';
+import { pageRoute } from './routes/page.route';
 
 // Initialize express app
 const app = express();
@@ -27,7 +27,7 @@ app.set('views', path.join(__dirname, '../views'));
 // Routes
 
 // 	Index Route
-app.use('/', indexRoute);
+app.use('/', pageRoute);
 
 // Api for anime
 app.use('/api/anime', animeRoutes);
