@@ -1,11 +1,7 @@
 import app from "./app";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-const PORT = process.env.PORT || 3000;
+import { PORT, NODE_ENV } from "./config/env.config";
 
 app.listen(PORT, () => {
-	console.log(`Server is running on http://localhost:${PORT}`);
-	console.log(`Environment: ${process.env.NODE_ENV}`);
+	console.log(`Server is running on http://localhost:${PORT || 3000}`);
+	console.log(`Environment: ${NODE_ENV}`);
 });

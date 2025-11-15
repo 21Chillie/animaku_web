@@ -1,18 +1,15 @@
-import express from "express";
-import path from "path";
-import dotenv from "dotenv";
-import cors from "cors";
+import cors from 'cors';
+import express from 'express';
+import path from 'path';
 
 // Import Config
-import { basicSecurityHeaders } from "./config/basicSecurity.config";
-import { indexRoute } from "./routes/index.route";
-import { animeRoutes } from "./routes/apiAnime.route";
+import { basicSecurityHeaders } from './config/basicSecurity.config';
+import { animeRoutes } from './routes/apiAnime.route';
+import { mangaRoutes } from './routes/apiManga.route';
+import { indexRoute } from './routes/page.route';
 
-// Load environment variables
-dotenv.config();
-
+// Initialize express app
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(basicSecurityHeaders); // remove if not needed
@@ -21,17 +18,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Static files - relative to project root
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // View engine setup
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "../views"));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../views'));
 
 // Routes
 
 // 	Index Route
-app.use("/", indexRoute);
+app.use('/', indexRoute);
 
-app.use("/api/anime", animeRoutes);
+// Api for anime
+app.use('/api/anime', animeRoutes);
+
+// API for manga
+app.use('/api/manga', mangaRoutes);
 
 export default app;
