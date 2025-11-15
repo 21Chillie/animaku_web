@@ -1,14 +1,12 @@
 import { Pool } from "pg";
-import dotenv from "dotenv";
-
-dotenv.config();
+import { DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD } from "./env.config";
 
 const pool = new Pool({
-	host: process.env.DB_HOST,
-	port: parseInt(process.env.DB_PORT || "5432"),
-	database: process.env.DB_NAME,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASSWORD,
+	host: DB_HOST,
+	port: parseInt(DB_PORT || "5432"),
+	database: DB_NAME,
+	user: DB_USER,
+	password: DB_PASSWORD,
 	max: 20,
 	idleTimeoutMillis: 30000,
 	connectionTimeoutMillis: 2000,
