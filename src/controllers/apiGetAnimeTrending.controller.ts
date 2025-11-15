@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { fetchAnimeTrendingBatch } from "../services/fetchAnimeTrending.service";
 import { seedTableAnimeTrending } from "../models/animeTrendingSeedTable";
-import { DatabaseAnimeTypes } from "../types/databaseAnime.types";
+import { DatabaseAnimeTypes } from "../types/database.types";
 import { deleteOldAnimeTrending, getAllAnimeTrending, getOldAnimeTrending } from "../models/animeTrendingModel";
 
 export async function getAnimeTrending(req: Request, res: Response) {
