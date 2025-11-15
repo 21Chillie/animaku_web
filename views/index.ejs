@@ -42,6 +42,7 @@
 			src="/js/toggleTheme.js"
 			defer></script>
 	</head>
+
 	<body>
 		<header><%- include('partials/navbar.ejs') %></header>
 
@@ -62,10 +63,12 @@
 				<div class="image-overlay absolute inset-0 z-0"></div>
 
 				<!-- Content -->
-				<div class="relative z-10 mx-auto w-screen max-w-screen-7xl px-4 py-12 md:py-24 flex flex-col gap-6">
+				<div
+					class="relative z-10 mx-auto w-screen max-w-screen-7xl px-4 py-12 md:py-24 flex flex-col gap-6">
 					<!-- Hero Title and Description -->
 					<div class="hero-title mx-auto max-w-prose text-center flex flex-col gap-4">
-						<div class="hero-badge flex items-center gap-2 rounded-full px-4 py-2 text-sm border w-fit mx-auto">
+						<div
+							class="hero-badge flex items-center gap-2 rounded-full px-4 py-2 text-sm border w-fit mx-auto">
 							<i class="ri-clipboard-line"></i>
 							<p class="font-medium inline">Track Your Favorite Titles</p>
 						</div>
@@ -77,21 +80,21 @@
 						</h1>
 
 						<p class="text-sm md:text-base text-pretty sm:text-lg/relaxed">
-							Create your personal watch list and read list with AnimaKu. Easily track the anime or manga you’ve finished and discover
-							what’s next on your journey, all in one organized list.
+							Create your personal watch list and read list with AnimaKu. Easily track the anime or
+							manga you’ve finished and discover what’s next on your journey, all in one organized
+							list.
 						</p>
 					</div>
 
 					<!-- CTA Button -->
 					<div class="flex justify-center items-center gap-4">
 						<a href="/browse">
-							<button class="btn-get-started px-5 py-3 shadow-md">Get Started</button>
+							<button class="btn-get-started px-5 py-3 shadow-md"> Get Started </button>
 						</a>
-
 						<a
 							href="https://github.com/21Chillie/animaku_web"
 							target="_blank">
-							<button class="btn-documentation px-5 py-3 shadow-md">Read Docs</button>
+							<button class="btn-documentation px-5 py-3 shadow-md"> Read Docs </button>
 						</a>
 					</div>
 				</div>
@@ -122,7 +125,7 @@
 						<% trendingAnime.forEach(anime => { %>
 						<a href="/anime/<%= anime.mal_id %>">
 							<div
-								class="anime-card group flex flex-col rounded-xl overflow-hidden bg-card border border-transparent transition-all duration-300 hover:shadow-lg hover:border-primary h-full">
+								class="title-card group flex flex-col rounded-xl overflow-hidden bg-card border border-transparent transition-all duration-300 hover:shadow-lg hover:border-primary h-full">
 								<!-- Image container -->
 								<div class="relative aspect-3/4 overflow-hidden">
 									<img
@@ -131,7 +134,8 @@
 										class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
 
 									<% if (anime.score) { %>
-									<div class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
+									<div
+										class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
 										<i class="ri-star-fill icon-star"></i>
 										<span><%= anime.score %></span>
 									</div>
@@ -143,10 +147,12 @@
 									</div>
 								</div>
 
-								<div class="anime-card-info p-3 flex flex-col justify-between flex-1">
+								<div class="title-card-info p-3 flex flex-col justify-between flex-1">
 									<div>
-										<h3 class="text-base font-bold line-clamp-2 min-h-12"><%= anime.title %></h3>
-										<p class="text-sm opacity-80"><%= anime.type || 'Unknown' %> - <%= anime.data.episodes || '?' %> Episodes</p>
+										<h3 class="text-base font-bold line-clamp-2 min-h-12"> <%= anime.title %> </h3>
+										<p class="text-sm opacity-80">
+											<%= anime.type || 'Unknown' %> - <%= anime.data.episodes || '?' %> Episodes
+										</p>
 									</div>
 								</div>
 							</div>
@@ -158,14 +164,14 @@
 
 			<!-- Top Anime Section -->
 			<section
-				id="trending-anime-section"
+				id="top-anime-section"
 				class="w-screen my-8">
 				<div class="max-w-7xl mx-auto flex flex-col gap-4 px-4">
 					<!-- Title Section -->
-					<div class="trending-anime-title flex justify-between items-center">
+					<div class="top-anime-title flex justify-between items-center">
 						<div class="flex-col gap-1">
 							<h2 class="text-xl md:text-2xl font-bold">Top Anime Series</h2>
-							<p class="text-sm md:text-base">Most highest score anime of all time</p>
+							<p class="text-sm md:text-base"> Most highest score anime of all time </p>
 						</div>
 						<a
 							class="view-more-link"
@@ -181,7 +187,7 @@
 						<% topAnime.forEach(anime => { %>
 						<a href="/anime/<%= anime.mal_id %>">
 							<div
-								class="anime-card group flex flex-col rounded-xl overflow-hidden bg-card border border-transparent transition-all duration-300 hover:shadow-lg hover:border-primary h-full">
+								class="title-card group flex flex-col rounded-xl overflow-hidden bg-card border border-transparent transition-all duration-300 hover:shadow-lg hover:border-primary h-full">
 								<!-- Image container -->
 								<div class="relative aspect-3/4 overflow-hidden">
 									<img
@@ -190,7 +196,8 @@
 										class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
 
 									<% if (anime.score) { %>
-									<div class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
+									<div
+										class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
 										<i class="ri-star-fill icon-star"></i>
 										<span><%= anime.score %></span>
 									</div>
@@ -202,10 +209,74 @@
 									</div>
 								</div>
 
-								<div class="anime-card-info p-3 flex flex-col justify-between flex-1">
+								<div class="title-card-info p-3 flex flex-col justify-between flex-1">
 									<div>
-										<h3 class="text-base font-bold line-clamp-2 min-h-12"><%= anime.title %></h3>
-										<p class="text-sm opacity-80"><%= anime.type || 'Unknown' %> - <%= anime.data.episodes || '?' %> Episodes</p>
+										<h3 class="text-base font-bold line-clamp-2 min-h-12"> <%= anime.title %> </h3>
+										<p class="text-sm opacity-80">
+											<%= anime.type || 'Unknown' %> - <%= anime.data.episodes || '?' %> Episodes
+										</p>
+									</div>
+								</div>
+							</div>
+						</a>
+						<% }) %>
+					</div>
+				</div>
+			</section>
+
+			<!-- Top Manga Section -->
+			<section
+				id="trending-manga-section"
+				class="w-screen my-8">
+				<div class="max-w-7xl mx-auto flex flex-col gap-4 px-4">
+					<!-- Title Section -->
+					<div class="top-manga-title flex justify-between items-center">
+						<div class="flex-col gap-1">
+							<h2 class="text-xl md:text-2xl font-bold">Top Manga Series</h2>
+							<p class="text-sm md:text-base"> Most highest score manga of all time </p>
+						</div>
+						<a
+							class="view-more-link"
+							href="#">
+							View More
+						</a>
+					</div>
+
+					<!-- List Cards -->
+					<div
+						id="top-manga-container"
+						class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+						<% topManga.forEach(manga => { %>
+						<a href="/anime/<%= manga.mal_id %>">
+							<div
+								class="title-card group flex flex-col rounded-xl overflow-hidden bg-card border border-transparent transition-all duration-300 hover:shadow-lg hover:border-primary h-full">
+								<!-- Image container -->
+								<div class="relative aspect-3/4 overflow-hidden">
+									<img
+										src="<%= manga.data.images?.webp?.image_url || manga.data.images?.jpg?.image_url || '/images/no-img-placeholder.webp' %>"
+										alt="<%= manga.title %>"
+										class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+
+									<% if (manga.score) { %>
+									<div
+										class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
+										<i class="ri-star-fill icon-star"></i>
+										<span><%= manga.score %></span>
+									</div>
+									<% } %>
+
+									<div
+										class="floating-status absolute bottom-2 left-2 rounded-md px-2 py-1 text-xs font-medium bg-float opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+										<%= manga.status || 'Unknown' %>
+									</div>
+								</div>
+
+								<div class="title-card-info p-3 flex flex-col justify-between flex-1">
+									<div>
+										<h3 class="text-base font-bold line-clamp-2 min-h-12"> <%= manga.title %> </h3>
+										<p class="text-sm opacity-80">
+											<%= manga.type || 'Unknown' %> - <%= manga.data.chapters || '?' %> Episodes
+										</p>
 									</div>
 								</div>
 							</div>
