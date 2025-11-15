@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { DatabaseAnimeTypes } from "../types/databaseAnime.types";
+import { DatabaseAnimeTypes } from "../types/database.types";
 import { getOldAnimeTop, deleteOldAnimeTop, getAllAnimeTop } from "../models/animeTopModel";
 import { fetchTopAnimeBatch } from "../services/fetchTopAnime.service";
 import { seedTableAnimeTop } from "../models/animeTopSeedTable";
