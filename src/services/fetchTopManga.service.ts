@@ -10,27 +10,22 @@ export async function fetchTopMangaBatch(maxPage: number) {
 	for (let page = 1; page <= maxPage; page++) {
 		try {
 			if (page > 1) {
-				await new Promise((resolve) => setTimeout(resolve, 200));
+				await new Promise((resolve) => setTimeout(resolve, 335));
 			}
 
-			const response: AxiosResponse<JikanMangaResponse> = await axios.get(
-				`${API_URL}/top/manga`,
-				{
-					params: {
-						page: page,
-					},
-					timeout: 10000,
-				}
-			);
+			const response: AxiosResponse<JikanMangaResponse> = await axios.get(`${API_URL}/top/manga`, {
+				params: {
+					page: page,
+				},
+				timeout: 10000,
+			});
 
 			const topMangaData: Manga[] = response.data.data;
 
 			if (topMangaData && Array.isArray(topMangaData)) {
 				topMangaList.push(...topMangaData);
 
-				console.log(
-					`Page ${page}: ${topMangaList.length} top titles titles fetched from API`
-				);
+				console.log(`Page ${page}: ${topMangaList.length} top titles titles fetched from API`);
 			}
 
 			// Stop early if no more pages available
@@ -47,9 +42,7 @@ export async function fetchTopMangaBatch(maxPage: number) {
 				console.error('Request timed out');
 			}
 
-			throw new Error(
-				'Something went wrong while fetching topanime list from API!'
-			);
+			throw new Error('Something went wrong while fetching topanime list from API!');
 		}
 	}
 
