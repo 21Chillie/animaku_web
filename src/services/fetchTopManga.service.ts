@@ -1,22 +1,20 @@
-import axios, { type AxiosResponse } from 'axios';
-import type { Anime, JikanResponse } from '../types/animeData.types';
+import axios, { AxiosResponse } from 'axios';
 import { JIKAN_BASE_URL } from '../config/env.config';
+import { JikanMangaResponse, Manga } from '../types/mangaData.types';
 
 const API_URL = JIKAN_BASE_URL;
 
-export async function fetchTopAnimeBatch(maxPage: number): Promise<Anime[]> {
-	const topAnimeList: Anime[] = [];
+export async function fetchTopMangaBatch(maxPage: number) {
+	const topMangaList: Manga[] = [];
 
-	// Loop request max 4 pages for fetching only 100 anime trending data
 	for (let page = 1; page <= maxPage; page++) {
 		try {
-			// Delay Request
 			if (page > 1) {
 				await new Promise((resolve) => setTimeout(resolve, 200));
 			}
 
-			const response: AxiosResponse<JikanResponse> = await axios.get(
-				`${API_URL}/top/anime`,
+			const response: AxiosResponse<JikanMangaResponse> = await axios.get(
+				`${API_URL}/top/manga`,
 				{
 					params: {
 						page: page,
@@ -24,14 +22,14 @@ export async function fetchTopAnimeBatch(maxPage: number): Promise<Anime[]> {
 					timeout: 10000,
 				}
 			);
-			const topAnimeData: Anime[] = response.data.data;
 
-			// If the data is available and the data is array then push
-			if (topAnimeData && Array.isArray(topAnimeData)) {
-				topAnimeList.push(...topAnimeData);
+			const topMangaData: Manga[] = response.data.data;
+
+			if (topMangaData && Array.isArray(topMangaData)) {
+				topMangaList.push(...topMangaData);
 
 				console.log(
-					`Page ${page}: ${topAnimeList.length} top anime titles fetched from API`
+					`Page ${page}: ${topMangaList.length} top titles titles fetched from API`
 				);
 			}
 
@@ -55,5 +53,5 @@ export async function fetchTopAnimeBatch(maxPage: number): Promise<Anime[]> {
 		}
 	}
 
-	return topAnimeList;
+	return topMangaList;
 }

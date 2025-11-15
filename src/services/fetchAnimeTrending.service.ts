@@ -1,27 +1,32 @@
-import axios, { AxiosResponse } from "axios";
-import dotenv from "dotenv";
-import { Anime, JikanResponse } from "../types/animeData.types";
+import axios, { type AxiosResponse } from "axios";
+import type { Anime, JikanResponse } from "../types/animeData.types";
+import { JIKAN_BASE_URL } from "../config/env.config";
 
-dotenv.config();
+const API_URL = JIKAN_BASE_URL;
 
-const API_URL = process.env.JIKAN_BASE_URL;
-
-export async function fetchAnimeTrendingLimit(maxRecords: number): Promise<Anime[]> {
+export async function fetchAnimeTrendingLimit(
+	maxRecords: number,
+): Promise<Anime[]> {
 	const data: Anime[] = [];
 
 	try {
-		const response: AxiosResponse<JikanResponse> = await axios.get(`${API_URL}/seasons/now`, {
-			params: {
-				limit: maxRecords,
+		const response: AxiosResponse<JikanResponse> = await axios.get(
+			`${API_URL}/seasons/now`,
+			{
+				params: {
+					limit: maxRecords,
+				},
+				timeout: 10000,
 			},
-			timeout: 10000,
-		});
+		);
 
 		const result: Anime[] = response.data.data;
 
 		if (result && Array.isArray(result)) {
 			data.push(...result.slice(0, maxRecords));
-			console.log(`Successfully fetched ${result.length} trending anime titles from API`);
+			console.log(
+				`Successfully fetched ${result.length} trending anime titles from API`,
+			);
 		}
 	} catch (err) {
 		if (err instanceof Error) {
@@ -32,13 +37,17 @@ export async function fetchAnimeTrendingLimit(maxRecords: number): Promise<Anime
 			console.error("Request timed out");
 		}
 
-		throw new Error("Something went wrong while fetching trending anime list from API!");
+		throw new Error(
+			"Something went wrong while fetching trending anime list from API!",
+		);
 	}
 
 	return data;
 }
 
-export async function fetchAnimeTrendingBatch(maxPage: number): Promise<Anime[]> {
+export async function fetchAnimeTrendingBatch(
+	maxPage: number,
+): Promise<Anime[]> {
 	const trendingAnimeList: Anime[] = [];
 
 	// Loop request max 4 pages for fetching only 100 anime trending data
@@ -49,19 +58,24 @@ export async function fetchAnimeTrendingBatch(maxPage: number): Promise<Anime[]>
 				await new Promise((resolve) => setTimeout(resolve, 200));
 			}
 
-			const response: AxiosResponse<JikanResponse> = await axios.get(`${API_URL}/seasons/now`, {
-				params: {
-					page: page,
+			const response: AxiosResponse<JikanResponse> = await axios.get(
+				`${API_URL}/seasons/now`,
+				{
+					params: {
+						page: page,
+					},
+					timeout: 10000,
 				},
-				timeout: 10000,
-			});
+			);
 			const animeTrendingData: Anime[] = response.data.data;
 
 			// If the data is available and the data is array then push
 			if (animeTrendingData && Array.isArray(animeTrendingData)) {
 				trendingAnimeList.push(...animeTrendingData);
 
-				console.log(`Page ${page}: ${trendingAnimeList.length} trending anime titles fetched from API`);
+				console.log(
+					`Page ${page}: ${trendingAnimeList.length} trending anime titles fetched from API`,
+				);
 			}
 
 			// Stop early if no more pages available
@@ -78,7 +92,9 @@ export async function fetchAnimeTrendingBatch(maxPage: number): Promise<Anime[]>
 				console.error("Request timed out");
 			}
 
-			throw new Error("Something went wrong while fetching trending anime list from API!");
+			throw new Error(
+				"Something went wrong while fetching trending anime list from API!",
+			);
 		}
 	}
 
