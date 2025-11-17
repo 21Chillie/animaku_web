@@ -32,10 +32,188 @@
 .title-type {
 	color: var(--text-primary);
 	background-color: var(--bg-secondary);
-	border: 1px solid var(--border-color);
+	border: 1px solid var(--border-accent);
 }
 
 .title-synopsis {
 	color: var(--text-secondary);
 	opacity: 85%;
+}
+
+/* Meta */
+.title-meta-container {
+	background-color: var(--bg-secondary);
+	border: 1px solid var(--border-accent);
+}
+
+.title-meta-item i {
+	color: var(--primary);
+}
+
+.title-meta-item p {
+	color: var(--text-primary);
+}
+
+/* Genres */
+.title-genres h2 {
+	color: var(--text-primary);
+}
+
+.genre {
+	background-color: var(--bg-secondary);
+	color: var(--text-primary);
+	border: 1px solid var(--border-accent);
+}
+
+/* Characters */
+.character-container > h2 {
+	color: var(--text-primary);
+}
+
+.character-card {
+	background-color: var(--bg-secondary);
+	border: 1px solid var(--border-accent);
+	transition: all 0.2s ease;
+}
+
+.character-card:hover {
+	background-color: var(--bg-tertiary);
+	border-color: var(--primary);
+}
+
+.character-card h3 {
+	color: var(--text-primary);
+}
+
+.character-card p {
+	color: var(--text-secondary);
+	opacity: 90%;
+}
+
+.img-character {
+	border-radius: 6px 0px 0px 6px;
+}
+
+.img-voice-actor {
+	border-radius: 0px 6px 6px 0px;
+}
+
+/* Relations */
+.relations-container > h2 {
+	color: var(--text-primary);
+}
+
+.relation-card {
+	background-color: var(--bg-secondary);
+	border: 1px solid var(--border-accent);
+	transition: all 0.2s ease;
+}
+
+.relation-card:hover {
+	background-color: var(--bg-tertiary);
+	border-color: var(--primary);
+}
+
+.relation-card p {
+	color: var(--text-secondary);
+	opacity: 90%;
+}
+
+.relation-card h3 {
+	color: var(--text-primary);
+}
+
+.side-story-container {
+	background-color: var(--bg-secondary);
+	color: var(--text-primary);
+	border: 1px solid var(--border-accent);
+	transition: all 0.2s ease;
+}
+
+.side-story-container a:hover {
+	color: var(--primary);
+}
+
+/* Recommendation */
+.recommendation-container > h2 {
+	color: var(--text-primary);
+}
+
+.title-card {
+	background: var(--bg-secondary);
+	color: var(--text-primary);
+	border: 2px solid;
+	border-color: var(--border-accent);
+	position: relative;
+	overflow: hidden;
+	backdrop-filter: blur(6px);
+}
+
+.title-card:hover {
+	.floating-status {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
+	}
+	border-color: var(--border-accent-hover);
+}
+
+.title-card-info h3 {
+	color: var(--text-primary);
+}
+
+.title-card-info p {
+	color: var(--text-secondary);
+	opacity: 80%;
+}
+
+/* Floating badges (rating & status) */
+.bg-float {
+	background-color: var(--bg-secondary);
+	color: var(--text-primary);
+	backdrop-filter: blur(8px);
+	border: 1px solid var(--border-color);
+}
+
+/* For light theme adjustment */
+[data-theme='light'] .bg-float {
+	background: rgba(255, 255, 255, 0.55);
+	color: var(--text-primary);
+}
+
+/* Trailer Embed */
+.trailer-container {
+	background-color: var(--bg-secondary);
+	color: var(--text-primary);
+	border: 1px solid var(--border-accent);
+}
+
+/* Soundtrack */
+.soundtrack-container {
+	background-color: var(--bg-secondary);
+	border-color: var(--border-accent);
+}
+
+.soundtrack-container h2,
+.soundtrack-container h3 {
+	color: var(--text-primary);
+}
+
+
+.soundtrack-container i {
+	color: var(--primary);
+}
+
+.soundtrack-title {
+	color: var(--text-primary);
+}
+
+.soundtrack-by {
+	color: var(--text-secondary);
+	opacity: 80%;
+}
+
+.soundtrack-eps {
+	background-color: var(--primary);
+	color: var(--bg-primary);
 }
