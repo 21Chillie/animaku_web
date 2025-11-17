@@ -47,9 +47,11 @@
 		<header><%- include('partials/navbar.ejs') %></header>
 
 		<main>
-			<section class="min-h-screen my-16 md:my-18 mx-auto">
-				<!-- Banner -->
-				<div class="relative h-[300px] md:h-[400px] overflow-hidden">
+			<!-- Banner -->
+			<section
+				id="banner-section"
+				class="mt-16 md:mt-18 lg:mt-20">
+				<div class="-z-10 relative h-[300px] md:h-[400px] overflow-hidden">
 					<img
 						src="https://cdn.myanimelist.net/images/anime/1208/94745l.webp"
 						alt="Anime Banner"
@@ -58,347 +60,358 @@
 					<!-- Banner Overlay -->
 					<div class="absolute inset-0 bg-linear-to-b from-transparent to-(--bg-primary)"></div>
 				</div>
+			</section>
 
-				<!-- Content Container -->
-				<div class="max-w-7xl mx-auto flex items-center justify-between -mt-36 md:-mt-32 relative">
-					<div class="flex flex-col md:flex-row gap-10 px-4">
-						<!-- Poster Button -->
-						<div class="shrink-0">
-							<img
-								src="https://cdn.myanimelist.net/images/anime/1208/94745l.webp"
-								alt="Title Here"
-								class="image-poster w-48 md:w-56 rounded-lg shadow-2xl border-2 mb-4" />
+			<!-- Title -->
+			<section
+				id="title-section"
+				class="max-w-7xl mx-auto -mt-36">
+				<div class="flex flex-col md:flex-row gap-10 px-4">
+					<!-- Cover & Add to list btn -->
+					<div>
+						<img
+							src="https://cdn.myanimelist.net/images/anime/1208/94745l.webp"
+							alt="Title Here"
+							class="image-poster w-48 md:w-56 rounded-lg shadow-2xl border-2 mb-4" />
 
-							<button class="btn-add-to-list w-48 md:w-56 py-2 rounded-md">
-								<i class="ri-add-line"></i>
-								<span>Add to list</span>
-							</button>
+						<button class="btn-add-to-list w-48 md:w-56 py-2 rounded-md">
+							<i class="ri-add-line"></i>
+							<span>Add to list</span>
+						</button>
+					</div>
+
+					<!-- Title Info -->
+					<div class="title-info flex flex-col gap-4">
+						<h1 class="text-3xl font-bold leading-tight">Fullmetal Alchemist: Brotherhood</h1>
+
+						<!-- Rating, Type, Status -->
+						<div class="flex gap-2">
+							<div class="title-rating flex items-center gap-1 px-3 py-1 rounded-full">
+								<i class="ri-star-fill text-sm"></i>
+								<p class="text-sm">10</p>
+							</div>
+
+							<div class="title-type flex items-center gap-1 px-3 py-1 rounded-full">
+								<p class="text-sm">TV</p>
+							</div>
+
+							<div class="title-status flex items-center gap-1 px-3 py-1 rounded-full">
+								<p class="text-sm">Finished</p>
+							</div>
 						</div>
 
-						<!-- Title Info -->
-						<div class="title-info flex-1 flex flex-col gap-4">
-							<h1 class="text-3xl font-bold leading-tight">Fullmetal Alchemist: Brotherhood</h1>
-
-							<!-- Title Rating, Type, Status -->
-							<div class="flex gap-2">
-								<div class="title-rating flex items-center gap-1 px-3 py-1 rounded-full">
-									<i class="ri-star-fill text-sm"></i>
-									<p class="text-sm">10</p>
-								</div>
-
-								<div class="title-type flex items-center gap-1 px-3 py-1 rounded-full">
-									<p class="text-sm">TV</p>
-								</div>
-
-								<div class="title-status flex items-center gap-1 px-3 py-1 rounded-full">
-									<p class="text-sm">Finished</p>
-								</div>
-							</div>
-
-							<!-- Title Synopsis -->
-							<div
-								class="max-h-60 md:max-h-68 overflow-y-auto pr-4 lg:pr-16 scrollbar-thin scrollbar-thumb-[#4c566a] scrollbar-track-[#3b4252] mb-2">
-								<p class="title-synopsis mt-2 text-sm leading-relaxed">
-									After a horrific alchemy experiment goes wrong in the Elric household, brothers
-									Edward and Alphonse are left in a catastrophic new reality. Ignoring the
-									alchemical principle banning human transmutation, the boys attempted to bring
-									their recently deceased mother back to life. Instead, they suffered brutal
-									personal loss: Alphonse's body disintegrated while Edward lost a leg and then
-									sacrificed an arm to keep Alphonse's soul in the physical realm by binding it to a
-									hulking suit of armor.\n\nThe brothers are rescued by their neighbor Pinako
-									Rockbell and her granddaughter Winry. Known as a bio-mechanical engineering
-									prodigy, Winry creates prosthetic limbs for Edward by utilizing \"automail,\" a
-									tough, versatile metal used in robots and combat armor. After years of training,
-									the Elric brothers set off on a quest to restore their bodies by locating the
-									Philosopher's Stone—a powerful gem that allows an alchemist to defy the
-									traditional laws of Equivalent Exchange.\n\nAs Edward becomes an infamous
-									alchemist and gains the nickname \"Fullmetal,\" the boys' journey embroils them in
-									a growing conspiracy that threatens the fate of the world.\n\n[Written by MAL
-									Rewrite]
-								</p>
-							</div>
-
-							<!-- Genres -->
-							<div class="title-genres flex flex-col gap-2 mb-2">
-								<h2 class="text-2xl font-bold">Genres</h2>
-								<div class="flex gap-2">
-									<div class="genre flex items-center gap-1 px-3 py-1 rounded-full">
-										<p class="text-sm">Action</p>
-									</div>
-
-									<div class="genre flex items-center gap-1 px-3 py-1 rounded-full">
-										<p class="text-sm">Adventure</p>
-									</div>
-
-									<div class="genre flex items-center gap-1 px-3 py-1 rounded-full">
-										<p class="text-sm">Fantasy</p>
-									</div>
-
-									<div class="genre flex items-center gap-1 px-3 py-1 rounded-full">
-										<p class="text-sm">Drama</p>
-									</div>
-								</div>
-							</div>
-
-							<!-- Title Meta -->
-							<div
-								class="title-meta-container grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 p-3 rounded-md shadow-md items-start">
-								<div class="title-meta-item flex gap-2 items-center">
-									<i class="ri-tv-2-line text-base"></i>
-									<div class="flex flex-col">
-										<p class="text-sm opacity-75">Studios</p>
-										<p class="text-base">Bones</p>
-									</div>
-								</div>
-
-								<div class="title-meta-item flex gap-2 items-center">
-									<i class="ri-tv-2-line text-base"></i>
-									<div class="flex flex-col">
-										<p class="text-sm opacity-75">Source</p>
-										<p class="text-base">Manga</p>
-									</div>
-								</div>
-
-								<div class="title-meta-item flex gap-2 items-center">
-									<i class="ri-tv-2-line text-base"></i>
-									<div class="flex flex-col">
-										<p class="text-sm opacity-75">Demographics</p>
-										<p class="text-base">Shounen</p>
-									</div>
-								</div>
-
-								<div class="title-meta-item flex gap-2 items-center">
-									<i class="ri-tv-2-line text-base"></i>
-									<div class="flex flex-col">
-										<p class="text-sm opacity-75">Seasons</p>
-										<p class="text-base">Spring 2009</p>
-									</div>
-								</div>
-
-								<div class="title-meta-item flex gap-2 items-center">
-									<i class="ri-tv-2-line text-base"></i>
-									<div class="flex flex-col">
-										<p class="text-sm opacity-75">Aired</p>
-										<p class="text-base">5/4/2009</p>
-									</div>
-								</div>
-
-								<div class="title-meta-item flex gap-2 items-center">
-									<i class="ri-tv-2-line text-base"></i>
-									<div class="flex flex-col">
-										<p class="text-sm opacity-75">End</p>
-										<p class="text-base">4/7/2010</p>
-									</div>
-								</div>
-
-								<div class="title-meta-item flex gap-2 items-center">
-									<i class="ri-tv-2-line text-base"></i>
-									<div class="flex flex-col">
-										<p class="text-sm opacity-75">Duration</p>
-										<p class="text-base">24 min per ep</p>
-									</div>
-								</div>
-
-								<div class="title-meta-item flex gap-2 items-center">
-									<i class="ri-tv-2-line text-base"></i>
-									<div class="flex flex-col">
-										<p class="text-sm opacity-75">Duration</p>
-										<p class="text-base">24 min per ep</p>
-									</div>
-								</div>
-
-								<div class="title-meta-item flex gap-2 items-center">
-									<i class="ri-tv-2-line text-base"></i>
-									<div class="flex flex-col">
-										<p class="text-sm opacity-75">Rank</p>
-										<p class="text-base">#3</p>
-									</div>
-								</div>
-
-								<div class="title-meta-item flex gap-2 items-center">
-									<i class="ri-tv-2-line text-base"></i>
-									<div class="flex flex-col">
-										<p class="text-sm opacity-75">Popularity</p>
-										<p class="text-base">#3</p>
-									</div>
-								</div>
-
-								<div class="title-meta-item flex gap-2 items-center">
-									<i class="ri-tv-2-line text-base"></i>
-									<div class="flex flex-col">
-										<p class="text-sm opacity-75">Rating</p>
-										<p class="text-base">R - 17+ (violence & profanity)</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Title Characters -->
-				<div class="character-container max-w-7xl mx-auto px-4 mt-10 flex flex-col gap-3">
-					<h2 class="text-2xl font-bold">Characters</h2>
-					<!-- Characters Card -->
-					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-						<a href="/overview/character">
-							<div class="character-card flex justify-between rounded-md shadow-md">
-								<div class="flex gap-4">
-									<img
-										src="https://cdn.myanimelist.net/images/characters/5/54265.webp?s=65c1a674adae3d7c5740d5711517285a"
-										alt="Elric Alphonse image"
-										class="img-character w-20 h-28 object-cover rounded-md" />
-
-									<div class="flex flex-col gap-1 py-3">
-										<p class="text-sm">Main</p>
-										<h3 class="font-bold text-base">Elric Alphonse</h3>
-										<p class="text-sm md:text-base">Kugiyima Rei</p>
-									</div>
-								</div>
-
-								<img
-									src="https://cdn.myanimelist.net/images/voiceactors/3/63374.jpg?s=b834d16ead8ec560bcfcbc2da93ae6a2"
-									alt=""
-									class="img-voice-actor w-20 h-28 object-cover" />
-							</div>
-						</a>
-					</div>
-				</div>
-
-				<!-- Relations -->
-				<div class="relations-container max-w-7xl mx-auto px-4 mt-10 flex flex-col gap-3">
-					<h2 class="text-2xl font-bold">Relations</h2>
-					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-						<a href="/overview/anime">
-							<div class="relation-card p-2 items-center rounded-md shadow-md">
-								<div class="flex flex-col gap-1">
-									<p class="text-sm">Prequel</p>
-									<h3 class="font-bold text-base">Fullmetal 0</h3>
-								</div>
-							</div>
-						</a>
-
-						<a href="/overview/anime">
-							<div class="relation-card p-2 items-center rounded-md shadow-md">
-								<div class="flex flex-col gap-1">
-									<p class="text-sm">Sequel</p>
-									<h3 class="font-bold text-base">Fullmetal Alchemist 2</h3>
-								</div>
-							</div>
-						</a>
-
-						<a href="/overview/manga">
-							<div class="relation-card p-2 items-center rounded-md shadow-md">
-								<div class="flex flex-col gap-1">
-									<p class="text-sm">Adaptation</p>
-									<h3 class="font-bold text-base">Fullmetal Alchemist</h3>
-								</div>
-							</div>
-						</a>
-
+						<!-- Synopsis -->
 						<div
-							class="side-story-container col-span-1 md:col-span-2 lg:col-span-3 flex gap-2 p-4 rounded-md shadow-md">
-							<p class="text-base">Side Story:</p>
+							class="max-h-60 md:max-h-68 overflow-y-auto lg:pr-16 scrollbar-thin scrollbar-thumb-[#4c566a] scrollbar-track-[#3b4252] mb-2">
+							<p class="title-synopsis mt-2 text-sm leading-relaxed">
+								After a horrific alchemy experiment goes wrong in the Elric household, brothers
+								Edward and Alphonse are left in a catastrophic new reality. Ignoring the alchemical
+								principle banning human transmutation, the boys attempted to bring their recently
+								deceased mother back to life. Instead, they suffered brutal personal loss:
+								Alphonse's body disintegrated while Edward lost a leg and then sacrificed an arm to
+								keep Alphonse's soul in the physical realm by binding it to a hulking suit of
+								armor.\n\nThe brothers are rescued by their neighbor Pinako Rockbell and her
+								granddaughter Winry. Known as a bio-mechanical engineering prodigy, Winry creates
+								prosthetic limbs for Edward by utilizing \"automail,\" a tough, versatile metal used
+								in robots and combat armor. After years of training, the Elric brothers set off on a
+								quest to restore their bodies by locating the Philosopher's Stone—a powerful gem
+								that allows an alchemist to defy the traditional laws of Equivalent Exchange.\n\nAs
+								Edward becomes an infamous alchemist and gains the nickname \"Fullmetal,\" the boys'
+								journey embroils them in a growing conspiracy that threatens the fate of the
+								world.\n\n[Written by MAL Rewrite]
+							</p>
+						</div>
+
+						<!-- Genres -->
+						<div class="title-genres flex flex-col gap-2 mb-2 flex-wrap">
+							<h2 class="text-2xl font-bold">Genres</h2>
+							<div class="flex gap-2 flex-wrap">
+								<div class="genre flex items-center gap-1 px-3 py-1 rounded-full">
+									<p class="text-sm">Action</p>
+								</div>
+
+								<div class="genre flex items-center gap-1 px-3 py-1 rounded-full">
+									<p class="text-sm">Adventure</p>
+								</div>
+
+								<div class="genre flex items-center gap-1 px-3 py-1 rounded-full">
+									<p class="text-sm">Fantasy</p>
+								</div>
+
+								<div class="genre flex items-center gap-1 px-3 py-1 rounded-full">
+									<p class="text-sm">Drama</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- Meta -->
+						<div
+							class="title-meta-container grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 p-3 rounded-md shadow-md items-start">
+							<div class="title-meta-item flex gap-2 items-center">
+								<i class="ri-tv-2-line text-base"></i>
+								<div class="flex flex-col">
+									<p class="text-sm opacity-75">Studios</p>
+									<p class="text-sm md:text-base">Bones</p>
+								</div>
+							</div>
+
+							<div class="title-meta-item flex gap-2 items-center">
+								<i class="ri-tv-2-line text-base"></i>
+								<div class="flex flex-col">
+									<p class="text-sm opacity-75">Source</p>
+									<p class="text-sm md:text-base">Manga</p>
+								</div>
+							</div>
+
+							<div class="title-meta-item flex gap-2 items-center">
+								<i class="ri-tv-2-line text-base"></i>
+								<div class="flex flex-col">
+									<p class="text-sm opacity-75">Demographics</p>
+									<p class="text-sm md:text-base">Shounen</p>
+								</div>
+							</div>
+
+							<div class="title-meta-item flex gap-2 items-center">
+								<i class="ri-tv-2-line text-base"></i>
+								<div class="flex flex-col">
+									<p class="text-sm opacity-75">Seasons</p>
+									<p class="text-sm md:text-base">Spring 2009</p>
+								</div>
+							</div>
+
+							<div class="title-meta-item flex gap-2 items-center">
+								<i class="ri-tv-2-line text-base"></i>
+								<div class="flex flex-col">
+									<p class="text-sm opacity-75">Aired</p>
+									<p class="text-sm md:text-base">5/4/2009</p>
+								</div>
+							</div>
+
+							<div class="title-meta-item flex gap-2 items-center">
+								<i class="ri-tv-2-line text-base"></i>
+								<div class="flex flex-col">
+									<p class="text-sm opacity-75">End</p>
+									<p class="text-sm md:text-base">4/7/2010</p>
+								</div>
+							</div>
+
+							<div class="title-meta-item flex gap-2 items-center">
+								<i class="ri-tv-2-line text-base"></i>
+								<div class="flex flex-col">
+									<p class="text-sm opacity-75">Duration</p>
+									<p class="text-sm md:text-base">24 min per ep</p>
+								</div>
+							</div>
+
+							<div class="title-meta-item flex gap-2 items-center">
+								<i class="ri-tv-2-line text-base"></i>
+								<div class="flex flex-col">
+									<p class="text-sm opacity-75">Duration</p>
+									<p class="text-sm md:text-base">24 min per ep</p>
+								</div>
+							</div>
+
+							<div class="title-meta-item flex gap-2 items-center">
+								<i class="ri-tv-2-line text-base"></i>
+								<div class="flex flex-col">
+									<p class="text-sm opacity-75">Rank</p>
+									<p class="text-sm md:text-base">#3</p>
+								</div>
+							</div>
+
+							<div class="title-meta-item flex gap-2 items-center">
+								<i class="ri-tv-2-line text-base"></i>
+								<div class="flex flex-col">
+									<p class="text-sm opacity-75">Popularity</p>
+									<p class="text-sm md:text-base">#3</p>
+								</div>
+							</div>
+
+							<div class="title-meta-item flex gap-2 items-center">
+								<i class="ri-tv-2-line text-base"></i>
+								<div class="flex flex-col">
+									<p class="text-sm opacity-75">Rating</p>
+									<p class="text-sm md:text-base">R - 17+ (violence & profanity)</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Character Section -->
+			<section
+				id="character-section"
+				class="character-container max-w-7xl mx-auto px-4 mt-10 flex flex-col gap-3">
+				<h2 class="text-2xl font-bold">Characters</h2>
+				<!-- Characters Card -->
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+					<a href="/overview/character">
+						<div class="character-card flex justify-between rounded-md shadow-md">
+							<div class="flex gap-4">
+								<img
+									src="https://cdn.myanimelist.net/images/characters/5/54265.webp?s=65c1a674adae3d7c5740d5711517285a"
+									alt="Elric Alphonse image"
+									class="img-character w-20 h-28 object-cover rounded-md" />
+
+								<div class="flex flex-col gap-1 py-3">
+									<p class="text-sm">Main</p>
+									<h3 class="font-bold text-base">Elric Alphonse</h3>
+									<p class="text-sm md:text-base">Kugiyima Rei</p>
+								</div>
+							</div>
+
+							<img
+								src="https://cdn.myanimelist.net/images/voiceactors/3/63374.jpg?s=b834d16ead8ec560bcfcbc2da93ae6a2"
+								alt=""
+								class="img-voice-actor w-20 h-28 object-cover" />
+						</div>
+					</a>
+				</div>
+			</section>
+
+			<!-- Relation Section -->
+			<section
+				id="relation-section"
+				class="relations-container max-w-7xl mx-auto px-4 mt-10 flex flex-col gap-3">
+				<h2 class="text-2xl font-bold">Relations</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+					<a href="/overview/anime">
+						<div class="relation-card p-3 items-center rounded-md shadow-md">
 							<div class="flex flex-col gap-1">
-								<a
-									href="#"
-									class="text-base underline">
-									Fullmetal Alchemist: Brotherhood Specials
-								</a>
-
-								<a
-									href="#"
-									class="text-base underline">
-									Fullmetal Alchemist: The Sacred Star of Milos
-								</a>
+								<p class="text-sm">Prequel</p>
+								<h3 class="font-bold text-base">Fullmetal 0</h3>
 							</div>
+						</div>
+					</a>
+
+					<a href="/overview/anime">
+						<div class="relation-card p-2 items-center rounded-md shadow-md">
+							<div class="flex flex-col gap-1">
+								<p class="text-sm">Sequel</p>
+								<h3 class="font-bold text-base">Fullmetal Alchemist 2</h3>
+							</div>
+						</div>
+					</a>
+
+					<a href="/overview/manga">
+						<div class="relation-card p-3 items-center rounded-md shadow-md">
+							<div class="flex flex-col gap-1">
+								<p class="text-sm">Adaptation</p>
+								<h3 class="font-bold text-base">Fullmetal Alchemist</h3>
+							</div>
+						</div>
+					</a>
+
+					<div
+						class="side-story-container col-span-1 md:col-span-2 lg:col-span-3 flex flex-col md:flex-row gap-2 p-3 rounded-md shadow-md">
+						<p class="text-base shrink-0">Side Story:</p>
+						<div class="flex flex-col gap-3">
+							<a
+								href="#"
+								class="text-base underline">
+								Fullmetal Alchemist: Brotherhood Specials
+							</a>
+
+							<a
+								href="#"
+								class="text-base underline">
+								Fullmetal Alchemist: The Sacred Star of Milos
+							</a>
 						</div>
 					</div>
 				</div>
+			</section>
 
-				<!-- Recommendation -->
-				<div class="recommendation-container max-w-7xl mx-auto px-4 mt-10 flex flex-col gap-3">
-					<h2 class="text-2xl font-bold">Recommendation</h2>
-					<!-- List Recommendation -->
-					<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-						<a href="/overview/anime/">
-							<div
-								class="title-card group flex flex-col rounded-md overflow-hidden transition-all duration-300">
-								<!-- Image container -->
-								<div class="relative aspect-3/4 overflow-hidden">
-									<img
-										src="https://cdn.myanimelist.net/images/anime/1370/135212.webp?s=057b95e4f0325310cd6c3747123e7c3b"
-										alt="Title"
-										class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+			<!-- Recommendation Section -->
+			<section
+				id="recommendation-section"
+				class="recommendation-container max-w-7xl mx-auto px-4 mt-10 flex flex-col gap-3">
+				<h2 class="text-2xl font-bold">Recommendation</h2>
+				<!-- List Recommendation -->
+				<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+					<a href="/overview/anime/">
+						<div
+							class="title-card group flex flex-col rounded-md overflow-hidden transition-all duration-300">
+							<!-- Image container -->
+							<div class="relative aspect-3/4 overflow-hidden">
+								<img
+									src="https://cdn.myanimelist.net/images/anime/1370/135212.webp?s=057b95e4f0325310cd6c3747123e7c3b"
+									alt="Title"
+									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
 
-									<div
-										class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
-										<span>191 votes</span>
-									</div>
-								</div>
-
-								<div class="px-2 py-3">
-									<h3 class="text-sm md:text-base font-bold line-clamp-2">Samurai Champloo</h3>
+								<div
+									class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
+									<span>191 votes</span>
 								</div>
 							</div>
-						</a>
-					</div>
-				</div>
 
-				<!-- Trailer Embed -->
-				<div class="max-w-7xl mx-auto px-4 mt-10">
-					<div class="trailer-container p-6 rounded-md shadow-md">
-						<h2 class="text-2xl font-bold mb-4">Trailer</h2>
-
-						<div class="aspect-video rounded-lg overflow-hidden">
-							<iframe
-								class="w-full h-full rounded-lg"
-								src="https://www.youtube-nocookie.com/embed/1ac3_YdSSy0?enablejsapi=1&wmode=opaque"
-								title="Attack on Titan Trailer"
-								frameborder="0"
-								allowfullscreen></iframe>
-						</div>
-					</div>
-				</div>
-
-				<!-- Soundtrack -->
-				<div class="max-w-7xl mx-auto px-4 mt-10">
-					<div class="soundtrack-container border p-6 rounded-md shadow-md">
-						<h2 class="text-2xl font-bold mb-6">Soundtracks</h2>
-
-						<!-- Openings -->
-						<div class="opening-container mb-6">
-							<div class="flex items-center gap-2 mb-3">
-								<i class="ri-music-2-line text-lg"></i>
-								<h3 class="text-lg font-medium">Openings</h3>
-							</div>
-
-							<div class="flex flex-col gap-4">
-								<!-- Item -->
-								<div class="flex justify-between items-center rounded-lg p-4">
-									<div>
-										<p class="soundtrack-title font-bold">again</p>
-										<p class="soundtrack-by text-sm">YUI</p>
-									</div>
-									<span class="soundtrack-eps text-xs px-3 py-1 rounded-full">EP 1-14</span>
-								</div>
+							<div class="px-2 py-3">
+								<h3 class="text-sm md:text-base font-bold line-clamp-2">Samurai Champloo</h3>
 							</div>
 						</div>
+					</a>
+				</div>
+			</section>
 
-						<!-- Endings -->
-						<div>
-							<div class="ending-container flex items-center gap-2 mb-3">
-								<i class="ri-music-2-line text-lg"></i>
-								<h3 class="text-lg font-medium">Endings</h3>
-							</div>
+			<!-- Trailer Section -->
+			<section
+				id="trailer-section"
+				class="max-w-7xl mx-auto px-4 mt-10">
+				<div class="trailer-container p-3 md:p-4 lg:p-6 rounded-md shadow-md">
+					<h2 class="text-2xl font-bold mb-3">Trailer</h2>
 
-							<div class="flex flex-col gap-4">
-								<div class="flex justify-between items-center rounded-lg p-4">
-									<div>
-										<p class="soundtrack-title font-bold">Uso (嘘)</p>
-										<p class="soundtrack-by text-sm">SID</p>
-									</div>
-									<span class="soundtrack-eps text-xs px-3 py-1 rounded-full">EP 1-14</span>
+					<div class="aspect-video rounded-lg overflow-hidden">
+						<iframe
+							class="w-full h-full rounded-lg"
+							src="https://www.youtube-nocookie.com/embed/1ac3_YdSSy0?enablejsapi=1&wmode=opaque"
+							title="Attack on Titan Trailer"
+							frameborder="0"
+							allowfullscreen></iframe>
+					</div>
+				</div>
+			</section>
+
+			<!-- Soundtrack Section -->
+			<section
+				id="soundtrack-section"
+				class="max-w-7xl mx-auto px-4 mt-10">
+				<div class="soundtrack-container border p-3 md:p-4 lg:p-6 rounded-md shadow-md">
+					<h2 class="text-2xl font-bold mb-6">Soundtracks</h2>
+
+					<!-- Openings -->
+					<div class="opening-container mb-6">
+						<div class="flex items-center gap-2">
+							<i class="ri-music-2-line text-lg"></i>
+							<h3 class="text-lg font-medium">Openings</h3>
+						</div>
+
+						<div class="flex flex-col gap-4">
+							<!-- Item -->
+							<div class="flex justify-between items-center rounded-lg p-4">
+								<div>
+									<p class="soundtrack-title font-bold">again</p>
+									<p class="soundtrack-by text-sm">YUI</p>
 								</div>
+								<span class="soundtrack-eps text-xs px-3 py-1 rounded-full">EP 1-14</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Endings -->
+					<div>
+						<div class="ending-container flex items-center gap-2">
+							<i class="ri-music-2-line text-lg"></i>
+							<h3 class="text-lg font-medium">Endings</h3>
+						</div>
+
+						<div class="flex flex-col gap-4">
+							<div class="flex justify-between items-center rounded-lg p-4">
+								<div>
+									<p class="soundtrack-title font-bold">Uso (嘘)</p>
+									<p class="soundtrack-by text-sm">SID</p>
+								</div>
+								<span class="soundtrack-eps text-xs px-3 py-1 rounded-full">EP 1-14</span>
 							</div>
 						</div>
 					</div>
