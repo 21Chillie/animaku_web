@@ -1,14 +1,22 @@
-import { Request, Response } from "express";
-import { fetchAnimeTrendingBatch } from "../services/fetchAnimeTrending.service";
-import { seedTableAnimeTrending } from "../models/animeTrendingSeedTable";
-import { DatabaseAnimeTypes } from "../types/database.types";
-import { deleteOldAnimeTrending, getAllAnimeTrending, getOldAnimeTrending } from "../models/animeTrendingModel";
+import { Request, Response } from 'express';
+import { seedTableAnime } from '../models/animeDBSeedTable';
+import {
+	deleteOldAnimeTrending,
+	getAllAnimeTrending,
+	getOldAnimeTrending,
+} from '../models/animeTrendingModel';
+import { seedTableAnimeTrending } from '../models/animeTrendingSeedTable';
+import { fetchAnimeTrendingBatch } from '../services/fetchAnimeTrending.service';
+import { DatabaseAnimeTypes } from '../types/database.types';
 
 export async function getAnimeTrending(req: Request, res: Response) {
-	// 30 days or 1 month
-	const daysThreshold = 30;
-	// Recommended 4, but not limited to 4
-	const maxPage = 4;
+	// 2 weeks
+	const daysThreshold = 14;
+	// Recommended 20,
+	const maxPage = 20;
+
+	// Store anime trending data here
+	const trendingAnimeList: DatabaseAnimeTypes[] = [];
 
 	try {
 		// Get records from 'anime_trending' table that older than `dayThreshold` days
@@ -26,34 +34,29 @@ export async function getAnimeTrending(req: Request, res: Response) {
 		const animeTrendingDB = await getAllAnimeTrending();
 
 		// If its empty, then fetch fresh data and inserting to database
-		if (animeTrendingDB.length === 0) {
-			console.log("Database empty, fetching from api...");
+		if (animeTrendingDB.length <= 100) {
+			console.log('Database empty, fetching from api...');
 
 			const dataFromAPI = await fetchAnimeTrendingBatch(maxPage);
-
 			await seedTableAnimeTrending(dataFromAPI);
+			await seedTableAnime(dataFromAPI);
+			const animeTrendingDB = await getAllAnimeTrending();
 
-			// Transform data from API, so the structure is same as from database
-			const transformedDataAPI: DatabaseAnimeTypes[] = dataFromAPI.map((anime, index) => ({
-				id: index + 1, // Temporary ID since it doesn't have real DB ID yet
-				mal_id: anime.mal_id,
-				data: anime, // Entire anime object goes in data field
-				title: anime.title,
-				score: anime.score,
-				type: anime.type,
-				status: anime.status,
-				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString(),
-			}));
+			// Push data from database to trendingAnimelist variable
+			trendingAnimeList.push(...animeTrendingDB);
 
-			console.log("Showing data from API");
-			return res.status(200).json({ success: true, data: transformedDataAPI, source: "API" });
+			console.log('Successfully inserting into database');
 		}
 
-		console.log("Showing data from database");
-		res.status(200).json({ success: true, data: animeTrendingDB, source: "Database" });
+		trendingAnimeList.push(...animeTrendingDB);
+
+		console.log('Showing trending anime list');
+
+		res.status(200).json({ success: true, data: trendingAnimeList, source: 'Database' });
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ success: false, error: "Something went wrong while getting anime trending data" });
+		res
+			.status(500)
+			.json({ success: false, error: 'Something went wrong while getting anime trending data' });
 	}
 }
