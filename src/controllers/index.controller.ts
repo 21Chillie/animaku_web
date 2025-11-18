@@ -15,11 +15,11 @@ import { fetchTopMangaBatch } from '../services/fetchTopManga.service';
 import { DatabaseAnimeTypes, DatabaseMangaTypes } from '../types/database.types';
 
 async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
-	const daysThreshold = 30;
+	const daysThreshold = 7;
 	// The value max to 25
 	const maxRecords = 6;
-	// Recommended 4, but not limited to 4 (Each page has 25 records)
-	const maxPage = 4;
+	// Recommended max 4, but not limited to 4 (Each page has 25 records)
+	const maxPage = 1;
 	try {
 		const oldAnimeDatabase = await getOldAnimeTrending(daysThreshold);
 		const animeTrendingData: DatabaseAnimeTypes[] = [];
@@ -38,18 +38,20 @@ async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 			await seedTableAnimeTrending(dataFromAPI);
 
 			const transformedDataAPI: DatabaseAnimeTypes[] = dataFromAPI.map((anime, index) => ({
-				id: index + 1,
+				id: index + 1, // Temporary ID since it doesn't have real DB ID yet
 				mal_id: anime.mal_id,
-				data: anime,
 				title: anime.title,
-				score: anime.score,
 				type: anime.type,
 				status: anime.status,
+				year: anime.aired?.prop?.from?.year,
+				score: anime.score,
+				rank: anime.rank,
+				popularity: anime.popularity,
+				data: anime,
 				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString(),
+				last_updated_at: new Date().toISOString(),
 			}));
 
-			console.log('Showing data from API');
 			animeTrendingData.push(...transformedDataAPI.slice(0, maxRecords));
 		}
 
@@ -65,9 +67,9 @@ async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 	const daysThreshold = 30;
 	// The value max to 25
-	const maxRecords = 10;
+	const maxRecords = 6;
 	// Recommended 4, but not limited to 4 (Each page has 25 records)
-	const maxPage = 4;
+	const maxPage = 1;
 
 	try {
 		const animeTopData: DatabaseAnimeTypes[] = [];
@@ -83,25 +85,27 @@ async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 
 		if (animeTopDB.length === 0) {
 			const dataFromAPI = await fetchTopAnimeBatch(maxPage);
+
 			await seedTableAnimeTop(dataFromAPI);
 
 			const transformedDataAPI: DatabaseAnimeTypes[] = dataFromAPI.map((anime, index) => ({
-				id: index + 1,
+				id: index + 1, // Temporary ID since it doesn't have real DB ID yet
 				mal_id: anime.mal_id,
-				data: anime,
 				title: anime.title,
-				score: anime.score,
 				type: anime.type,
 				status: anime.status,
+				year: anime.aired?.prop?.from?.year,
+				score: anime.score,
+				rank: anime.rank,
+				popularity: anime.popularity,
+				data: anime,
 				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString(),
+				last_updated_at: new Date().toISOString(),
 			}));
 
-			console.log('Showing data from API');
 			animeTopData.push(...transformedDataAPI.slice(0, maxRecords));
 		}
 
-		console.log('Showing data from Database');
 		animeTopData.push(...animeTopDB);
 
 		return animeTopData;
@@ -113,8 +117,8 @@ async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 
 async function getMangaTop(): Promise<DatabaseMangaTypes[]> {
 	const dayThreshold = 30;
-	const maxRecords = 10;
-	const maxPage = 4;
+	const maxRecords = 6;
+	const maxPage = 1;
 
 	try {
 		const mangaTopData: DatabaseMangaTypes[] = [];
@@ -130,26 +134,28 @@ async function getMangaTop(): Promise<DatabaseMangaTypes[]> {
 
 		if (mangaTopDB.length === 0) {
 			const dataFromAPI = await fetchTopMangaBatch(maxPage);
+
 			await seedTableMangaTop(dataFromAPI);
 
 			// Transform data from API, so the structure is same as from database
 			const transformedDataAPI: DatabaseMangaTypes[] = dataFromAPI.map((manga, index) => ({
 				id: index + 1, // Temporary ID since it doesn't have real DB ID yet
 				mal_id: manga.mal_id,
-				data: manga, // Entire anime object goes in data field
 				title: manga.title,
-				score: manga.score,
 				type: manga.type,
 				status: manga.status,
+				year: manga.published?.prop?.from?.year,
+				score: manga.score,
+				rank: manga.rank,
+				popularity: manga.popularity,
+				data: manga,
 				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString(),
+				last_updated_at: new Date().toISOString(),
 			}));
 
-			console.log('Showing data from API');
 			mangaTopData.push(...transformedDataAPI.slice(0, maxRecords));
 		}
 
-		console.log('Showing data from Database');
 		mangaTopData.push(...mangaTopDB);
 
 		return mangaTopData;
