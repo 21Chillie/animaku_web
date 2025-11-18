@@ -1,14 +1,14 @@
 import type { Request, Response } from 'express';
-import { deleteOldAnimeTop, getAnimeTopLimit, getOldAnimeTop } from '../models/animeTopModel';
-import { seedTableAnimeTop } from '../models/animeTopSeedTable';
+import { deleteOldAnimeTop, getAnimeTopLimit, getOldAnimeTop } from '../models/anime/animeTopModel';
+import { seedTableAnimeTop } from '../models/anime/animeTopSeedTable';
 import {
 	deleteOldAnimeTrending,
 	getAnimeTrendingLimit,
 	getOldAnimeTrending,
-} from '../models/animeTrendingModel';
-import { seedTableAnimeTrending } from '../models/animeTrendingSeedTable';
-import { getMangaTopLimit, getOldMangaTop } from '../models/mangaTopModel';
-import { seedTableMangaTop } from '../models/mangaTopSeedTable';
+} from '../models/anime/animeTrendingModel';
+import { seedTableAnimeTrending } from '../models/anime/animeTrendingSeedTable';
+import { deleteOldMangaTop, getMangaTopLimit, getOldMangaTop } from '../models/manga/mangaTopModel';
+import { seedTableMangaTop } from '../models/manga/mangaTopSeedTable';
 import { fetchAnimeTrendingBatch } from '../services/fetchAnimeTrending.service';
 import { fetchTopAnimeBatch } from '../services/fetchTopAnime.service';
 import { fetchTopMangaBatch } from '../services/fetchTopManga.service';
@@ -126,7 +126,7 @@ async function getMangaTop(): Promise<DatabaseMangaTypes[]> {
 
 		if (oldMangaDB.length > 0) {
 			console.log(`Found ${oldMangaDB.length} records older than 30 days, deleting...`);
-			const deleteResult = await deleteOldAnimeTop(dayThreshold);
+			const deleteResult = await deleteOldMangaTop(dayThreshold);
 			console.log(`Deleted ${deleteResult} old records.`);
 		}
 

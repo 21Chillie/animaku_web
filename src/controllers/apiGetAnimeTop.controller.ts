@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { seedTableAnime } from '../models/animeDBSeedTable';
-import { deleteOldAnimeTop, getAllAnimeTop, getOldAnimeTop } from '../models/animeTopModel';
-import { seedTableAnimeTop } from '../models/animeTopSeedTable';
+import { seedTableAnime } from '../models/anime/animeDBSeedTable';
+import { deleteOldAnimeTop, getAllAnimeTop, getOldAnimeTop } from '../models/anime/animeTopModel';
+import { seedTableAnimeTop } from '../models/anime/animeTopSeedTable';
 import { fetchTopAnimeBatch } from '../services/fetchTopAnime.service';
 import { DatabaseAnimeTypes } from '../types/database.types';
 

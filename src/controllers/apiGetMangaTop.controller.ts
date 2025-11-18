@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { deleteOldMangaTop, getAllMangaTop, getOldMangaTop } from '../models/mangaTopModel';
-import { seedTableMangaTop } from '../models/mangaTopSeedTable';
+import { seedTableManga } from '../models/manga/mangaDBSeedTable';
+import { deleteOldMangaTop, getAllMangaTop, getOldMangaTop } from '../models/manga/mangaTopModel';
+import { seedTableMangaTop } from '../models/manga/mangaTopSeedTable';
 import { fetchTopMangaBatch } from '../services/fetchTopManga.service';
 import { DatabaseMangaTypes } from '../types/database.types';
 
@@ -25,7 +26,7 @@ export async function getMangaTop(req: Request, res: Response) {
 
 			const dataFromAPI = await fetchTopMangaBatch(maxPage);
 			await seedTableMangaTop(dataFromAPI);
-			await seedTableMangaTop(dataFromAPI);
+			await seedTableManga(dataFromAPI);
 			const mangaTopDB = await getAllMangaTop();
 			topMangaList.push(...mangaTopDB);
 

@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { seedTableAnime } from '../models/animeDBSeedTable';
+import { seedTableAnime } from '../models/anime/animeDBSeedTable';
 import {
 	deleteOldAnimeTrending,
 	getAllAnimeTrending,
 	getOldAnimeTrending,
-} from '../models/animeTrendingModel';
-import { seedTableAnimeTrending } from '../models/animeTrendingSeedTable';
+} from '../models/anime/animeTrendingModel';
+import { seedTableAnimeTrending } from '../models/anime/animeTrendingSeedTable';
 import { fetchAnimeTrendingBatch } from '../services/fetchAnimeTrending.service';
 import { DatabaseAnimeTypes } from '../types/database.types';
 
