@@ -38,49 +38,49 @@ export async function fetchAnimeTrendingLimit(maxRecords: number): Promise<Anime
 
 export async function fetchAnimeTrendingBatch(maxPage: number): Promise<Anime[]> {
 	const trendingAnimeList: Anime[] = [];
+	const requestsPerSecond = 3;
+	const delayMs = 3000 / requestsPerSecond;
 
-	// Loop request max 4 pages for fetching only 100 anime trending data
 	for (let page = 1; page <= maxPage; page++) {
+		const startTime = Date.now();
+
 		try {
-			// Delay Request
-			if (page > 1) {
-				await new Promise((resolve) => setTimeout(resolve, 335));
-			}
-
 			const response: AxiosResponse<JikanResponse> = await axios.get(`${API_URL}/seasons/now`, {
-				params: {
-					page: page,
-				},
-				timeout: 10000,
+				params: { page },
+				timeout: 20000, // Increased timeout for larger pages
 			});
-			const animeTrendingData: Anime[] = response.data.data;
 
-			// If the data is available and the data is array then push
-			if (animeTrendingData && Array.isArray(animeTrendingData)) {
-				trendingAnimeList.push(...animeTrendingData);
+			const trendingAnimeData: Anime[] = response.data.data;
 
+			if (trendingAnimeData?.length) {
+				trendingAnimeList.push(...trendingAnimeData);
 				console.log(
-					`Page ${page}: ${trendingAnimeList.length} trending anime titles fetched from API`
+					`✅ Page ${page}: ${trendingAnimeData.length} anime (Total: ${trendingAnimeList.length})`
 				);
 			}
 
-			// Stop early if no more pages available
 			if (!response.data.pagination.has_next_page) {
-				console.log(`⏹️ No more pages available. Stopping at page ${page}`);
+				console.log(`⏹️ No more pages. Stopping at page ${page}`);
 				break;
 			}
 		} catch (err) {
-			if (err instanceof Error) {
-				console.error('Error fetching trending anime list from api: ', err);
-			}
+			console.error(`❌ Page ${page} failed:`, err instanceof Error ? err.message : err);
 
-			if (axios.isAxiosError(err) && err.code === 'ECONNABORTED') {
-				console.error('Request timed out');
+			// If it's a rate limit error, wait longer
+			if (axios.isAxiosError(err) && err.response?.status === 429) {
+				console.log('⚠️ Rate limited, waiting 5 seconds...');
+				await new Promise((resolve) => setTimeout(resolve, 5000));
 			}
+			continue;
+		}
 
-			throw new Error('Something went wrong while fetching trending anime list from API!');
+		// Ensure minimum delay between requests
+		const elapsed = Date.now() - startTime;
+		if (elapsed < delayMs && page < maxPage) {
+			await new Promise((resolve) => setTimeout(resolve, delayMs - elapsed));
 		}
 	}
 
+	console.log(`🎉 Fetched ${trendingAnimeList.length} trending anime from ${maxPage} pages`);
 	return trendingAnimeList;
 }

@@ -4,47 +4,51 @@ import { JikanMangaResponse, Manga } from '../types/mangaData.types';
 
 const API_URL = JIKAN_BASE_URL;
 
-export async function fetchTopMangaBatch(maxPage: number) {
+export async function fetchTopMangaBatch(maxPage: number): Promise<Manga[]> {
 	const topMangaList: Manga[] = [];
+	const requestsPerSecond = 3;
+	const delayMs = 3000 / requestsPerSecond;
 
 	for (let page = 1; page <= maxPage; page++) {
-		try {
-			if (page > 1) {
-				await new Promise((resolve) => setTimeout(resolve, 335));
-			}
+		const startTime = Date.now();
 
+		try {
 			const response: AxiosResponse<JikanMangaResponse> = await axios.get(`${API_URL}/top/manga`, {
-				params: {
-					page: page,
-				},
-				timeout: 10000,
+				params: { page },
+				timeout: 20000, // Increased timeout for larger pages
 			});
 
 			const topMangaData: Manga[] = response.data.data;
 
-			if (topMangaData && Array.isArray(topMangaData)) {
+			if (topMangaData?.length) {
 				topMangaList.push(...topMangaData);
-
-				console.log(`Page ${page}: ${topMangaList.length} top titles titles fetched from API`);
+				console.log(
+					`✅ Page ${page}: ${topMangaData.length} anime (Total: ${topMangaList.length})`
+				);
 			}
 
-			// Stop early if no more pages available
 			if (!response.data.pagination.has_next_page) {
-				console.log(`⏹️ No more pages available. Stopping at page ${page}`);
+				console.log(`⏹️ No more pages. Stopping at page ${page}`);
 				break;
 			}
 		} catch (err) {
-			if (err instanceof Error) {
-				console.error('Error fetching top anime list from api: ', err);
-			}
+			console.error(`❌ Page ${page} failed:`, err instanceof Error ? err.message : err);
 
-			if (axios.isAxiosError(err) && err.code === 'ECONNABORTED') {
-				console.error('Request timed out');
+			// If it's a rate limit error, wait longer
+			if (axios.isAxiosError(err) && err.response?.status === 429) {
+				console.log('⚠️ Rate limited, waiting 5 seconds...');
+				await new Promise((resolve) => setTimeout(resolve, 5000));
 			}
+			continue;
+		}
 
-			throw new Error('Something went wrong while fetching topanime list from API!');
+		// Ensure minimum delay between requests
+		const elapsed = Date.now() - startTime;
+		if (elapsed < delayMs && page < maxPage) {
+			await new Promise((resolve) => setTimeout(resolve, delayMs - elapsed));
 		}
 	}
 
+	console.log(`🎉 Fetched ${topMangaList.length} top manga from ${maxPage} pages`);
 	return topMangaList;
 }

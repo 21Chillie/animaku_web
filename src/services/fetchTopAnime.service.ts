@@ -4,49 +4,51 @@ import type { Anime, JikanResponse } from '../types/animeData.types';
 
 const API_URL = JIKAN_BASE_URL;
 
-export async function fetchTopAnimeBatch(maxPage: number): Promise<Anime[]> {
+export async function fetchTopAnimeBatch(maxPage: number = 20): Promise<Anime[]> {
 	const topAnimeList: Anime[] = [];
+	const requestsPerSecond = 3;
+	const delayMs = 3000 / requestsPerSecond;
 
-	// Loop request max 4 pages for fetching only 100 anime trending data
 	for (let page = 1; page <= maxPage; page++) {
-		try {
-			// Delay Request
-			if (page > 1) {
-				await new Promise((resolve) => setTimeout(resolve, 335));
-			}
+		const startTime = Date.now();
 
+		try {
 			const response: AxiosResponse<JikanResponse> = await axios.get(`${API_URL}/top/anime`, {
-				params: {
-					page: page,
-				},
-				timeout: 10000,
+				params: { page },
+				timeout: 20000, // Increased timeout for larger pages
 			});
+
 			const topAnimeData: Anime[] = response.data.data;
 
-			// If the data is available and the data is array then push
-			if (topAnimeData && Array.isArray(topAnimeData)) {
+			if (topAnimeData?.length) {
 				topAnimeList.push(...topAnimeData);
-
-				console.log(`Page ${page}: ${topAnimeList.length} top anime titles fetched from API`);
+				console.log(
+					`✅ Page ${page}: ${topAnimeData.length} anime (Total: ${topAnimeList.length})`
+				);
 			}
 
-			// Stop early if no more pages available
 			if (!response.data.pagination.has_next_page) {
-				console.log(`⏹️ No more pages available. Stopping at page ${page}`);
+				console.log(`⏹️ No more pages. Stopping at page ${page}`);
 				break;
 			}
 		} catch (err) {
-			if (err instanceof Error) {
-				console.error('Error fetching top anime list from api: ', err);
-			}
+			console.error(`❌ Page ${page} failed:`, err instanceof Error ? err.message : err);
 
-			if (axios.isAxiosError(err) && err.code === 'ECONNABORTED') {
-				console.error('Request timed out');
+			// If it's a rate limit error, wait longer
+			if (axios.isAxiosError(err) && err.response?.status === 429) {
+				console.log('⚠️ Rate limited, waiting 5 seconds...');
+				await new Promise((resolve) => setTimeout(resolve, 5000));
 			}
+			continue;
+		}
 
-			throw new Error('Something went wrong while fetching topanime list from API!');
+		// Ensure minimum delay between requests
+		const elapsed = Date.now() - startTime;
+		if (elapsed < delayMs && page < maxPage) {
+			await new Promise((resolve) => setTimeout(resolve, delayMs - elapsed));
 		}
 	}
 
+	console.log(`🎉 Fetched ${topAnimeList.length} top anime from ${maxPage} pages`);
 	return topAnimeList;
 }
