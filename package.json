@@ -7,6 +7,7 @@
 		"dev": "nodemon --watch src --exec ts-node src/server.ts",
 		"build": "npx tsc",
 		"build:css": "npx @tailwindcss/cli -i ./public/css/tailwindcss/input.css -o ./public/css/tailwindcss/tailwind.css --watch --minify",
+		"build:db": "npx ts-node src/models/createAllTable.ts",
 		"start": "node dist/server.js"
 	},
 	"repository": {
