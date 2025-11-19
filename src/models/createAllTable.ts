@@ -1,14 +1,25 @@
-import { createTableAnime } from './animeDBCreateTable';
-import { createTableTopAnime } from './animeTopCreateTable';
-import { createTableTrendingAnime } from './animeTrendingCreateTable';
-import { createTableTopManga } from './mangaTopCreatingTable';
+import { createTableAnime } from './anime/animeDBCreateTable';
+import { createTableTopAnime } from './anime/animeTopCreateTable';
+import { createTableTrendingAnime } from './anime/animeTrendingCreateTable';
+import { createTableManga } from './manga/mangaDBCreateTable';
+import { createTableTopManga } from './manga/mangaTopCreatingTable';
+import {
+	createTableAnimeCharacter,
+	createTableMangaCharacter,
+} from './other/characterDBCreateTable';
+import { createTableAnimeRelation, createTableMangaRelation } from './other/relationDBCreateTable';
 
 async function createAllTables() {
 	try {
 		await createTableAnime();
+		await createTableManga();
 		await createTableTrendingAnime();
 		await createTableTopAnime();
 		await createTableTopManga();
+		await createTableAnimeCharacter();
+		await createTableMangaCharacter();
+		await createTableAnimeRelation();
+		await createTableMangaRelation();
 
 		console.log('All table created successfully');
 	} catch (error) {
