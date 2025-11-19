@@ -4,6 +4,10 @@ export interface JikanMangaResponse {
 	pagination: Pagination;
 }
 
+export interface JikanResponseMangaDataById {
+	data: Manga;
+}
+
 // Pagination info
 export interface Pagination {
 	last_visible_page: number;
