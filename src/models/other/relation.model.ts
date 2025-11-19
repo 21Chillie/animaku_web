@@ -20,9 +20,9 @@ export async function insertAnimeRelationByMalId(mal_id: number, data: Relation[
 	}
 }
 
-export async function getAnimeRelationByMalId(mal_id: number) {
+export async function getAnimeRelationByMalId(mal_id: number): Promise<DatabaseRelationResponse> {
 	const result: QueryResult<DatabaseRelationResponse> = await pool.query(
-		`SELECT relation_data, created_at, last_updated_at FROM anime_relation WHERE mal_id = $1`,
+		`SELECT relation_data FROM anime_relation WHERE mal_id = $1`,
 		[mal_id]
 	);
 

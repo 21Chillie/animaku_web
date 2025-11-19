@@ -20,11 +20,13 @@ export async function insertAnimeCharacterByMalId(mal_id: number, data: JikanCha
 	}
 }
 
-export async function getAnimeCharactersByMalId(mal_id: number) {
+export async function getAnimeCharactersByMalId(
+	mal_id: number
+): Promise<DatabaseCharacterResponse> {
 	const result: QueryResult<DatabaseCharacterResponse> = await pool.query(
-		`SELECT character_data, created_at, last_updated_at FROM anime_character WHERE mal_id = $1`,
+		`SELECT character_data FROM anime_character WHERE mal_id = $1`,
 		[mal_id]
 	);
 
-	return result.rows[0]
+	return result.rows[0];
 }
