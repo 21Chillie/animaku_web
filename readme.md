@@ -23,13 +23,13 @@ Node.js or Bun, Express or Hono, EJS, TailwindCSS.
 
 ---
 
-Todo List:
+## Todo List:
 
 - [x] Setup project
 - [x] Testing the Jikan API
 - [x] Design the database
 
-Redesign homepage:
+**Redesign homepage:**
 
 - [x] Navbar
 - [x] Navbar logic for collapse
@@ -43,17 +43,63 @@ Redesign homepage:
   - [x] Write logic for fetch data
   - [x] Write logic for storing the data
   - [x] Get the data and render for this section
-- [ ] Top manga section
+- [x] Top manga section :
+  - [x] Write logic for fetch data
+  - [x] Write logic for storing the data
+  - [x] Get the data and render for this section
 
-API and Database:
+**Overview Section**
 
-- [x] Fetch and store it to database trending anime (max 100)
-- [x] Fetch and store it to database top anime (max 100)
-- [x] Fetch and store it to database top manga (max 100)
+- [x] Design overview section
+- [x] Write logic for fetch anime data and storing to database
+- [x] Write logic for fetch anime character data and storing to database
+- [x] Write logic for fetch anime relation data and storing to database
+- [ ] Write logic for fetch anime recommendation and storing to database
+- [ ] Write logic for fetch manga data and storing to database
+- [ ] Write logic for fetch manga character data and storing to database
+- [ ] Write logic for fetch manga relation data and storing to database
+- [ ] Write logic for fetch manga recommendation and storing to database
+- [ ] Render all the data for overview page
+
+**Browse Section**
+
+- [ ] Do this
+
+**API and Database:**
+
+- [x] Fetch trending anime and store it to database (max 200+)
+- [x] Fetch top anime and store it to database (max 1000+)
+- [x] Fetch top manga and store it to database (max 1000+)
+- [x] Create anime table and store both anime trending and top data
+- [x] Create manga table and store top manga data
+- [x] Create anime and manga character table
+- [x] Create anime and manga relation table
+- [ ] Create anime and manga recommendation table
+
+**Filter query and params(mal_id):**
+
+- [ ] Filter query for anime table
+- [ ] Filter query for manga table
 - [ ] Filter query trending anime api data
 - [ ] Filter query top anime api data
 - [ ] Filter query top manga api data
 
+**Typescript Type Definition**
+
+- [x] Type definition for anime data (Database/API Response)
+- [x] Type definition for character data (Database/API Response)
+- [x] Type definition for relation data (Database/API Response)
+- [ ] Type definition for recommendation data (Database/API Response)
+- [ ] Tidy up and fix
+
+**User List**
+
+- [ ] Do this
+
+**Authentication**
+
+- [ ] Do this
+
 ---
 
-Tired af ....
+Holy fck there so much to do ....
