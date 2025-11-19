@@ -2,24 +2,6 @@ import { QueryResult } from 'pg';
 import pool from '../../config/database.config';
 import { Anime } from '../../types/animeData.types';
 
-export async function insertAnimeDataByMalId(data: Anime) {
-	try {
-		await pool.query(
-			`
-			INSERT INTO anime(mal_id, data)
-			VALUES ($1, $2)
-			ON CONFLICT (mal_id)
-			DO UPDATE SET 
-    		data = EXCLUDED.data,
-    		last_updated_at = CURRENT_TIMESTAMP;
-			`,
-			[data.mal_id, data]
-		);
-	} catch (err) {
-		console.error('Error while inserting anime data into database: ', err);
-	}
-}
-
 export async function seedTableAnime(animeList: Anime[]): Promise<void> {
 	const client = await pool.connect();
 
