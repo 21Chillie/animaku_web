@@ -14,7 +14,6 @@ export async function createTableAnimeRelation(): Promise<void> {
 );
 
     CREATE INDEX idx_anime_relation_mal_id ON anime_relation(mal_id);
-    CREATE INDEX idx_anime_relation_data ON anime_relation USING GIN (relation_data);
   `
 	);
 
@@ -37,7 +36,6 @@ export async function createTableMangaRelation(): Promise<void> {
 );
 
     CREATE INDEX idx_manga_relation_mal_id ON manga_relation(mal_id);
-    CREATE INDEX idx_manga_relation_data ON manga_relation USING GIN (relation_data);
   `
 	);
 
