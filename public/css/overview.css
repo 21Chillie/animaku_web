@@ -40,6 +40,11 @@
 	opacity: 85%;
 }
 
+.written-by {
+	color: var(--text-secondary);
+	opacity: 85%;
+}
+
 /* Meta */
 .title-meta-container {
 	background-color: var(--bg-secondary);
