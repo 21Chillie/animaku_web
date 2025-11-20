@@ -30,3 +30,32 @@ export async function getAnimeCharactersByMalId(
 
 	return result.rows[0];
 }
+
+export async function insertMangaCharacterByMalId(mal_id: number, data: JikanCharacter[]) {
+	try {
+		await pool.query(
+			`
+			INSERT INTO manga_character(mal_id, character_data)
+			VALUES ($1, $2)
+			ON CONFLICT (mal_id)
+			DO UPDATE SET 
+    		character_data = EXCLUDED.character_data,
+    		last_updated_at = CURRENT_TIMESTAMP;
+			`,
+			[mal_id, data]
+		);
+	} catch (err) {
+		console.error('Error while inserting manga character data into database: ', err);
+	}
+}
+
+export async function getMangaCharactersByMalId(
+	mal_id: number
+): Promise<DatabaseCharacterResponse> {
+	const result: QueryResult<DatabaseCharacterResponse> = await pool.query(
+		`SELECT character_data FROM manga_character WHERE mal_id = $1`,
+		[mal_id]
+	);
+
+	return result.rows[0];
+}
