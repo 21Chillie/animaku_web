@@ -55,11 +55,12 @@ Node.js or Bun, Express or Hono, EJS, TailwindCSS.
 - [x] Write logic for fetch anime character data and storing to database
 - [x] Write logic for fetch anime relation data and storing to database
 - [x] Write logic for fetch anime recommendation and storing to database
-- [ ] Write logic for fetch manga data and storing to database
-- [ ] Write logic for fetch manga character data and storing to database
-- [ ] Write logic for fetch manga relation data and storing to database
-- [ ] Write logic for fetch manga recommendation and storing to database
-- [ ] Render all the data for overview page
+- [x] Write logic for fetch manga data and storing to database
+- [x] Write logic for fetch manga character data and storing to database
+- [x] Write logic for fetch manga relation data and storing to database
+- [x] Write logic for fetch manga recommendation and storing to database
+- [x] Render all the data for overview page
+- [ ] Need to add ending and opening OST (or will delete that section)
 
 **Browse Section**
 
@@ -90,7 +91,7 @@ Node.js or Bun, Express or Hono, EJS, TailwindCSS.
 - [x] Type definition for character data (Database/API Response)
 - [x] Type definition for relation data (Database/API Response)
 - [x] Type definition for recommendation data (Database/API Response)
-- [ ] Tidy up and fix
+- [x] Tidy up and fix
 
 **User List**
 
