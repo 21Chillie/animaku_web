@@ -7,7 +7,7 @@ export async function createTableAnimeRecommendation(): Promise<void> {
 		`
   CREATE TABLE anime_recommendation (
     id SERIAL PRIMARY KEY,
-    mal_id INTEGER UNIQUE NOT NULL REFERENCES anime(mal_id),
+    mal_id INTEGER UNIQUE NOT NULL REFERENCES anime(mal_id) ON DELETE CASCADE ON UPDATE CASCADE,
     recommendation_data JSONB[] NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -29,7 +29,7 @@ export async function createTableMangaRecommendation(): Promise<void> {
 		`
   CREATE TABLE manga_recommendation (
     id SERIAL PRIMARY KEY,
-    mal_id INTEGER UNIQUE NOT NULL REFERENCES manga(mal_id),
+    mal_id INTEGER UNIQUE NOT NULL REFERENCES manga(mal_id) ON DELETE CASCADE ON UPDATE CASCADE,
     recommendation_data JSONB[] NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
