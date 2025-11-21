@@ -30,7 +30,6 @@
 		"ejs": "^3.1.10",
 		"express": "^5.1.0",
 		"pg": "^8.16.3",
-		"remixicon": "^4.7.0",
 		"tailwindcss": "^4.1.17"
 	},
 	"devDependencies": {
