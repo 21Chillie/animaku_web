@@ -1,4 +1,5 @@
 import { createTableAnime } from './anime/animeDBCreateTable';
+import { createTableAnimeTheme } from './anime/animeThemesCreateTable';
 import { createTableTopAnime } from './anime/animeTopCreateTable';
 import { createTableTrendingAnime } from './anime/animeTrendingCreateTable';
 import { createTableManga } from './manga/mangaDBCreateTable';
@@ -26,6 +27,7 @@ async function createAllTables() {
 		await createTableMangaRelation();
 		await createTableAnimeRecommendation();
 		await createTableMangaRecommendation();
+		await createTableAnimeTheme();
 
 		console.log('All table created successfully');
 	} catch (error) {
