@@ -60,10 +60,21 @@ Node.js or Bun, Express or Hono, EJS, TailwindCSS.
 - [x] Write logic for fetch manga relation data and storing to database
 - [x] Write logic for fetch manga recommendation and storing to database
 - [x] Render all the data for overview page
-- [ ] Need to add ending and opening OST (or will delete that section)
+- [x] Need to add ending and opening OST (or will delete that section)
 
 **Browse Section**
 
+- [ ] Do this
+
+**User List**
+
+- [ ] Do this
+
+**Authentication**
+
+- [ ] Do this
+
+**Error Page**
 - [ ] Do this
 
 **API and Database:**
@@ -92,14 +103,6 @@ Node.js or Bun, Express or Hono, EJS, TailwindCSS.
 - [x] Type definition for relation data (Database/API Response)
 - [x] Type definition for recommendation data (Database/API Response)
 - [x] Tidy up and fix
-
-**User List**
-
-- [ ] Do this
-
-**Authentication**
-
-- [ ] Do this
 
 ---
 
