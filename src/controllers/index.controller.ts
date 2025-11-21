@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import { seedTableAnime } from '../models/anime/animeDBSeedTable';
 import { deleteOldAnimeTop, getAnimeTopLimit, getOldAnimeTop } from '../models/anime/animeTopModel';
 import { seedTableAnimeTop } from '../models/anime/animeTopSeedTable';
 import {
@@ -7,6 +8,7 @@ import {
 	getOldAnimeTrending,
 } from '../models/anime/animeTrendingModel';
 import { seedTableAnimeTrending } from '../models/anime/animeTrendingSeedTable';
+import { seedTableManga } from '../models/manga/mangaDBSeedTable';
 import { deleteOldMangaTop, getMangaTopLimit, getOldMangaTop } from '../models/manga/mangaTopModel';
 import { seedTableMangaTop } from '../models/manga/mangaTopSeedTable';
 import { fetchAnimeTrendingBatch } from '../services/fetchAnimeTrending.service';
@@ -36,6 +38,7 @@ async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 			const dataFromAPI = await fetchAnimeTrendingBatch(maxPage);
 
 			await seedTableAnimeTrending(dataFromAPI);
+			await seedTableAnime(dataFromAPI);
 
 			const transformedDataAPI: DatabaseAnimeTypes[] = dataFromAPI.map((anime, index) => ({
 				id: index + 1, // Temporary ID since it doesn't have real DB ID yet
@@ -87,6 +90,7 @@ async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 			const dataFromAPI = await fetchTopAnimeBatch(maxPage);
 
 			await seedTableAnimeTop(dataFromAPI);
+			await seedTableAnime(dataFromAPI);
 
 			const transformedDataAPI: DatabaseAnimeTypes[] = dataFromAPI.map((anime, index) => ({
 				id: index + 1, // Temporary ID since it doesn't have real DB ID yet
@@ -136,6 +140,7 @@ async function getMangaTop(): Promise<DatabaseMangaTypes[]> {
 			const dataFromAPI = await fetchTopMangaBatch(maxPage);
 
 			await seedTableMangaTop(dataFromAPI);
+			await seedTableManga(dataFromAPI);
 
 			// Transform data from API, so the structure is same as from database
 			const transformedDataAPI: DatabaseMangaTypes[] = dataFromAPI.map((manga, index) => ({
