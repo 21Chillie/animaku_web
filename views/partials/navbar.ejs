@@ -1,117 +1,83 @@
 <nav class="navbar fixed top-0 w-screen z-100 shadow-md">
 	<div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
 		<!-- Logo -->
-		<a
-			href="/"
-			class="flex items-center space-x-2 tracking-wide">
-			<img
-				id="navbarBrand"
-				src="/images/animaku-logo-dark.webp"
-				alt="AnimaKu Logo"
-				class="logo-img w-32 md:w-40 lg:w-44 object-contain transition-transform duration-300 hover:scale-105" />
+		<a href="/" class="flex items-center space-x-2 tracking-wide">
+			<img id="navbarBrand" src="/images/animaku-logo-dark.webp"
+					alt="AnimaKu Logo"
+					class="logo-img w-32 md:w-40 lg:w-44 object-contain transition-transform duration-300 hover:scale-105" />
 		</a>
 
 		<!-- Hamburger Button (Mobile) -->
-		<button
-			id="menuToggle"
-			class="md:hidden flex items-center justify-center w-10 h-10 focus:outline-none"
-			aria-label="Toggle Menu">
-			<i
-				id="menuIcon"
-				class="ri-menu-line text-2xl"></i>
-			<i
-				id="closeIcon"
-				class="ri-close-line text-2xl hidden"></i>
+		<button id="menuToggle"
+				class="md:hidden flex items-center justify-center w-10 h-10 focus:outline-none"
+				aria-label="Toggle Menu">
+			<i id="menuIcon" class="ri-menu-line text-2xl"></i>
+			<i id="closeIcon" class="ri-close-line text-2xl hidden"></i>
 		</button>
 
 		<!-- Navigation Links -->
-		<div
-			id="navLinks"
-			class="hidden md:flex items-center space-x-6">
-			<a
-				href="/"
-				class="nav-link flex items-center space-x-2">
+		<div id="navLinks" class="hidden md:flex items-center space-x-6">
+			<a href="/" class="nav-link flex items-center space-x-2">
 				<i class="ri-home-5-line text-lg"></i>
 				<span>Home</span>
 			</a>
-			<a
-				href="/browse"
-				class="nav-link flex items-center space-x-2">
+			<a href="/browse" class="nav-link flex items-center space-x-2">
 				<i class="ri-compass-3-line text-lg"></i>
 				<span>Browse</span>
 			</a>
-			<a
-				href="/my-list"
-				class="nav-link flex items-center space-x-2">
+			<a href="/my-list" class="nav-link flex items-center space-x-2">
 				<i class="ri-list-unordered text-lg"></i>
 				<span>My List</span>
 			</a>
 		</div>
 
 		<!-- Auth Buttons -->
-		<div
-			id="authButtons"
-			class="hidden md:flex items-center space-x-3">
+		<div id="authButtons" class="hidden md:flex items-center space-x-3">
 			<button class="btn-outline">Log In</button>
 			<button class="btn-filled flex items-center space-x-2">
 				<i class="ri-user-line"></i>
 				<span>Profile</span>
 			</button>
 			<!-- Theme Toggler -->
-			<button
-				id="themeToggle"
-				class="theme-btn flex items-center justify-center text-lg py-1 px-2">
-				<i
-					class="ri-sun-line hidden"
-					id="sunIcon"></i>
-				<i
-					class="ri-moon-line"
-					id="moonIcon"></i>
+			<button id="themeToggle"
+					class="theme-btn flex items-center justify-center text-lg py-1 px-2"
+					aria-label="button-toggle-theme">
+				<i class="ri-sun-line hidden" id="sunIcon"></i>
+				<i class="ri-moon-line" id="moonIcon"></i>
 			</button>
 		</div>
 	</div>
 
 	<!-- Collapsible Menu (Mobile) -->
-	<div
-		id="mobileMenu"
-		class="hidden md:hidden flex-col items-start px-4 pb-4 space-y-4">
-		<a
-			href="/"
-			class="mobile-link flex items-center space-x-2">
+	<div id="mobileMenu"
+			class="hidden md:hidden flex-col items-start px-4 pb-4 space-y-4">
+		<a href="/" class="mobile-link flex items-center space-x-2">
 			<i class="ri-home-5-line"></i>
 			<span>Home</span>
 		</a>
-		<a
-			href="/browse"
-			class="mobile-link flex items-center space-x-2">
+		<a href="/browse" class="mobile-link flex items-center space-x-2">
 			<i class="ri-compass-3-line"></i>
 			<span>Browse</span>
 		</a>
-		<a
-			href="/my-list"
-			class="mobile-link flex items-center space-x-2">
+		<a href="/my-list" class="mobile-link flex items-center space-x-2">
 			<i class="ri-list-unordered"></i>
 			<span>My List</span>
 		</a>
 
 		<div class="flex flex-col space-y-2 w-full">
 			<button class="btn-outline w-full">Log In</button>
-			<button class="btn-filled w-full flex items-center justify-center space-x-2">
+			<button
+					class="btn-filled w-full flex items-center justify-center space-x-2">
 				<i class="ri-user-line"></i>
 				<span>Profile</span>
 			</button>
 		</div>
 
 		<!-- Mobile Theme Toggler -->
-		<button
-			id="themeToggleMobile"
-			class="theme-btn flex items-center text-lg mt-2 p-2">
-			<i
-				class="ri-sun-line hidden"
-				id="sunIconMobile"></i>
-			<i
-				class="ri-moon-line"
-				id="moonIconMobile"></i>
+		<button id="themeToggleMobile"
+				class="theme-btn flex items-center text-lg mt-2 p-2">
+			<i class="ri-sun-line hidden" id="sunIconMobile"></i>
+			<i class="ri-moon-line" id="moonIconMobile"></i>
 			<span class="ml-2">Toggle Theme</span>
 		</button>
 	</div>
