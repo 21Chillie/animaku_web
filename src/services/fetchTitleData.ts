@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { JIKAN_BASE_URL } from '../config/env.config';
 import { Anime, JikanResponseAnimeDataById } from '../types/animeData.types';
+import { AnimeThemes, JikanAnimeThemesResponse } from '../types/animeTheme.types';
 import { JikanCharacter, JikanCharactersResponse } from '../types/characterData.types';
 import { JikanResponseMangaDataById, Manga } from '../types/mangaData.types';
 import { JikanRecommendationsResponse, Recommendation } from '../types/recommendationData.types';
@@ -108,6 +109,31 @@ export async function fetchAnimeRecommendationByMalId(mal_id: number): Promise<R
 		}
 
 		throw new Error('Something went wrong while trying fetch anime recommendations data');
+	}
+}
+
+// Fetch anime OST by mal id
+export async function fetchAnimeThemeByMalId(mal_id: number): Promise<AnimeThemes> {
+	try {
+		const response: AxiosResponse<JikanAnimeThemesResponse> = await axios.get(
+			`${API_URL}/anime/${mal_id}/themes`
+		);
+
+		const data: AnimeThemes = response.data.data;
+
+		if (data) {
+			console.log('Sucessfully fetch anime themes data from api');
+		}
+
+		return data;
+	} catch (err) {
+		console.error(`Something went wrong while trying fetch anime themes data with id `, mal_id);
+
+		if (axios.isAxiosError(err) && err.response?.status === 429) {
+			console.error('Rate limited, please wait in a second and try refresh browser');
+		}
+
+		throw new Error('Something went wrong while trying fetch anime themes data');
 	}
 }
 
