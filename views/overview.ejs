@@ -6,7 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 	<!-- Favicon -->
-	<link rel="shortcut icon" href="/images/icons/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="/images/icons/favicon.ico"
+			type="image/x-icon" />
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="/css/tailwindcss/tailwind.css" />
@@ -32,10 +33,14 @@
 		<section id="banner-section" class="mt-16 md:mt-18 lg:mt-20">
 			<div class="-z-10 relative h-[300px] md:h-[400px] overflow-hidden">
 				<img src="<%= data.anime?.data?.images?.webp?.large_image_url || data.anime?.data?.images?.webp?.image_url || data.anime?.data?.images?.jpg?.large_image_url ||
-							data?.anime?.data?.images?.jpg?.image_url || data.manga?.data?.images?.webp?.large_image_url || data.manga?.data?.images?.webp?.image_url || data.manga?.data?.images?.jpg?.large_image_url || data.manga?.data?.images?.jpg?.image_url || "/images/no-img-placeholder.webp" %>" alt="<%= data.anime?.title || data.manga.title %> banner" class="absolute inset-0 h-full w-screen object-cover blur-sm scale-110" />
+							data?.anime?.data?.images?.jpg?.image_url || data.manga?.data?.images?.webp?.large_image_url || data.manga?.data?.images?.webp?.image_url || data.manga?.data?.images?.jpg?.large_image_url || data.manga?.data?.images?.jpg?.image_url || "/images/no-img-placeholder.webp" %>"
+						alt="<%= data.anime?.title || data.manga.title %> banner"
+						class="absolute inset-0 h-full w-screen object-cover blur-sm scale-110" />
 
 				<!-- Banner Overlay -->
-				<div class="absolute inset-0 bg-linear-to-b from-transparent to-(--bg-primary)"></div>
+				<div
+						class="absolute inset-0 bg-linear-to-b from-transparent to-(--bg-primary)">
+				</div>
 			</div>
 		</section>
 
@@ -45,7 +50,9 @@
 				<!-- Cover & Add to list btn -->
 				<div>
 					<img src="<%= data.anime?.data?.images?.webp?.large_image_url || data.anime?.data?.images?.webp?.image_url || data.anime?.data?.images?.jpg?.large_image_url ||
-							data?.anime?.data?.images?.jpg?.image_url || data.manga?.data?.images?.webp?.large_image_url || data.manga?.data?.images?.webp?.image_url || data.manga?.data?.images?.jpg?.large_image_url || data.manga?.data?.images?.jpg?.image_url || "/images/no-img-placeholder.webp" %>" alt="<%= data.anime?.title || data.manga.title %> cover" class="image-poster w-48 md:w-56 rounded-lg shadow-2xl border-2 mb-4" />
+							data?.anime?.data?.images?.jpg?.image_url || data.manga?.data?.images?.webp?.large_image_url || data.manga?.data?.images?.webp?.image_url || data.manga?.data?.images?.jpg?.large_image_url || data.manga?.data?.images?.jpg?.image_url || "/images/no-img-placeholder.webp" %>"
+							alt="<%= data.anime?.title || data.manga.title %> cover"
+							class="image-poster w-48 md:w-56 rounded-lg shadow-2xl border-2 mb-4" />
 
 					<button class="btn-add-to-list w-48 md:w-56 py-2 rounded-md">
 						<i class="ri-add-line"></i>
@@ -61,28 +68,41 @@
 
 					<!-- Rating, Type, Status -->
 					<div class="flex gap-2">
-						<div class="title-rating flex items-center gap-1 px-3 py-1 rounded-full">
+						<div
+								class="title-rating flex items-center gap-1 px-3 py-1 rounded-full">
 							<i class="ri-star-fill text-sm"></i>
 							<p class="text-sm">
 								<%= data.anime?.score || data.manga?.score || "N/A" %>
 							</p>
 						</div>
 
-						<div class="title-type flex items-center gap-1 px-3 py-1 rounded-full">
+						<div
+								class="title-type flex items-center gap-1 px-3 py-1 rounded-full">
 							<p class="text-sm">
 								<%= data.anime?.type || data.manga?.type || "N/A" %>
 							</p>
 						</div>
 
-						<div class="title-status flex items-center gap-1 px-3 py-1 rounded-full">
+						<div
+								class="title-status flex items-center gap-1 px-3 py-1 rounded-full">
 							<p class="text-sm">
 								<%= data.anime?.status || data.manga?.status || "N/A" %>
 							</p>
 						</div>
+
+						<% if (type === "anime") { %>
+						<div
+								class="title-status flex items-center gap-1 px-3 py-1 rounded-full">
+							<p class="text-sm">
+								<%= data.anime.data.episodes || "N/A" %> Episodes
+							</p>
+						</div>
+						<% } %>
 					</div>
 
 					<!-- Synopsis -->
-					<div class="max-h-60 md:max-h-68 overflow-y-auto lg:pr-16 scrollbar-thin scrollbar-thumb-[#4c566a] scrollbar-track-[#3b4252] mb-2">
+					<div
+							class="max-h-60 md:max-h-68 overflow-y-auto lg:pr-16 scrollbar-thin scrollbar-thumb-[#4c566a] scrollbar-track-[#3b4252] mb-2">
 						<p class="title-synopsis mt-2 text-sm leading-relaxed">
 							<%- data.synopsis || "No synopsis available for this title." %>
 						</p>
@@ -113,7 +133,8 @@
 					</div>
 
 					<!-- Meta -->
-					<div class="title-meta-container grid grid-cols-2 md:grid-cols-3 gap-4 p-3 rounded-md shadow-md items-start">
+					<div
+							class="title-meta-container grid grid-cols-2 md:grid-cols-3 gap-4 p-3 rounded-md shadow-md items-start">
 						<% if (type === "anime") { %>
 						<div class="title-meta-item flex gap-2 items-center">
 							<i class="ri-tv-2-line text-base"></i>
@@ -129,7 +150,8 @@
 							<i class="ri-tv-2-line text-base"></i>
 							<div class="flex flex-col">
 								<p class="text-sm opacity-75">Source</p>
-								<p class="text-sm md:text-base"><%= data.anime.data.source || "N/A" %></p>
+								<p class="text-sm md:text-base">
+									<%= data.anime.data.source || "N/A" %></p>
 							</div>
 						</div>
 
@@ -198,7 +220,8 @@
 							<i class="ri-tv-2-line text-base"></i>
 							<div class="flex flex-col">
 								<p class="text-sm opacity-75">Rating</p>
-								<p class="text-sm md:text-base"><%= data.anime.data.rating %></p>
+								<p class="text-sm md:text-base"><%= data.anime.data.rating %>
+								</p>
 							</div>
 						</div>
 						<% } else if (type === "manga") { %>
@@ -276,17 +299,36 @@
 							<i class="ri-tv-2-line text-base"></i>
 							<div class="flex flex-col">
 								<p class="text-sm opacity-75">Popularity</p>
-								<p class="text-sm md:text-base">#<%= data.manga.data.popularity || "N/A" %></p>
+								<p class="text-sm md:text-base">
+									#<%= data.manga.data.popularity || "N/A" %></p>
 							</div>
 						</div>
 						<% } %>
 					</div>
+
+					<!-- Trailer Section -->
+					<% if (type === "anime") { %>
+					<section id="trailer-section">
+						<div
+								class="trailer-container p-3 md:p-4 lg:p-6 rounded-md shadow-md">
+							<h2 class="text-2xl font-bold mb-3">Trailer/PV</h2>
+
+							<div class="aspect-video rounded-lg overflow-hidden">
+								<iframe class="w-full h-full rounded-lg"
+										src="<%= data.anime.data.trailer.embed_url %>"
+										title="<%= data.anime.title %> Trailer" frameborder="0"
+										allowfullscreen></iframe>
+							</div>
+						</div>
+					</section>
+					<% } %>
 				</div>
 			</div>
 		</section>
 
 		<!-- Character Section -->
-		<section id="character-section" class="character-container max-w-7xl mx-auto px-4 mt-10 flex flex-col gap-3">
+		<section id="character-section"
+				class="character-container max-w-7xl mx-auto px-4 mt-10 flex flex-col gap-3">
 			<h2 class="text-2xl font-bold">Characters</h2>
 			<!-- Characters Card -->
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -294,7 +336,9 @@
 				<a href="/overview/character/<%= char.character.mal_id %>">
 					<div class="character-card flex justify-between rounded-md shadow-md">
 						<div class="flex gap-4">
-							<img src="<%= char.character.images.webp?.image_url || char.character.images.jpg?.image_url || "/images/no-img-placeholder.webp"  %>" alt="<%= char.character.name || "character" %> cover" class="img-character w-20 h-28 object-cover rounded-md" />
+							<img src="<%= char.character.images.webp?.image_url || char.character.images.jpg?.image_url || "/images/no-img-placeholder.webp"  %>"
+									alt="<%= char.character.name || "character" %> cover"
+									class="img-character w-20 h-28 object-cover rounded-md" />
 
 							<div class="flex flex-col gap-1 py-3">
 								<p class="text-sm">
@@ -312,7 +356,9 @@
 						</div>
 
 						<% if (type === "anime") { %>
-						<img src="<%= char.voice_actors[0]?.person?.images?.webp?.image_url || char.voice_actors[0]?.person?.images?.jpg?.image_url || "/images/no-img-placeholder.webp" %>" alt="voice actors cover" class="img-voice-actor w-20 h-28 object-cover" />
+						<img src="<%= char.voice_actors[0]?.person?.images?.webp?.image_url || char.voice_actors[0]?.person?.images?.jpg?.image_url || "/images/no-img-placeholder.webp" %>"
+								alt="voice actors cover"
+								class="img-voice-actor w-20 h-28 object-cover" />
 						<% } %>
 					</div>
 				</a>
@@ -321,7 +367,8 @@
 		</section>
 
 		<!-- Relation Section -->
-		<section id="relation-section" class="relations-container max-w-7xl mx-auto px-4 mt-10 flex flex-col gap-3">
+		<section id="relation-section"
+				class="relations-container max-w-7xl mx-auto px-4 mt-10 flex flex-col gap-3">
 			<h2 class="text-2xl font-bold">Relations</h2>
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				<!-- Prequel -->
@@ -374,11 +421,13 @@
 
 				<!-- Side Story -->
 				<% if (data.relation.side_story && data.relation.side_story.entry) { %>
-				<div class="side-story-container col-span-1 md:col-span-2 lg:col-span-3 flex flex-col md:flex-row gap-2 p-3 rounded-md shadow-md">
+				<div
+						class="side-story-container col-span-1 md:col-span-2 lg:col-span-3 flex flex-col md:flex-row gap-2 p-3 rounded-md shadow-md">
 					<p class="text-base shrink-0">Side Story:</p>
 					<div class="flex flex-col gap-3">
 						<% data.relation.side_story.entry.forEach(rel => { %>
-						<a href="/overview/<%= rel.type %>/<%= rel.mal_id %>" class="text-base underline">
+						<a href="/overview/<%= rel.type %>/<%= rel.mal_id %>"
+								class="text-base underline">
 							<%= rel.name %>
 						</a>
 						<% }) %>
@@ -388,19 +437,88 @@
 			</div>
 		</section>
 
+		<!-- Soundtrack Section -->
+		<% if (type === "anime") { %>
+		<% if (data.themes) { %>
+		<section id="soundtrack-section" class="max-w-7xl mx-auto px-4 my-10">
+			<div
+					class="soundtrack-container border p-3 md:p-4 lg:p-6 rounded-md shadow-md">
+				<h2 class="text-2xl font-bold mb-6">Soundtracks</h2>
+
+				<!-- Openings -->
+				<% if (data.themes.opening.length > 0) { %>
+				<div class="opening-container mb-6">
+					<div class="flex items-center gap-2 mb-5">
+						<i class="ri-music-2-line text-lg"></i>
+						<h3 class="text-lg font-medium">Openings</h3>
+					</div>
+
+					<div class="flex flex-col gap-4 pl-7 pr-4">
+						<!-- Item -->
+						<% data.themes.opening.forEach(opening => { %>
+						<div class="flex justify-between items-center rounded-lg">
+							<div>
+								<p class="soundtrack-title font-bold"><%= opening.title %></p>
+								<p class="soundtrack-by text-sm">By <%= opening.singer %></p>
+							</div>
+							<span
+									class="soundtrack-eps text-xs font-bold px-2 py-1 rounded-full shrink-0">
+								EPS <%= opening.episodes %>
+							</span>
+						</div>
+						<% }) %>
+					</div>
+				</div>
+				<% } %>
+
+				<!-- Openings -->
+				<% if (data.themes.ending.length > 0) { %>
+				<div class="opening-container mb-6">
+					<div class="flex items-center gap-2 mb-5">
+						<i class="ri-music-2-line text-lg"></i>
+						<h3 class="text-lg font-medium">Endings</h3>
+					</div>
+
+					<div class="flex flex-col gap-4 pl-7 pr-4">
+						<!-- Item -->
+						<% data.themes.ending.forEach(opening => { %>
+						<div class="flex justify-between items-center rounded-lg gap-3">
+							<div>
+								<p class="soundtrack-title font-bold"><%= opening.title %></p>
+								<p class="soundtrack-by text-sm">By <%= opening.singer %></p>
+							</div>
+							<span
+									class="soundtrack-eps text-xs font-bold px-2 py-1 rounded-full shrink-0">
+								EPS <%= opening.episodes %>
+							</span>
+						</div>
+						<% }) %>
+					</div>
+				</div>
+				<% } %>
+			</div>
+		</section>
+		<% } %>
+		<% } %>
+
 		<!-- Recommendation Section -->
-		<section id="recommendation-section" class="recommendation-container max-w-7xl mx-auto px-4 my-10 flex flex-col gap-3">
+		<section id="recommendation-section"
+				class="recommendation-container max-w-7xl mx-auto px-4 my-10 flex flex-col gap-3">
 			<h2 class="text-2xl font-bold">Recommendation</h2>
 			<!-- List Recommendation -->
 			<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
 				<% data.recommendation.recommendation_data.forEach(title => { %>
 				<a href="/overview/<%= type %>/<%= title.entry.mal_id %>">
-					<div class="title-card group flex flex-col rounded-md overflow-hidden transition-all duration-300">
+					<div
+							class="title-card group flex flex-col rounded-md overflow-hidden transition-all duration-300">
 						<!-- Image container -->
 						<div class="relative aspect-3/4 overflow-hidden">
-							<img src="<%= title.entry.images?.webp?.image_url || title.entry.images?.jpg?.image_url || "/images/no-img-placeholder.webp"  %>" alt="<%= title.entry.title %> cover" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+							<img src="<%= title.entry.images?.webp?.image_url || title.entry.images?.jpg?.image_url || "/images/no-img-placeholder.webp"  %>"
+									alt="<%= title.entry.title %> cover"
+									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
 
-							<div class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
+							<div
+									class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
 								<span>
 									<%= title.votes %> Votes
 								</span>
@@ -408,72 +526,14 @@
 						</div>
 
 						<div class="px-2 py-3">
-							<h3 class="text-sm md:text-base font-bold truncate"><%= title.entry.title %></h3>
+							<h3 class="text-sm md:text-base font-bold truncate">
+								<%= title.entry.title %></h3>
 						</div>
 					</div>
 				</a>
 				<% }) %>
 			</div>
 		</section>
-
-		<!-- Trailer Section -->
-		<% if (type === "anime") { %>
-		<section id="trailer-section" class="max-w-7xl mx-auto px-4 mt-10">
-			<div class="trailer-container p-3 md:p-4 lg:p-6 rounded-md shadow-md">
-				<h2 class="text-2xl font-bold mb-3">Trailer</h2>
-
-				<div class="aspect-video rounded-lg overflow-hidden">
-					<iframe class="w-full h-full rounded-lg" src="<%= data.anime.data.trailer.embed_url %>" title="<%= data.anime.title %> Trailer" frameborder="0" allowfullscreen></iframe>
-				</div>
-			</div>
-		</section>
-		<% } %>
-
-		<!-- Soundtrack Section -->
-		<% if (type === "anime") { %>
-		<section id="soundtrack-section" class="max-w-7xl mx-auto px-4 my-10">
-			<div class="soundtrack-container border p-3 md:p-4 lg:p-6 rounded-md shadow-md">
-				<h2 class="text-2xl font-bold mb-6">Soundtracks (Not Completed)</h2>
-
-				<!-- Openings -->
-				<div class="opening-container mb-6">
-					<div class="flex items-center gap-2">
-						<i class="ri-music-2-line text-lg"></i>
-						<h3 class="text-lg font-medium">Openings</h3>
-					</div>
-
-					<div class="flex flex-col gap-4">
-						<!-- Item -->
-						<div class="flex justify-between items-center rounded-lg p-4">
-							<div>
-								<p class="soundtrack-title font-bold">again</p>
-								<p class="soundtrack-by text-sm">YUI</p>
-							</div>
-							<span class="soundtrack-eps text-xs px-3 py-1 rounded-full">EP 1-14</span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Endings -->
-				<div>
-					<div class="ending-container flex items-center gap-2">
-						<i class="ri-music-2-line text-lg"></i>
-						<h3 class="text-lg font-medium">Endings</h3>
-					</div>
-
-					<div class="flex flex-col gap-4">
-						<div class="flex justify-between items-center rounded-lg p-4">
-							<div>
-								<p class="soundtrack-title font-bold">Uso (嘘)</p>
-								<p class="soundtrack-by text-sm">SID</p>
-							</div>
-							<span class="soundtrack-eps text-xs px-3 py-1 rounded-full">EP 1-14</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<% } %>
 	</main>
 </body>
 
