@@ -1,8 +1,8 @@
-# DEV Branch
+# Still on development
 
 11/11/2025 to ??
 
-The project will be rewritten in TypeScript, with all code organized into modular structure to improve development efficiency and scalability.
+The project will be refactor and rewritten in TypeScript, with all code organized into modular structure to improve development efficiency and scalability.
 
 Tech Stack:
 Maybe there is some minor changes.
@@ -23,13 +23,29 @@ Node.js or Bun, Express or Hono, EJS, TailwindCSS.
 
 ---
 
+## About AnimaKu
+
+AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and PostgreSQL that allows users to search, browse, and manage their personal anime or manga lists. It integrates with the JIKAN API to fetch up-to-date anime/manga data while caching information in PostgreSQL for faster performance.
+
+---
+
+## Demo
+
+![homepage](demo/Home.webp)
+
+![overview dark](demo/overview-dark.webp)
+
+![overview light](demo/overview-light.webp)
+
+---
+
 ## Todo List:
 
 - [x] Setup project
 - [x] Testing the Jikan API
 - [x] Design the database
 
-**Redesign homepage:**
+**Redesign homepage (COMPLETED)**
 
 - [x] Navbar
 - [x] Navbar logic for collapse
@@ -48,7 +64,7 @@ Node.js or Bun, Express or Hono, EJS, TailwindCSS.
   - [x] Write logic for storing the data
   - [x] Get the data and render for this section
 
-**Overview Section**
+**Overview Section (COMPLETED)**
 
 - [x] Design overview section
 - [x] Write logic for fetch anime data and storing to database
@@ -75,6 +91,7 @@ Node.js or Bun, Express or Hono, EJS, TailwindCSS.
 - [ ] Do this
 
 **Error Page**
+
 - [ ] Do this
 
 **API and Database:**
