@@ -23,7 +23,7 @@ export async function fetchTopMangaBatch(maxPage: number): Promise<Manga[]> {
 			if (topMangaData?.length) {
 				topMangaList.push(...topMangaData);
 				console.log(
-					`✅ Page ${page}: ${topMangaData.length} anime (Total: ${topMangaList.length})`
+					`✅ Page ${page}: ${topMangaData.length} manga (Total: ${topMangaList.length})`
 				);
 			}
 
