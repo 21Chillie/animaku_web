@@ -29,3 +29,9 @@ export async function getAnimeByMalId(mal_id: number): Promise<DatabaseAnimeType
 
 	return result.rows[0];
 }
+
+export async function getAllAnime(): Promise<DatabaseAnimeTypes[]> {
+	const result: QueryResult<DatabaseAnimeTypes> = await pool.query(`SELECT * FROM anime`);
+
+	return result.rows;
+}

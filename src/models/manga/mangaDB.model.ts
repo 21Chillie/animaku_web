@@ -29,3 +29,9 @@ export async function getMangaByMalId(mal_id: number): Promise<DatabaseMangaType
 
 	return result.rows[0];
 }
+
+export async function getAllManga(): Promise<DatabaseMangaTypes[]> {
+	const result: QueryResult<DatabaseMangaTypes> = await pool.query(`SELECT * FROM manga`);
+
+	return result.rows;
+}
