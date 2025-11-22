@@ -3,12 +3,10 @@ import { seedTableManga } from '../models/manga/mangaDBSeedTable';
 import { deleteOldMangaTop, getAllMangaTop, getOldMangaTop } from '../models/manga/mangaTopModel';
 import { seedTableMangaTop } from '../models/manga/mangaTopSeedTable';
 import { fetchTopMangaBatch } from '../services/fetchTopManga.service';
-import { DatabaseMangaTypes } from '../types/database.types';
 
 export async function getMangaTop(req: Request, res: Response) {
 	const daysThreshold = 30;
-	const maxPage = 40;
-	const topMangaList: DatabaseMangaTypes[] = [];
+	const maxPage = 4;
 
 	try {
 		const oldMangaTopDB = await getOldMangaTop(daysThreshold);
@@ -19,7 +17,7 @@ export async function getMangaTop(req: Request, res: Response) {
 			console.log(`Deleted ${deleteResult} old records.`);
 		}
 
-		const mangaTopDB = await getAllMangaTop();
+		let mangaTopDB = await getAllMangaTop();
 
 		if (mangaTopDB.length <= 100) {
 			console.log('Database empty, fetching from api...');
@@ -27,17 +25,14 @@ export async function getMangaTop(req: Request, res: Response) {
 			const dataFromAPI = await fetchTopMangaBatch(maxPage);
 			await seedTableMangaTop(dataFromAPI);
 			await seedTableManga(dataFromAPI);
-			const mangaTopDB = await getAllMangaTop();
-			topMangaList.push(...mangaTopDB);
+			mangaTopDB = await getAllMangaTop();
 
 			console.log('Successfully inserting data into database');
 		}
 
-		topMangaList.push(...mangaTopDB);
-
 		console.log('Showing top manga list');
 
-		res.status(200).json({ success: true, data: topMangaList, source: 'Database' });
+		res.status(200).json({ success: true, data: mangaTopDB, source: 'Database' });
 	} catch (err) {
 		console.error(err);
 		res

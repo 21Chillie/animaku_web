@@ -7,16 +7,12 @@ import {
 } from '../models/anime/animeTrendingModel';
 import { seedTableAnimeTrending } from '../models/anime/animeTrendingSeedTable';
 import { fetchAnimeTrendingBatch } from '../services/fetchAnimeTrending.service';
-import { DatabaseAnimeTypes } from '../types/database.types';
 
 export async function getAnimeTrending(req: Request, res: Response) {
 	// 2 weeks
 	const daysThreshold = 14;
-	// Recommended 20,
-	const maxPage = 20;
-
-	// Store anime trending data here
-	const trendingAnimeList: DatabaseAnimeTypes[] = [];
+	// Recommended 6,
+	const maxPage = 6;
 
 	try {
 		// Get records from 'anime_trending' table that older than `dayThreshold` days
@@ -31,28 +27,23 @@ export async function getAnimeTrending(req: Request, res: Response) {
 		}
 
 		// Get all records from 'anime_trending' table
-		const animeTrendingDB = await getAllAnimeTrending();
+		let animeTrendingDB = await getAllAnimeTrending();
 
-		// If its empty, then fetch fresh data and inserting to database
+		// If its less or equal than 100, then fetch fresh data and inserting to database
 		if (animeTrendingDB.length <= 100) {
 			console.log('Database empty, fetching from api...');
 
 			const dataFromAPI = await fetchAnimeTrendingBatch(maxPage);
 			await seedTableAnimeTrending(dataFromAPI);
 			await seedTableAnime(dataFromAPI);
-			const animeTrendingDB = await getAllAnimeTrending();
-
-			// Push data from database to trendingAnimelist variable
-			trendingAnimeList.push(...animeTrendingDB);
+			animeTrendingDB = await getAllAnimeTrending();
 
 			console.log('Successfully inserting into database');
 		}
 
-		trendingAnimeList.push(...animeTrendingDB);
-
 		console.log('Showing trending anime list');
 
-		res.status(200).json({ success: true, data: trendingAnimeList, source: 'Database' });
+		res.status(200).json({ success: true, data: animeTrendingDB, source: 'Database' });
 	} catch (err) {
 		console.error(err);
 		res
