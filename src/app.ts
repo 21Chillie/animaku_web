@@ -4,8 +4,7 @@ import path from 'path';
 
 // Import Config
 import { basicSecurityHeaders } from './config/basicSecurity.config';
-import { animeRoutes } from './routes/apiAnime.route';
-import { mangaRoutes } from './routes/apiManga.route';
+import { apiRoutes } from './routes/api.routes';
 import { pageRoute } from './routes/page.route';
 
 // Initialize express app
@@ -29,10 +28,7 @@ app.set('views', path.join(__dirname, '../views'));
 // 	Index Route
 app.use('/', pageRoute);
 
-// Api for anime
-app.use('/api/anime', animeRoutes);
-
-// API for manga
-app.use('/api/manga', mangaRoutes);
+// Api routes
+app.use('/api', apiRoutes);
 
 export default app;
