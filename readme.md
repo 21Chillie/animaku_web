@@ -1,4 +1,6 @@
-# Still on development
+# Still on development for v.2.0.0
+
+If you want see the old source code just head to branch release/v1.0.0 or click [here](https://github.com/21Chillie/animaku_web/tree/release/v1.0.0)
 
 11/11/2025 to ??
 
