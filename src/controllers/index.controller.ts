@@ -19,12 +19,11 @@ import { DatabaseAnimeTypes, DatabaseMangaTypes } from '../types/database.types'
 async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 	const daysThreshold = 7;
 	// The value max to 25
-	const maxRecords = 6;
+	const maxRecords = 10;
 	// Recommended max 4, but not limited to 4 (Each page has 25 records)
 	const maxPage = 1;
 	try {
 		const oldAnimeDatabase = await getOldAnimeTrending(daysThreshold);
-		const animeTrendingData: DatabaseAnimeTypes[] = [];
 
 		if (oldAnimeDatabase.length > 0) {
 			console.log(`Found ${oldAnimeDatabase.length} records older than 30 days, deleting...`);
@@ -32,35 +31,16 @@ async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 			console.log(`Deleted ${deleteResult} old records.`);
 		}
 
-		const animeTrendingDatabase = await getAnimeTrendingLimit(maxRecords);
+		let animeTrendingDatabase = await getAnimeTrendingLimit(maxRecords);
 
 		if (animeTrendingDatabase.length === 0) {
 			const dataFromAPI = await fetchAnimeTrendingBatch(maxPage);
-
 			await seedTableAnimeTrending(dataFromAPI);
 			await seedTableAnime(dataFromAPI);
-
-			const transformedDataAPI: DatabaseAnimeTypes[] = dataFromAPI.map((anime, index) => ({
-				id: index + 1, // Temporary ID since it doesn't have real DB ID yet
-				mal_id: anime.mal_id,
-				title: anime.title,
-				type: anime.type,
-				status: anime.status,
-				year: anime.aired?.prop?.from?.year,
-				score: anime.score,
-				rank: anime.rank,
-				popularity: anime.popularity,
-				data: anime,
-				created_at: new Date().toISOString(),
-				last_updated_at: new Date().toISOString(),
-			}));
-
-			animeTrendingData.push(...transformedDataAPI.slice(0, maxRecords));
+			animeTrendingDatabase = await getAnimeTrendingLimit(maxRecords);
 		}
 
-		animeTrendingData.push(...animeTrendingDatabase);
-
-		return animeTrendingData;
+		return animeTrendingDatabase;
 	} catch (err) {
 		console.error(err);
 		throw new Error('Something went wrong while fetching anime trending data');
@@ -70,12 +50,11 @@ async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 	const daysThreshold = 30;
 	// The value max to 25
-	const maxRecords = 6;
+	const maxRecords = 10;
 	// Recommended 4, but not limited to 4 (Each page has 25 records)
 	const maxPage = 1;
 
 	try {
-		const animeTopData: DatabaseAnimeTypes[] = [];
 		const oldAnimeDB = await getOldAnimeTop(daysThreshold);
 
 		if (oldAnimeDB.length > 0) {
@@ -84,35 +63,16 @@ async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 			console.log(`Deleted ${deleteResult} old records.`);
 		}
 
-		const animeTopDB = await getAnimeTopLimit(maxRecords);
+		let animeTopDB = await getAnimeTopLimit(maxRecords);
 
 		if (animeTopDB.length === 0) {
 			const dataFromAPI = await fetchTopAnimeBatch(maxPage);
-
 			await seedTableAnimeTop(dataFromAPI);
 			await seedTableAnime(dataFromAPI);
-
-			const transformedDataAPI: DatabaseAnimeTypes[] = dataFromAPI.map((anime, index) => ({
-				id: index + 1, // Temporary ID since it doesn't have real DB ID yet
-				mal_id: anime.mal_id,
-				title: anime.title,
-				type: anime.type,
-				status: anime.status,
-				year: anime.aired?.prop?.from?.year,
-				score: anime.score,
-				rank: anime.rank,
-				popularity: anime.popularity,
-				data: anime,
-				created_at: new Date().toISOString(),
-				last_updated_at: new Date().toISOString(),
-			}));
-
-			animeTopData.push(...transformedDataAPI.slice(0, maxRecords));
+			animeTopDB = await getAnimeTopLimit(maxRecords);
 		}
 
-		animeTopData.push(...animeTopDB);
-
-		return animeTopData;
+		return animeTopDB;
 	} catch (err) {
 		console.error(err);
 		throw new Error('Something went wrong while fetching anime trending data');
@@ -121,11 +81,10 @@ async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 
 async function getMangaTop(): Promise<DatabaseMangaTypes[]> {
 	const dayThreshold = 30;
-	const maxRecords = 6;
+	const maxRecords = 10;
 	const maxPage = 1;
 
 	try {
-		const mangaTopData: DatabaseMangaTypes[] = [];
 		const oldMangaDB = await getOldMangaTop(dayThreshold);
 
 		if (oldMangaDB.length > 0) {
@@ -134,36 +93,16 @@ async function getMangaTop(): Promise<DatabaseMangaTypes[]> {
 			console.log(`Deleted ${deleteResult} old records.`);
 		}
 
-		const mangaTopDB = await getMangaTopLimit(maxRecords);
+		let mangaTopDB = await getMangaTopLimit(maxRecords);
 
 		if (mangaTopDB.length === 0) {
 			const dataFromAPI = await fetchTopMangaBatch(maxPage);
-
 			await seedTableMangaTop(dataFromAPI);
 			await seedTableManga(dataFromAPI);
-
-			// Transform data from API, so the structure is same as from database
-			const transformedDataAPI: DatabaseMangaTypes[] = dataFromAPI.map((manga, index) => ({
-				id: index + 1, // Temporary ID since it doesn't have real DB ID yet
-				mal_id: manga.mal_id,
-				title: manga.title,
-				type: manga.type,
-				status: manga.status,
-				year: manga.published?.prop?.from?.year,
-				score: manga.score,
-				rank: manga.rank,
-				popularity: manga.popularity,
-				data: manga,
-				created_at: new Date().toISOString(),
-				last_updated_at: new Date().toISOString(),
-			}));
-
-			mangaTopData.push(...transformedDataAPI.slice(0, maxRecords));
+			mangaTopDB = await getMangaTopLimit(maxRecords);
 		}
 
-		mangaTopData.push(...mangaTopDB);
-
-		return mangaTopData;
+		return mangaTopDB;
 	} catch (err) {
 		console.error(err);
 		throw new Error('Something went wrong while fetching anime trending data');
