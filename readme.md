@@ -96,16 +96,18 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 
 **API and Database:**
 
-- [x] Fetch trending anime and store it to database (max 200+)
-- [x] Fetch top anime and store it to database (max 1000+)
-- [x] Fetch top manga and store it to database (max 1000+)
+- [x] Fetch trending anime and store it to database
+- [x] Fetch top anime and store it to database
+- [x] Fetch top manga and store it to database
 - [x] Create anime table and store both anime trending and top data
 - [x] Create manga table and store top manga data
+- [x] Fix rate limited from api
 - [x] Create anime and manga character table
 - [x] Create anime and manga relation table
 - [x] Create anime and manga recommendation table
+- [x] Create anime theme table
 
-**Filter query and params(mal_id):**
+**Filter query and params(mal_id) (PRIORITIZE)**
 
 - [ ] Filter query for anime table
 - [ ] Filter query for manga table
@@ -119,6 +121,7 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Type definition for character data (Database/API Response)
 - [x] Type definition for relation data (Database/API Response)
 - [x] Type definition for recommendation data (Database/API Response)
+- [x] Type definition for anime theme data (database/api response)
 - [x] Tidy up and fix
 
 ---
