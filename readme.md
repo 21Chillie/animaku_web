@@ -80,6 +80,10 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Render all the data for overview page
 - [x] Need to add ending and opening OST (or will delete that section)
 
+**Top and Trending Page (Anime/Manga)**
+
+- [ ] Do this
+
 **Browse Section**
 
 - [ ] Do this
@@ -109,13 +113,19 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Create anime and manga recommendation table
 - [x] Create anime theme table
 
-**Filter query and params(mal_id) (PRIORITIZE)**
+**Filter query and params(mal_id) (COMPLETED)**
 
-- [ ] Filter query for anime table
-- [ ] Filter query for manga table
-- [ ] Filter query trending anime api data
-- [ ] Filter query top anime api data
-- [ ] Filter query top manga api data
+- [x] Get anime by mal_id
+- [x] Get manga by mal_id
+- [x] Paginated and Limit query for anime top table
+- [x] Paginated and Limit query for anime trending table
+- [x] Paginated and Limit query for manga top table
+- [x] Paginated and Limit query for anime table
+- [x] Filter query with type and status for anime table
+- [x] Order by query title, rank, score popularity, and year for anime table
+- [x] Paginated and Limit query for manga table
+- [x] Filter query with type and status for manga table
+- [x] Order by query title, rank, score popularity, and year for manga table
 
 **Typescript Type Definition**
 
@@ -125,6 +135,11 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Type definition for recommendation data (Database/API Response)
 - [x] Type definition for anime theme data (database/api response)
 - [x] Tidy up and fix
+
+**Documentations**
+
+- [ ] API documentation
+- [ ] Repositories Documentation
 
 ---
 
