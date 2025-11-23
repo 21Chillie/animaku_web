@@ -3,6 +3,8 @@ import { seedTableAnime } from '../models/anime/animeDBSeedTable';
 import {
 	deleteOldAnimeTrending,
 	getAllAnimeTrending,
+	getAnimeTrendingCount,
+	getAnimeTrendingPaginated,
 	getOldAnimeTrending,
 } from '../models/anime/animeTrendingModel';
 import { seedTableAnimeTrending } from '../models/anime/animeTrendingSeedTable';
@@ -13,6 +15,10 @@ export async function getAnimeTrending(req: Request, res: Response) {
 	const daysThreshold = 14;
 	// Recommended 6,
 	const maxPage = 6;
+
+	const page = Number(req.query.page as string) || 1;
+	const limit = parseInt(req.query.limit as string) || 25;
+	const offset = (page - 1) * limit;
 
 	try {
 		// Get records from 'anime_trending' table that older than `dayThreshold` days
@@ -41,9 +47,39 @@ export async function getAnimeTrending(req: Request, res: Response) {
 			console.log('Successfully inserting into database');
 		}
 
-		console.log('Showing trending anime list');
+		const paginatedTrendingAnime = await getAnimeTrendingPaginated(limit, offset);
+		const totalRecords = await getAnimeTrendingCount();
+		const totalPages = Math.ceil(totalRecords / limit);
 
-		res.status(200).json({ success: true, data: animeTrendingDB, source: 'Database' });
+		if (limit > 25) {
+			return res.status(400).json({
+				status: 400,
+				success: false,
+				message: `The input limit value is ${limit} and it's higher than the configured '25'`,
+			});
+		}
+
+		if (page > totalPages) {
+			return res.status(400).json({
+				status: 400,
+				success: false,
+				message: `The input pages value is ${page} and it's higher than total pages ${totalPages}`,
+			});
+		}
+
+		res.status(200).json({
+			success: true,
+			data: paginatedTrendingAnime,
+			pagination: {
+				currentPage: page,
+				totalPages: totalPages,
+				totalRecords: totalRecords,
+				hasNext: page < totalPages,
+				hasPrev: page > 1,
+				limit: limit,
+			},
+			source: 'Database',
+		});
 	} catch (err) {
 		console.error(err);
 		res

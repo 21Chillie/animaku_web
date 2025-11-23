@@ -1,6 +1,12 @@
 import { Request, Response } from 'express';
 import { seedTableAnime } from '../models/anime/animeDBSeedTable';
-import { deleteOldAnimeTop, getAllAnimeTop, getOldAnimeTop } from '../models/anime/animeTopModel';
+import {
+	deleteOldAnimeTop,
+	getAllAnimeTop,
+	getAnimeTopCount,
+	getAnimeTopPaginated,
+	getOldAnimeTop,
+} from '../models/anime/animeTopModel';
 import { seedTableAnimeTop } from '../models/anime/animeTopSeedTable';
 import { fetchTopAnimeBatch } from '../services/fetchTopAnime.service';
 
@@ -9,6 +15,11 @@ export async function getAnimeTop(req: Request, res: Response) {
 	const daysThreshold = 30;
 	// Recommended 4, you can do more than that
 	const maxPage = 4;
+
+	// Page and limit records
+	const page = parseInt(req.query.page as string) || 1;
+	const limit = parseInt(req.query.limit as string) || 25;
+	const offset = (page - 1) * limit;
 
 	try {
 		// Check old anime top db
@@ -25,7 +36,7 @@ export async function getAnimeTop(req: Request, res: Response) {
 		let animeTopDB = await getAllAnimeTop();
 
 		// if the records is less or equal than 100, will fetch fresh data from api
-		if (animeTopDB.length <= 100) {
+		if (animeTopDB.length === 0) {
 			console.log('Database empty, fetching from api...');
 
 			// Fetch Data then seed to database (anime_top and anime tables)
@@ -36,9 +47,39 @@ export async function getAnimeTop(req: Request, res: Response) {
 			console.log('Successfully inserting into database');
 		}
 
-		console.log('Showing top anime list');
+		const paginatedTopAnime = await getAnimeTopPaginated(limit, offset);
+		const totalRecords = await getAnimeTopCount();
+		const totalPages = Math.ceil(totalRecords / limit);
 
-		res.status(200).json({ success: true, data: animeTopDB, source: 'Database' });
+		if (limit > 25) {
+			return res.status(400).json({
+				status: 400,
+				success: false,
+				message: `The input limit value is ${limit} and it's higher than the configured '25'`,
+			});
+		}
+
+		if (page > totalPages) {
+			return res.status(400).json({
+				status: 400,
+				success: false,
+				message: `The input pages value is ${page} and it's higher than total pages ${totalPages}`,
+			});
+		}
+
+		res.status(200).json({
+			success: true,
+			data: paginatedTopAnime,
+			pagination: {
+				currentPage: page,
+				totalPages: totalPages,
+				totalRecords: totalRecords,
+				hasNext: page < totalPages,
+				hasPrev: page > 1,
+				limit: limit,
+			},
+			source: 'Database',
+		});
 	} catch (err) {
 		console.error(err);
 		res
