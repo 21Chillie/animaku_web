@@ -26,8 +26,13 @@ export async function fetchAnimeByMalId(mal_id: number): Promise<Anime> {
 	} catch (err) {
 		console.error(`Something went wrong while trying fetch anime data with id `, mal_id);
 
+		if (axios.isAxiosError(err) && err.response?.status === 404) {
+			throw new Error('Anime with that mal_id does not exist');
+		}
+
 		if (axios.isAxiosError(err) && err.response?.status === 429) {
 			console.error('Rate limited, please wait in a second and try refresh browser');
+			throw new Error('Rate limited, please wait in a second and refresh the browser');
 		}
 
 		throw new Error('Something went wrong while trying fetch anime data');
@@ -154,8 +159,13 @@ export async function fetchMangaByMalId(mal_id: number): Promise<Manga> {
 	} catch (err) {
 		console.error(`Something went wrong while trying fetch manga data with id `, mal_id);
 
+		if (axios.isAxiosError(err) && err.response?.status === 404) {
+			throw new Error('Manga with that mal_id does not exist');
+		}
+
 		if (axios.isAxiosError(err) && err.response?.status === 429) {
 			console.error('Rate limited, please wait in a second and try refresh browser');
+			throw new Error('Rate limited, please wait in a second and refresh the browser');
 		}
 
 		throw new Error('Something went wrong while trying fetch manga data');
