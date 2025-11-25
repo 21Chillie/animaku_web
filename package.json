@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "nodemon --watch src --exec ts-node src/server.ts",
 		"build": "npx tsc",
-		"build:css": "npx @tailwindcss/cli -i ./public/css/tailwindcss/input.css -o ./public/css/tailwindcss/tailwind.css --watch --minify",
+		"build:css": "npx @tailwindcss/cli -i ./public/css/tailwindcss/input.css -o ./public/css/tailwindcss/tailwind.css --watch",
 		"build:db": "npx ts-node src/models/createAllTable.ts",
 		"start": "node dist/server.js"
 	},
@@ -26,6 +26,7 @@
 		"@tailwindcss/cli": "^4.1.17",
 		"axios": "^1.13.2",
 		"cors": "^2.8.5",
+		"daisyui": "^5.5.5",
 		"dotenv": "^17.2.3",
 		"ejs": "^3.1.10",
 		"express": "^5.1.0",
