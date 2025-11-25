@@ -21,6 +21,15 @@ export async function insertAnimeDataByMalId(data: Anime) {
 	}
 }
 
+export async function getOldAnime(daysThreshold: number): Promise<DatabaseAnimeTypes[]> {
+	const result: QueryResult<DatabaseAnimeTypes> = await pool.query(
+		`SELECT * FROM anime WHERE last_updated_at <= NOW() - make_interval(days => $1)`,
+		[daysThreshold]
+	);
+
+	return result.rows;
+}
+
 export async function getAnimeByMalId(mal_id: number): Promise<DatabaseAnimeTypes> {
 	const result: QueryResult<DatabaseAnimeTypes> = await pool.query(
 		`SELECT * FROM anime WHERE mal_id = $1`,
