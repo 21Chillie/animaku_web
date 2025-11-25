@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { seedTableAnime } from '../../models/anime/animeDBSeedTable';
 
 import {
-	deleteOldAnimeTop,
 	getAllAnimeTop,
 	getAnimeTopCount,
 	getAnimeTopPaginated,
@@ -28,9 +27,11 @@ export async function getAnimeTop(req: Request, res: Response) {
 
 		// if there is records that has older than 30 days, delete the data
 		if (oldAnimeTopDB.length > 0) {
-			console.log(`Found ${oldAnimeTopDB.length} records older than 30 days, deleting...`);
-			const deleteResult = await deleteOldAnimeTop(daysThreshold);
-			console.log(`Deleted ${deleteResult} old records.`);
+			console.log(`Found ${oldAnimeTopDB.length} records older than 30 days, updating data...`);
+			const dataFromAPI = await fetchTopAnimeBatch(maxPage);
+			await seedTableAnimeTop(dataFromAPI);
+			await seedTableAnime(dataFromAPI);
+			console.log(`Successfully update ${oldAnimeTopDB.length} records of data`);
 		}
 
 		// After that will check anime top records

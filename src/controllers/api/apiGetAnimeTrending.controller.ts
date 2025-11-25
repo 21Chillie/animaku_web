@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { seedTableAnime } from '../../models/anime/animeDBSeedTable';
 
 import {
-	deleteOldAnimeTrending,
 	getAllAnimeTrending,
 	getAnimeTrendingCount,
 	getAnimeTrendingPaginated,
@@ -13,7 +12,7 @@ import { fetchAnimeTrendingBatch } from '../../services/fetchAnimeTrending.servi
 
 export async function getAnimeTrending(req: Request, res: Response) {
 	// 2 weeks
-	const daysThreshold = 14;
+	const daysThreshold = 7;
 	// Recommended 6,
 	const maxPage = 6;
 
@@ -27,10 +26,13 @@ export async function getAnimeTrending(req: Request, res: Response) {
 
 		// If there is any old records within `daysThreshold` days, will be deleted.
 		if (oldAnimeTrendingDB.length > 0) {
-			console.log(`Found ${oldAnimeTrendingDB.length} records older than 30 days, deleting...`);
-
-			const deleteResult = await deleteOldAnimeTrending(daysThreshold);
-			console.log(`Deleted ${deleteResult} old records.`);
+			console.log(
+				`Found ${oldAnimeTrendingDB.length} records older than 7 days, updating data...`
+			);
+			const dataFromAPI = await fetchAnimeTrendingBatch(maxPage);
+			await seedTableAnimeTrending(dataFromAPI);
+			await seedTableAnime(dataFromAPI);
+			console.log(`Successfully update ${oldAnimeTrendingDB.length} records of data`);
 		}
 
 		// Get all records from 'anime_trending' table

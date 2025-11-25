@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { seedTableManga } from '../../models/manga/mangaDBSeedTable';
 
 import {
-	deleteOldMangaTop,
 	getAllMangaTop,
 	getMangaTopCount,
 	getMangaTopPaginated,
@@ -22,10 +21,11 @@ export async function getMangaTop(req: Request, res: Response) {
 	try {
 		const oldMangaTopDB = await getOldMangaTop(daysThreshold);
 		if (oldMangaTopDB.length > 0) {
-			console.log(`Found ${oldMangaTopDB.length} records older than 30 days, deleting...`);
-
-			const deleteResult = await deleteOldMangaTop(daysThreshold);
-			console.log(`Deleted ${deleteResult} old records.`);
+			console.log(`Found ${oldMangaTopDB.length} records older than 30 days, updating data...`);
+			const dataFromAPI = await fetchTopMangaBatch(maxPage);
+			await seedTableMangaTop(dataFromAPI);
+			await seedTableManga(dataFromAPI);
+			console.log(`Successfully update ${oldMangaTopDB.length} records of data`);
 		}
 
 		let mangaTopDB = await getAllMangaTop();
