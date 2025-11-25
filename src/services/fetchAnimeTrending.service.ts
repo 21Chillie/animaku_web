@@ -11,6 +11,7 @@ export async function fetchAnimeTrendingLimit(maxRecords: number): Promise<Anime
 		const response: AxiosResponse<JikanResponse> = await axios.get(`${API_URL}/seasons/now`, {
 			params: {
 				limit: maxRecords,
+				continuing: true,
 			},
 			timeout: 10000,
 		});
@@ -46,7 +47,10 @@ export async function fetchAnimeTrendingBatch(maxPage: number): Promise<Anime[]>
 
 		try {
 			const response: AxiosResponse<JikanResponse> = await axios.get(`${API_URL}/seasons/now`, {
-				params: { page },
+				params: {
+					page,
+					continuing: true,
+				},
 				timeout: 20000, // Increased timeout for larger pages
 			});
 
