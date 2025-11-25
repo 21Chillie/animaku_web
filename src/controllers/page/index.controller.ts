@@ -1,23 +1,11 @@
 import type { Request, Response } from 'express';
 import { seedTableAnime } from '../../models/anime/animeDBSeedTable';
-import {
-	deleteOldAnimeTop,
-	getAnimeTopLimit,
-	getOldAnimeTop,
-} from '../../models/anime/animeTopModel';
+import { getAnimeTopLimit, getOldAnimeTop } from '../../models/anime/animeTopModel';
 import { seedTableAnimeTop } from '../../models/anime/animeTopSeedTable';
-import {
-	deleteOldAnimeTrending,
-	getAnimeTrendingLimit,
-	getOldAnimeTrending,
-} from '../../models/anime/animeTrendingModel';
+import { getAnimeTrendingLimit, getOldAnimeTrending } from '../../models/anime/animeTrendingModel';
 import { seedTableAnimeTrending } from '../../models/anime/animeTrendingSeedTable';
 import { seedTableManga } from '../../models/manga/mangaDBSeedTable';
-import {
-	deleteOldMangaTop,
-	getMangaTopLimit,
-	getOldMangaTop,
-} from '../../models/manga/mangaTopModel';
+import { getMangaTopLimit, getOldMangaTop } from '../../models/manga/mangaTopModel';
 import { seedTableMangaTop } from '../../models/manga/mangaTopSeedTable';
 import { fetchAnimeTrendingBatch } from '../../services/fetchAnimeTrending.service';
 import { fetchTopAnimeBatch } from '../../services/fetchTopAnime.service';
@@ -34,9 +22,11 @@ async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 		const oldAnimeDatabase = await getOldAnimeTrending(daysThreshold);
 
 		if (oldAnimeDatabase.length > 0) {
-			console.log(`Found ${oldAnimeDatabase.length} records older than 30 days, deleting...`);
-			const deleteResult = await deleteOldAnimeTrending(daysThreshold);
-			console.log(`Deleted ${deleteResult} old records.`);
+			console.log(`Found ${oldAnimeDatabase.length} records older than 7 days, updating data...`);
+			const dataFromAPI = await fetchAnimeTrendingBatch(maxPage);
+			await seedTableAnimeTrending(dataFromAPI);
+			await seedTableAnime(dataFromAPI);
+			console.log(`Successfully update ${oldAnimeDatabase.length} records of data`);
 		}
 
 		let animeTrendingDatabase = await getAnimeTrendingLimit(maxRecords);
@@ -56,7 +46,7 @@ async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 }
 
 async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
-	const daysThreshold = 60;
+	const daysThreshold = 30;
 	// The value max to 25
 	const maxRecords = 10;
 	// Recommended 4, but not limited to 4 (Each page has 25 records)
@@ -66,9 +56,11 @@ async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 		const oldAnimeDB = await getOldAnimeTop(daysThreshold);
 
 		if (oldAnimeDB.length > 0) {
-			console.log(`Found ${oldAnimeDB.length} records older than 30 days, deleting...`);
-			const deleteResult = await deleteOldAnimeTop(daysThreshold);
-			console.log(`Deleted ${deleteResult} old records.`);
+			console.log(`Found ${oldAnimeDB.length} records older than 30 days, updating data...`);
+			const dataFromAPI = await fetchTopAnimeBatch(maxPage);
+			await seedTableAnimeTop(dataFromAPI);
+			await seedTableAnime(dataFromAPI);
+			console.log(`Successfully update ${oldAnimeDB.length} records of data`);
 		}
 
 		let animeTopDB = await getAnimeTopLimit(maxRecords);
@@ -88,7 +80,7 @@ async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 }
 
 async function getMangaTop(): Promise<DatabaseMangaTypes[]> {
-	const dayThreshold = 60;
+	const dayThreshold = 30;
 	const maxRecords = 10;
 	const maxPage = 1;
 
@@ -96,9 +88,11 @@ async function getMangaTop(): Promise<DatabaseMangaTypes[]> {
 		const oldMangaDB = await getOldMangaTop(dayThreshold);
 
 		if (oldMangaDB.length > 0) {
-			console.log(`Found ${oldMangaDB.length} records older than 30 days, deleting...`);
-			const deleteResult = await deleteOldMangaTop(dayThreshold);
-			console.log(`Deleted ${deleteResult} old records.`);
+			console.log(`Found ${oldMangaDB.length} records older than 30 days, updating data...`);
+			const dataFromAPI = await fetchTopMangaBatch(maxPage);
+			await seedTableMangaTop(dataFromAPI);
+			await seedTableManga(dataFromAPI);
+			console.log(`Successfully update ${oldMangaDB.length} records of data`);
 		}
 
 		let mangaTopDB = await getMangaTopLimit(maxRecords);
