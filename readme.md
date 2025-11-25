@@ -80,11 +80,18 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Render all the data for overview page
 - [x] Need to add ending and opening OST (or will delete that section)
 
-**Top and Trending Page (Anime/Manga)**
+**Top and Trending List Page (Anime/Manga) (COMPLETED)**
 
-- [ ] Do this
+- [x] Design list page with limit and pagination
+- [x] Make the page render correct information like title, description and head title (ejs render)
+- [x] Ive decided to use javascript fetch to render the data (client side render (CSR)), because using SSR (server side render) method the page has to be fully refresh to get the data. With CSR using JS fetch, i can get the data from API (which is from database) and then dynamically render the data using DOM.
+- [x] Use javascript fetch to get data from api endpoint that has been made before (the data from database)
+- [x] Add limit page function for showing data (10/15/25 records)
+- [x] Render the cards with correct data
+- [x] Add pagination function for showing data each page (this part is so hard)
+- [x] Thanks to Deepseek (Goated AI btw) for making the pagination function worked :D
 
-**Browse Section**
+**Browse Section (PRIORITIZE)**
 
 - [ ] Do this
 
@@ -100,7 +107,7 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 
 - [ ] Do this
 
-**API and Database:**
+**API and Database: (COMPLETED)**
 
 - [x] Fetch trending anime and store it to database
 - [x] Fetch top anime and store it to database
