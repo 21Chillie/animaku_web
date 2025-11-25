@@ -1,9 +1,9 @@
 import express from 'express';
-import { getAnime, getAnimeById } from '../controllers/apiAnime';
-import { getAnimeTop } from '../controllers/apiGetAnimeTop.controller';
-import { getAnimeTrending } from '../controllers/apiGetAnimeTrending.controller';
-import { getMangaTop } from '../controllers/apiGetMangaTop.controller';
-import { getManga, getMangaById } from '../controllers/apiManga';
+import { getAnime, getAnimeById } from '../controllers/api/apiAnime';
+import { getAnimeTop } from '../controllers/api/apiGetAnimeTop.controller';
+import { getAnimeTrending } from '../controllers/api/apiGetAnimeTrending.controller';
+import { getMangaTop } from '../controllers/api/apiGetMangaTop.controller';
+import { getManga, getMangaById } from '../controllers/api/apiManga';
 
 export const apiRoutes = express.Router();
 
