@@ -1,0 +1,140 @@
+@import url('colors.css');
+@import url('global.css');
+
+.title-section-container h1 {
+	color: var(--text-primary);
+}
+
+.title-section-container p {
+	color: var(--text-secondary);
+}
+
+.limit-label {
+	color: var(--text-primary);
+}
+
+#limit-select {
+	padding: 8px 12px;
+	border: 1px solid var(--border-accent);
+	border-radius: 6px;
+	background: var(--bg-secondary);
+	color: var(--text-primary);
+}
+
+/* Focus Ring */
+#limit-select:focus {
+	border-color: var(--border-accent-hover);
+}
+
+.title-card {
+	background: var(--bg-secondary);
+	color: var(--text-primary);
+	border: 2px solid;
+	border-color: var(--border-color);
+	position: relative;
+	overflow: hidden;
+	backdrop-filter: blur(6px);
+}
+
+.floating-status {
+	opacity: 0;
+	transform: translateY(10px);
+	transition: opacity 0.3s ease, transform 0.3s ease;
+	pointer-events: none; /* prevent accidental hover flicker */
+}
+
+.icon-star {
+	color: var(--primary);
+}
+
+.icon-love {
+	color: var(--nord11);
+}
+
+.title-card:hover {
+	.floating-status {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
+	}
+	border-color: var(--primary);
+}
+
+.title-card-info h3 {
+	color: var(--text-primary);
+}
+
+.title-card-info p {
+	color: var(--text-secondary);
+	opacity: 80%;
+}
+
+/* Floating badges (rating & status) */
+.bg-float {
+	background: rgba(0, 0, 0, 0.35);
+	color: var(--text-primary);
+	backdrop-filter: blur(8px);
+	border: 1px solid var(--border-color);
+}
+
+/* For light theme adjustment */
+[data-theme='light'] .bg-float {
+	background: rgba(255, 255, 255, 0.55);
+	color: var(--text-primary);
+}
+
+/* Pagination Styles */
+#page-info p {
+	color: var(--text-primary);
+}
+
+.page-btn {
+	transition: all 0.2s ease-in-out;
+	min-width: 2.5rem;
+	color: var(--text-primary);
+	border-color: var(--border-color);
+}
+
+.page-btn:disabled {
+	background-color: var(--primary);
+	color: var(--bg-primary);
+}
+
+.page-btn:hover:not(:disabled) {
+	transform: translateY(-1px);
+	background-color: var(--bg-secondary);
+}
+
+/* Loading animation */
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.animate-spin {
+	animation: spin 1s linear infinite;
+	color: var(--primary);
+}
+
+.loading-text {
+	color: var(--text-primary);
+}
+
+.error-message {
+	color: var(--error);
+}
+
+/* Ensure pagination container has proper spacing */
+#pagination-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 0.5rem;
+	margin-top: 2rem;
+	color: var(--text-primary);
+}
