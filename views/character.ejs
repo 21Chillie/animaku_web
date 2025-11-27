@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/images/icons/favicon.ico" type="image/x-icon" />
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="/css/tailwindcss/tailwind.css" />
+	<link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+	<link rel="stylesheet" href="/css/character.css" />
+
+	<title>Character</title>
+
+	<!-- JS -->
+	<script type="module" src="/js/navbar.js" defer></script>
+	<script type="module" src="/js/toggleTheme.js" defer></script>
+</head>
+
+<body>
+	<header>
+		<%- include('partials/navbar.ejs') %>
+	</header>
+
+	<main class="mt-28 mb-10">
+		<!-- Character Data -->
+		<section id="character-section" class="max-w-7xl mx-auto">
+			<div class="flex flex-col md:flex-row gap-10 px-4">
+				<!-- Cover & Add to list btn -->
+				<div class="shrink-0">
+					<img src="<%= data.data.images.jpg?.image_url || data.data.images.webp?.image_url || "/images/no-img-placeholder.webp" %>"
+							alt="<%= data.name %> cover"
+							class="image-poster w-48 md:w-56 object-cover rounded-lg shadow-2xl border-2 mb-4" />
+				</div>
+
+				<!-- Character DATA -->
+				<div class="characther-container flex flex-col gap-3">
+					<!-- Favorites -->
+					<div class="fav-char px-3 py-1 flex gap-1 w-fit rounded-full">
+						<i class="ri-heart-fill text-sm"></i>
+						<span class="text-sm font-bold"><%= data.data.favorites %></span>
+					</div>
+
+					<!-- Name -->
+					<div class="names flex flex-col gap-2">
+						<h1 class="text-3xl font-bold leading-tight">
+							<%= data.name %>
+						</h1>
+						<!-- Kanji name -->
+						<% if (data.data.name_kanji) { %>
+						<p><%= data.data.name_kanji %></p>
+						<% } %>
+
+						<!-- Nicknames -->
+						<% if (data.data.nicknames.length !== 0) { %>
+						<div class="flex flex-wrap gap-2">
+							<% data.data.nicknames.forEach(name => { %>
+							<div class="nicknames flex items-center px-3 py-1 rounded-full">
+								<p class="text-sm">
+									<%= name %>
+								</p>
+							</div>
+							<% }) %>
+						</div>
+						<% } %>
+					</div>
+
+					<!-- About -->
+					<div class="character-about max-h-60 md:max-h-68 overflow-y-auto lg:pr-16 scrollbar-thin
+							scrollbar-thumb-[#4c566a] scrollbar-track-[#3b4252] mb-2">
+						<p class="mt-2 text-sm leading-relaxed">
+							<%- about %>
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Voice Actor List -->
+		<% if (data.data.voices.length !== 0) { %>
+		<section id="voice-actor-section" class="max-w-7xl mx-auto px-4 mt-10 flex flex-col gap-3">
+			<h2 class="text-2xl font-bold">Voiced By</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				<!-- Voice Actor Card -->
+				<% data.data.voices.forEach(actor => { %>
+				<div class="voice-actor-card flex justify-between rounded-md shadow-md">
+					<div class="flex gap-4">
+						<img src="<%= actor.person.images.jpg.image_url || "/images/no-img-placeholder.webp" %>"
+								alt="Tachiki, Fumihiko cover"
+								class="img-character w-20 h-28 object-cover rounded-md" />
+
+						<div class="flex flex-col gap-1 py-3">
+							<h3 class="font-bold text-base line-clamp-2">
+								<%= actor.person.name %>
+							</h3>
+							<p class="text-sm md:text-base">
+								<%= actor.language %>
+							</p>
+						</div>
+					</div>
+				</div>
+				<% }) %>
+			</div>
+		</section>
+		<% } %>
+
+		<!-- Anime Section -->
+		<% if (data.data.anime.length !== 0) { %>
+		<section id="anime-section" class="max-w-7xl mx-auto px-4 my-10 flex flex-col gap-3">
+			<h2 class="text-2xl font-bold">Appears In Anime</h2>
+			<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+				<!-- Anime Card -->
+				<% data.data.anime.forEach(anime => { %>
+				<a href="/overview/anime/<%= anime.anime.mal_id %>">
+					<div
+							class="title-card group flex flex-col rounded-md shadow-md overflow-hidden transition-all duration-300">
+						<!-- Image container -->
+						<div class="relative aspect-3/4 overflow-hidden">
+							<img src="<%= anime.anime.images.webp?.image_url || anime.anime.images.jpg?.image_url || "/images/no-img-placeholder.webp" %>"
+									alt="<%= anime.anime.title %> cover"
+									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+
+							<div
+									class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
+								<span>
+									<%= anime.role %> Character
+								</span>
+							</div>
+						</div>
+
+						<div class="px-2 py-3">
+							<h3 class="text-sm md:text-base font-bold truncate">
+								<%= anime.anime.title %>
+						</div>
+					</div>
+				</a>
+				<% }) %>
+			</div>
+		</section>
+		<% } %>
+
+		<!-- Manga Section -->
+		<% if (data.data.manga.length !== 0) { %>
+		<section id="manga-section" class="max-w-7xl mx-auto px-4 my-10 flex flex-col gap-3">
+			<h2 class="text-2xl font-bold">Appears In Manga</h2>
+			<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+				<!-- Anime Card -->
+				<% data.data.manga.forEach(manga => { %>
+				<a href="/overview/manga/<%= manga.manga.mal_id %>">
+					<div
+							class="title-card group flex flex-col rounded-md shadow-md overflow-hidden transition-all duration-300">
+						<!-- Image container -->
+						<div class="relative aspect-3/4 overflow-hidden">
+							<img src="<%= manga.manga.images.webp?.image_url || manga.manga.images.jpg?.image_url || "/images/no-img-placeholder.webp" %>"
+									alt="<%= manga.manga.title %> cover"
+									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+
+							<div class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
+								<span>
+									<%= manga.role %> Character
+								</span>
+							</div>
+						</div>
+
+						<div class="px-2 py-3">
+							<h3 class="text-sm md:text-base font-bold truncate">
+								<%= manga.manga.title %>
+						</div>
+					</div>
+				</a>
+				<% }) %>
+			</div>
+		</section>
+		<% } %>
+	</main>
+</body>
+
+</html>
