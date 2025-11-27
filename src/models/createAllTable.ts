@@ -2,6 +2,7 @@ import { createTableAnime } from './anime/animeDBCreateTable';
 import { createTableAnimeTheme } from './anime/animeThemesCreateTable';
 import { createTableTopAnime } from './anime/animeTopCreateTable';
 import { createTableTrendingAnime } from './anime/animeTrendingCreateTable';
+import { createTableCharacterFull } from './character/characterFullCreateTable';
 import { createTableManga } from './manga/mangaDBCreateTable';
 import { createTableTopManga } from './manga/mangaTopCreatingTable';
 import {
@@ -28,6 +29,7 @@ async function createAllTables() {
 		await createTableAnimeRecommendation();
 		await createTableMangaRecommendation();
 		await createTableAnimeTheme();
+		await createTableCharacterFull();
 
 		console.log('All table created successfully');
 	} catch (error) {
