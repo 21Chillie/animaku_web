@@ -91,9 +91,16 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Add pagination function for showing data each page (this part is so hard)
 - [x] Thanks to Deepseek (Goated AI btw) for making the pagination function worked :D
 
+**Character Section (COMPLETED)**
+
+- [x] Design character page
+- [x] Write logic for fetch character full data and storing it to database
+- [x] Render correct character data by mal_id in character page
+
 **Browse Section (PRIORITIZE)**
 
-- [ ] Do this
+- [ ] Design browse page (with search filter, order by, filter by type or status,)
+- [ ] Do this...
 
 **User List**
 
@@ -119,6 +126,8 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Create anime and manga relation table
 - [x] Create anime and manga recommendation table
 - [x] Create anime theme table
+- [x] Create character full table
+- [x] Fetch character full data and storing it to database
 
 **Filter query and params(mal_id) (COMPLETED)**
 
