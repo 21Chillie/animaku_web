@@ -1,5 +1,6 @@
 import express from 'express';
 import { getAnime, getAnimeById } from '../controllers/api/apiAnime';
+import { getCharacterFull } from '../controllers/api/apiCharacterFull';
 import { getAnimeTop } from '../controllers/api/apiGetAnimeTop.controller';
 import { getAnimeTrending } from '../controllers/api/apiGetAnimeTrending.controller';
 import { getMangaTop } from '../controllers/api/apiGetMangaTop.controller';
@@ -17,3 +18,6 @@ apiRoutes.get('/top/anime', getAnimeTop);
 apiRoutes.get('/manga', getManga);
 apiRoutes.get('/manga/:id', getMangaById);
 apiRoutes.get('/top/manga', getMangaTop);
+
+// * Character *
+apiRoutes.get('/character/:id/full', getCharacterFull);
