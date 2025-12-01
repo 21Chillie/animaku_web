@@ -13,7 +13,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
 	<link rel="stylesheet" href="/css/character.css" />
 
-	<title>Character</title>
+	<title><%= data.name %> | AnimaKu</title>
 
 	<!-- JS -->
 	<script type="module" src="/js/navbar.js" defer></script>
@@ -158,7 +158,8 @@
 									alt="<%= manga.manga.title %> cover"
 									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
 
-							<div class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
+							<div
+									class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
 								<span>
 									<%= manga.role %> Character
 								</span>
