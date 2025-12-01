@@ -2,7 +2,7 @@ import express from 'express';
 import { renderBrowse } from '../controllers/page/browse.route';
 import { renderCharacter } from '../controllers/page/character.controller';
 import { renderIndex } from '../controllers/page/index.controller';
-import { renderListTitle } from '../controllers/page/list.controrller';
+import { renderListTitle } from '../controllers/page/list.controller';
 import { renderOverview } from '../controllers/page/overview.controller';
 
 export const pageRoute = express.Router();
