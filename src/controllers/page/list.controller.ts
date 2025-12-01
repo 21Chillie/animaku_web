@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 
-export async function top100Anime(req: Request, res: Response) {
+export async function renderListTitle(req: Request, res: Response) {
 	const { type, category } = req.params;
 
 	if (type === 'anime' && category === 'top') {
