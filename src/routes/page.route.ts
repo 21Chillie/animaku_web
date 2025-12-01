@@ -1,7 +1,8 @@
 import express from 'express';
+import { renderBrowse } from '../controllers/page/browse.route';
 import { renderCharacter } from '../controllers/page/character.controller';
 import { renderIndex } from '../controllers/page/index.controller';
-import { top100Anime } from '../controllers/page/list.controrller';
+import { renderListTitle } from '../controllers/page/list.controrller';
 import { renderOverview } from '../controllers/page/overview.controller';
 
 export const pageRoute = express.Router();
@@ -16,4 +17,7 @@ pageRoute.get('/overview/character/:id', renderCharacter);
 pageRoute.get('/overview/:type/:id', renderOverview);
 
 // Trending and Top Title List
-pageRoute.get('/list/:type/:category', top100Anime);
+pageRoute.get('/list/:type/:category', renderListTitle);
+
+// Browse Route
+pageRoute.get('/browse', renderBrowse);
