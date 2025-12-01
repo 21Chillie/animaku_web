@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="shortcut icon" href="/images/icons/favicon.ico" type="image/x-icon" />
+
+	<!-- Remix Icon -->
+	<link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="/css/tailwindcss/tailwind.css" />
+	<link rel="stylesheet" href="/css/browse.css" />
+
+	<title>Browse Page | AnimaKu</title>
+
+	<script type="module" src="/js/navbar.js" defer></script>
+	<script type="module" src="/js/toggleTheme.js" defer></script>
+	<script type="module" src="/js/filterChange.js" defer></script>
+	<script type="module" src="/js/browseService.js"></script>
+</head>
+
+<body>
+	<header>
+		<%- include('partials/navbar.ejs') %>
+	</header>
+
+	<main class="max-w-7xl mx-auto mt-24 md:mt-28 px-4">
+		<header class="mb-6">
+			<h1 class="header-title font-bold text-2xl md:text-3xl">Browse Title</h1>
+		</header>
+
+		<section id="search-filter-title" class="flex flex-col gap-4 mb-6">
+			<!-- Search Form -->
+			<div class="flex gap-3">
+				<form>
+					<select id="media-filter"
+							class="select appearance-none w-fit border rounded-md text-base shrink-0">
+						<option value="anime">Anime</option>
+						<option value="manga">Manga</option>
+					</select>
+				</form>
+
+				<form class="w-full md:col-span-2" role="search" aria-label="Search title">
+					<label class="search-input input border rounded-md w-full shadow-md">
+						<i class="ri-search-line text-base"></i>
+						<input id="search-filter" type="search" class="text-base"
+								placeholder="Search title..." />
+					</label>
+				</form>
+
+				<button class="btn-filter-mobile md:hidden border px-2 rounded-md">
+					<i class="ri-filter-line"></i>
+				</button>
+			</div>
+
+			<!-- Filter Controls -->
+			<div class="filter-controls p-4 rounded-md shadow-md border hidden md:flex flex-col gap-3">
+				<header class="flex gap-1">
+					<i class="ri-filter-line text-xl md:text-2xl"></i>
+					<h2 class="font-bold text-xl md:text-2xl">Filters</h2>
+				</header>
+
+				<div class="filter-container grid grid-cols-1 md:grid-cols-4 gap-3">
+					<form>
+						<label for="select">
+							<span class="text-sm">Type</span>
+							<select id="type-filter" class="select appearance-none w-full border rounded-md">
+								<option disabled selected value="">Select types</option>
+								<option value="tv">TV</option>
+								<option value="movie">Movie</option>
+								<option value="ova">OVA</option>
+								<option value="special">Special</option>
+								<option value="ona">ONA</option>
+								<option value="pv">PV</option>
+								<option value="tv_special">TV Special</option>
+							</select>
+						</label>
+					</form>
+
+					<form>
+						<label for="select">
+							<span class="text-sm">Status</span>
+							<select id="status-filter" class="select appearance-none w-full border rounded-md">
+								<option disabled selected value="">Select status</option>
+								<option value="finished">Finished Airing</option>
+								<option value="airing">Currently Airing</option>
+							</select>
+						</label>
+					</form>
+
+					<form>
+						<label for="select">
+							<span class="text-sm">Sort by</span>
+							<select id="sort-by-filter" class="select appearance-none w-full border rounded-md">
+								<option value="rank">Rank</option>
+								<option value="score">Score</option>
+								<option value="popularity">Popularity</option>
+								<option value="year">Year</option>
+								<option value="title">Title</option>
+							</select>
+						</label>
+					</form>
+
+					<form>
+						<label for="select">
+							<span class="text-sm">Sort direction</span>
+							<select id="sort-direction-filter"
+									class="select appearance-none w-full border rounded-md">
+								<option value="ASC">Ascending</option>
+								<option value="DESC">Descending</option>
+							</select>
+						</label>
+					</form>
+				</div>
+				<div class="flex gap-6 mt-3 justify-end">
+					<button id="btn-reset-filter" class="border px-3 py-2 rounded-md shadow-md">
+						Reset filters
+					</button>
+				</div>
+			</div>
+		</section>
+
+		<!-- List Title -->
+		<section id="list-title" class="flex flex-col gap-3">
+			<header class="header-list-title">
+				<p class="text-result text-base">Found 30 results</p>
+			</header>
+			<div id="list-container"
+					class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+				<!-- Anime cards will be rendered here -->
+				<a href="#">
+					<div
+							class="title-card group flex flex-col rounded-xl overflow-hidden bg-card border border-transparent transition-all duration-300 hover:shadow-lg hover:border-primary h-full">
+						<!-- Image container -->
+						<div class="relative aspect-3/4 overflow-hidden">
+							<img src="https://cdn.myanimelist.net/images/anime/1015/138006l.webp"
+									alt="Sousou no Frieren"
+									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+
+							<div
+									class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
+								<i class="ri-star-fill icon-star"></i>
+								<span>9.29</span>
+							</div>
+
+							<div
+									class="floating-status absolute bottom-2 left-2 rounded-md px-2 py-1 text-xs font-medium bg-float opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+								Finished Airing
+							</div>
+						</div>
+
+						<div class="title-card-info p-3 flex flex-col justify-between flex-1">
+							<div>
+								<h3 class="text-base font-bold line-clamp-2 min-h-12">
+									Sousou no Frieren </h3>
+								<p class="text-sm opacity-80">
+									TV - 28 Episodes
+								</p>
+							</div>
+						</div>
+					</div>
+				</a>
+			</div>
+		</section>
+	</main>
+</body>
+</html>
