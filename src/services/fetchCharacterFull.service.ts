@@ -28,8 +28,8 @@ export async function fetchCharacterFullData(mal_id: number): Promise<CharacterF
 		}
 
 		if (axios.isAxiosError(err) && err.code === 'ECONNABORTED') {
-			console.error('Request timed out');
-			throw new Error('Request timed out');
+			console.error('Request timed out, please refresh again in a second');
+			throw new Error('Request timed out, please try refresh the browser in a second');
 		}
 
 		throw new Error('Something went wrong while fetching trending anime list from API!');
