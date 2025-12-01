@@ -15,7 +15,8 @@
 
 	<link rel="stylesheet" href="/css/overview.css" />
 
-	<title>Overview Page</title>
+	<title><%= data.anime?.title || data.manga?.title %> (<%= data.anime?.type || data.manga?.type %>)
+		| AnimaKu</title>
 
 	<!-- JS -->
 	<script type="module" src="/js/navbar.js" defer></script>
