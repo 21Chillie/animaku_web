@@ -99,8 +99,10 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 
 **Browse Section (PRIORITIZE)**
 
-- [ ] Design browse page (with search filter, order by, filter by type or status,)
-- [ ] Do this...
+- [x] Design browse page (with search filter, order by, filter by type or status,)
+- [x] Make logic when selecting media type (anime/manga) the filter type and status option will change too according to type and status from anime or manga
+- [ ] Finish filter button to open modal popup (filters) when mobile
+- [ ] Finish javascript logic for fetch data from api    
 
 **User List**
 
