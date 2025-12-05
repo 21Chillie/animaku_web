@@ -97,18 +97,14 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Write logic for fetch character full data and storing it to database
 - [x] Render correct character data by mal_id in character page
 
-**Browse Section (PRIORITIZE)**
+**Browse Section (COMPLETE)**
 
 - [x] Design browse page (with search filter, order by, filter by type or status,)
 - [x] Make logic when selecting media type (anime/manga) the filter type and status option will change too according to type and status from anime or manga
-- [ ] Finish filter button to open modal popup (filters) when mobile
-- [ ] Finish javascript logic for fetch data from api    
+- [x] Finish filter button to open modal popup (filters) when mobile
+- [x] Finish javascript logic for fetch data from api
 
-**User List**
-
-- [ ] Do this
-
-**Authentication**
+**User & Authentication**
 
 - [ ] Do this
 
