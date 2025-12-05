@@ -46,14 +46,97 @@
 				<form class="w-full md:col-span-2" role="search" aria-label="Search title">
 					<label class="search-input input border rounded-md w-full shadow-md">
 						<i class="ri-search-line text-base"></i>
-						<input id="search-filter" type="search" class="text-base"
-								placeholder="Search title..." />
+						<input id="search-filter" type="search" class="text-base" placeholder="Search title..."
+								required />
 					</label>
 				</form>
 
-				<button class="btn-filter-mobile md:hidden border px-2 rounded-md">
+				<!-- Modal Popup for Filter -->
+				<button class="btn-filter-mobile md:hidden border px-2 rounded-md"
+						onclick="modalFilter.showModal()">
 					<i class="ri-filter-line"></i>
 				</button>
+
+				<dialog id="modalFilter" class="modal">
+					<div class="modal-box rounded-md">
+						<form method="dialog">
+							<button class="btn-modal-close rounded-full absolute right-2 top-2">
+								<i class="ri-close-line"></i>
+							</button>
+						</form>
+						<h3 class="text-lg font-bold mb-2">Filters</h3>
+						<div class="flex flex-col gap-2">
+							<form>
+								<label for="select">
+									<span class="text-sm">Type</span>
+									<select id="type-select-mobile"
+											class="select appearance-none w-full border rounded-md">
+										<option disabled selected value="">Select types</option>
+										<option value="tv">TV</option>
+										<option value="movie">Movie</option>
+										<option value="ova">OVA</option>
+										<option value="special">Special</option>
+										<option value="ona">ONA</option>
+										<option value="pv">PV</option>
+										<option value="tv_special">TV Special</option>
+									</select>
+								</label>
+							</form>
+
+							<form>
+								<label for="select">
+									<span class="text-sm">Status</span>
+									<select id="status-select-mobile"
+											class="select appearance-none w-full border rounded-md">
+										<option disabled selected value="">Select status</option>
+										<option value="finished">Finished Airing</option>
+										<option value="airing">Currently Airing</option>
+									</select>
+								</label>
+							</form>
+
+							<form>
+								<label for="select">
+									<span class="text-sm">Sort by</span>
+									<select id="sort-by-select-mobile"
+											class="select appearance-none w-full border rounded-md">
+										<option value="rank">Rank</option>
+										<option value="score">Score</option>
+										<option value="popularity">Popularity</option>
+										<option value="year">Year</option>
+										<option value="title">Title</option>
+									</select>
+								</label>
+							</form>
+
+							<form>
+								<label for="select">
+									<span class="text-sm">Sort direction</span>
+									<select id="sort-direction-select-mobile"
+											class="select appearance-none w-full border rounded-md">
+										<option value="asc">Ascending</option>
+										<option value="desc">Descending</option>
+									</select>
+								</label>
+							</form>
+
+							<div class="flex gap-3 mt-3">
+								<button id="btn-apply-filter-mobile"
+										class=" border px-3 py-2 rounded-md shadow-md text-sm font-bold" type="button">
+									Apply filters
+								</button>
+
+								<button id="btn-reset-filter-mobile"
+										class="border px-3 py-2 rounded-md shadow-md text-sm font-bold">
+									Reset filters
+								</button>
+							</div>
+						</div>
+					</div>
+					<form method="dialog" class="modal-backdrop">
+						<button>close</button>
+					</form>
+				</dialog>
 			</div>
 
 			<!-- Filter Controls -->
@@ -67,7 +150,7 @@
 					<form>
 						<label for="select">
 							<span class="text-sm">Type</span>
-							<select id="type-filter" class="select appearance-none w-full border rounded-md">
+							<select id="type-select" class="select appearance-none w-full border rounded-md">
 								<option disabled selected value="">Select types</option>
 								<option value="tv">TV</option>
 								<option value="movie">Movie</option>
@@ -83,7 +166,7 @@
 					<form>
 						<label for="select">
 							<span class="text-sm">Status</span>
-							<select id="status-filter" class="select appearance-none w-full border rounded-md">
+							<select id="status-select" class="select appearance-none w-full border rounded-md">
 								<option disabled selected value="">Select status</option>
 								<option value="finished">Finished Airing</option>
 								<option value="airing">Currently Airing</option>
@@ -94,9 +177,9 @@
 					<form>
 						<label for="select">
 							<span class="text-sm">Sort by</span>
-							<select id="sort-by-filter" class="select appearance-none w-full border rounded-md">
-								<option value="rank">Rank</option>
+							<select id="sort-by-select" class="select appearance-none w-full border rounded-md">
 								<option value="score">Score</option>
+								<option value="rank">Rank</option>
 								<option value="popularity">Popularity</option>
 								<option value="year">Year</option>
 								<option value="title">Title</option>
@@ -107,16 +190,21 @@
 					<form>
 						<label for="select">
 							<span class="text-sm">Sort direction</span>
-							<select id="sort-direction-filter"
+							<select id="sort-direction-select"
 									class="select appearance-none w-full border rounded-md">
-								<option value="ASC">Ascending</option>
-								<option value="DESC">Descending</option>
+								<option value="desc">Descending</option>
+								<option value="asc">Ascending</option>
 							</select>
 						</label>
 					</form>
 				</div>
-				<div class="flex gap-6 mt-3 justify-end">
-					<button id="btn-reset-filter" class="border px-3 py-2 rounded-md shadow-md">
+				<div class="flex gap-3 mt-3 justify-end">
+					<button id="btn-apply-filter"
+							class="border px-3 py-2 rounded-md shadow-md text-sm font-bold">Apply
+						filters</button>
+
+					<button id="btn-reset-filter"
+							class="border px-3 py-2 rounded-md shadow-md text-sm font-bold">
 						Reset filters
 					</button>
 				</div>
@@ -125,46 +213,12 @@
 
 		<!-- List Title -->
 		<section id="list-title" class="flex flex-col gap-3">
-			<header class="header-list-title">
-				<p class="text-result text-base">Found 30 results</p>
-			</header>
 			<div id="list-container"
 					class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
-				<!-- Anime cards will be rendered here -->
-				<a href="#">
-					<div
-							class="title-card group flex flex-col rounded-xl overflow-hidden bg-card border border-transparent transition-all duration-300 hover:shadow-lg hover:border-primary h-full">
-						<!-- Image container -->
-						<div class="relative aspect-3/4 overflow-hidden">
-							<img src="https://cdn.myanimelist.net/images/anime/1015/138006l.webp"
-									alt="Sousou no Frieren"
-									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
-
-							<div
-									class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float">
-								<i class="ri-star-fill icon-star"></i>
-								<span>9.29</span>
-							</div>
-
-							<div
-									class="floating-status absolute bottom-2 left-2 rounded-md px-2 py-1 text-xs font-medium bg-float opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-								Finished Airing
-							</div>
-						</div>
-
-						<div class="title-card-info p-3 flex flex-col justify-between flex-1">
-							<div>
-								<h3 class="text-base font-bold line-clamp-2 min-h-12">
-									Sousou no Frieren </h3>
-								<p class="text-sm opacity-80">
-									TV - 28 Episodes
-								</p>
-							</div>
-						</div>
-					</div>
-				</a>
+				<!-- Title cards will be rendered here -->
 			</div>
 		</section>
 	</main>
 </body>
+
 </html>
