@@ -11,8 +11,9 @@ import { fetchMangaByMalId } from '../../services/fetchTitleData';
 import { fetchTopMangaBatch } from '../../services/fetchTopManga.service';
 
 export async function getManga(req: Request, res: Response) {
-	// Recommended 20, but not limited to 20
-	const maxPage = 100;
+	// the higher the number, the longer and more data will be retrieved
+	// Recommended value is 100, you can get around +- 2500 titles
+	const maxPage = 1000;
 
 	// Paginated Query Paramaters, default to 1
 	const page = parseInt(req.query.page as string) || 1;
