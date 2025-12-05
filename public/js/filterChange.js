@@ -1,9 +1,23 @@
+const searchInput = document.getElementById('search-filter');
 const mediaFilter = document.getElementById('media-filter');
-const typeFilter = document.getElementById('type-filter');
-const statusFilter = document.getElementById('status-filter');
-const sortByFilter = document.getElementById('sort-by-filter');
-const sortDirectionFilter = document.getElementById('sort-direction-filter');
-const resetButton = document.getElementById('btn-reset-filter');
+
+// Desktop DOM Selector
+const typeFilter = document.querySelector('#type-select');
+const statusFilter = document.querySelector('#status-select');
+const sortByFilter = document.querySelector('#sort-by-select');
+const sortDirectionFilter = document.querySelector('#sort-direction-select');
+
+const btnApplyFilter = document.querySelector('#btn-apply-filter');
+const btnResetFilter = document.querySelector('#btn-reset-filter');
+
+// Mobile DOM Selector
+const typeFilterMobile = document.querySelector('#type-select-mobile');
+const statusFilterMobile = document.querySelector('#status-select-mobile');
+const sortByFilterMobile = document.querySelector('#sort-by-select-mobile');
+const sortDirectionFilterMobile = document.querySelector('#sort-direction-select-mobile');
+
+const btnApplyFilterMobile = document.querySelector('#btn-apply-filter-mobile');
+const btnResetFilterMobile = document.querySelector('#btn-reset-filter-mobile');
 
 const animeTypes = [
 	{ value: '', text: 'Select types' },
@@ -46,46 +60,60 @@ mediaFilter.addEventListener('change', () => {
 	let typeList = [];
 	let statusList = [];
 
+	// Clear all filter option
+	typeFilter.innerHTML = '';
+	statusFilter.innerHTML = '';
+	typeFilterMobile.innerHTML = '';
+	statusFilterMobile.innerHTML = '';
+
 	if (selectedMediaFilter === 'anime') {
-		typeFilter.innerHTML = '';
 		typeList = animeTypes;
-		statusFilter.innerHTML = '';
 		statusList = animeStatus;
 	} else if (selectedMediaFilter === 'manga') {
-		typeFilter.innerHTML = '';
 		typeList = mangaTypes;
-		statusFilter.innerHTML = '';
 		statusList = mangaStatus;
 	}
 
+	// Fill the filter
 	typeList.forEach((opt) => {
-		const option = document.createElement('option');
-		option.value = opt.value;
-		option.textContent = opt.text;
+		const optionDesktop = document.createElement('option');
+		optionDesktop.value = opt.value;
+		optionDesktop.textContent = opt.text;
+
+		const optionMobile = optionDesktop.cloneNode(true);
 
 		if (opt.value === '') {
-			option.disabled = true;
-			option.selected = true;
+			optionDesktop.disabled = true;
+			optionDesktop.selected = true;
+			optionMobile.disabled = true;
+			optionMobile.selected = true;
 		}
 
-		typeFilter.appendChild(option);
+		typeFilter.appendChild(optionDesktop);
+		typeFilterMobile.appendChild(optionMobile);
 	});
 
+	// Fill the filter
 	statusList.forEach((opt) => {
-		const option = document.createElement('option');
-		option.value = opt.value;
-		option.textContent = opt.text;
+		const optionDesktop = document.createElement('option');
+		optionDesktop.value = opt.value;
+		optionDesktop.textContent = opt.text;
+
+		const optionMobile = optionDesktop.cloneNode(true);
 
 		if (opt.value === '') {
-			option.disabled = true;
-			option.selected = true;
+			optionDesktop.disabled = true;
+			optionDesktop.selected = true;
+			optionMobile.disabled = true;
+			optionMobile.selected = true;
 		}
 
-		statusFilter.appendChild(option);
+		statusFilter.appendChild(optionDesktop);
+		statusFilterMobile.appendChild(optionMobile);
 	});
 });
 
-resetButton.addEventListener('click', function (e) {
+btnResetFilter.addEventListener('click', function (e) {
 	e.preventDefault();
 
 	if (typeFilter) {
@@ -97,15 +125,50 @@ resetButton.addEventListener('click', function (e) {
 	}
 
 	if (sortByFilter) {
-		sortByFilter.value = 'rank';
+		sortByFilter.value = 'score';
 	}
 
 	if (sortDirectionFilter) {
-		sortDirectionFilter.value = 'ASC';
+		sortDirectionFilter.value = 'desc';
 	}
 
+	if (mediaFilter) {
+		mediaFilter.value = 'anime';
+	}
+
+	if (typeFilter) typeFilter.dispatchEvent(new Event('change'));
 	if (typeFilter) typeFilter.dispatchEvent(new Event('change'));
 	if (statusFilter) statusFilter.dispatchEvent(new Event('change'));
 	if (sortByFilter) sortByFilter.dispatchEvent(new Event('change'));
 	if (sortDirectionFilter) sortDirectionFilter.dispatchEvent(new Event('change'));
+});
+
+btnResetFilterMobile.addEventListener('click', (e) => {
+	e.preventDefault();
+
+	if (typeFilterMobile) {
+		typeFilterMobile.selectedIndex = 0;
+	}
+
+	if (statusFilterMobile) {
+		statusFilterMobile.selectedIndex = 0;
+	}
+
+	if (sortByFilterMobile) {
+		sortByFilterMobile.value = 'score';
+	}
+
+	if (sortDirectionFilterMobile) {
+		sortDirectionFilterMobile.value = 'desc';
+	}
+
+	if (mediaFilter) {
+		mediaFilter.value = 'anime';
+	}
+
+	if (typeFilter) typeFilter.dispatchEvent(new Event('change'));
+	if (typeFilterMobile) typeFilterMobile.dispatchEvent(new Event('change'));
+	if (statusFilterMobile) statusFilterMobile.dispatchEvent(new Event('change'));
+	if (sortByFilterMobile) sortByFilterMobile.dispatchEvent(new Event('change'));
+	if (sortDirectionFilterMobile) sortDirectionFilterMobile.dispatchEvent(new Event('change'));
 });
