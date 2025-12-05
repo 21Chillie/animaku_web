@@ -36,3 +36,27 @@ export async function getAnimeTrendingLimit(maxRecords: number): Promise<Databas
 
 	return result.rows;
 }
+
+export async function getAnimeTrendingCount(): Promise<number> {
+	const result = await pool.query(`SELECT COUNT(*) FROM anime_trending`);
+	return parseInt(result.rows[0].count);
+}
+
+export async function getAnimeTrendingPaginated(
+	limit: number,
+	offset: number
+): Promise<DatabaseAnimeTypes[]> {
+	const client = await pool.connect();
+	try {
+		const result = await client.query(
+			`
+			SELECT * FROM anime_trending
+      ORDER BY popularity ASC NULLS LAST 
+      LIMIT $1 OFFSET $2`,
+			[limit, offset]
+		);
+		return result.rows;
+	} finally {
+		client.release();
+	}
+}

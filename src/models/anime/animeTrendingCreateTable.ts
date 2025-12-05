@@ -1,4 +1,4 @@
-import pool from "../../config/database.config";
+import pool from '../../config/database.config';
 
 export async function createTableTrendingAnime(): Promise<void> {
 	const client = await pool.connect();

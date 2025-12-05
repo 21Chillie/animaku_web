@@ -80,9 +80,29 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Render all the data for overview page
 - [x] Need to add ending and opening OST (or will delete that section)
 
-**Browse Section**
+**Top and Trending List Page (Anime/Manga) (COMPLETED)**
 
-- [ ] Do this
+- [x] Design list page with limit and pagination
+- [x] Make the page render correct information like title, description and head title (ejs render)
+- [x] Ive decided to use javascript fetch to render the data (client side render (CSR)), because using SSR (server side render) method the page has to be fully refresh to get the data. With CSR using JS fetch, i can get the data from API (which is from database) and then dynamically render the data using DOM.
+- [x] Use javascript fetch to get data from api endpoint that has been made before (the data from database)
+- [x] Add limit page function for showing data (10/15/25 records)
+- [x] Render the cards with correct data
+- [x] Add pagination function for showing data each page (this part is so hard)
+- [x] Thanks to Deepseek (Goated AI btw) for making the pagination function worked :D
+
+**Character Section (COMPLETED)**
+
+- [x] Design character page
+- [x] Write logic for fetch character full data and storing it to database
+- [x] Render correct character data by mal_id in character page
+
+**Browse Section (PRIORITIZE)**
+
+- [x] Design browse page (with search filter, order by, filter by type or status,)
+- [x] Make logic when selecting media type (anime/manga) the filter type and status option will change too according to type and status from anime or manga
+- [ ] Finish filter button to open modal popup (filters) when mobile
+- [ ] Finish javascript logic for fetch data from api    
 
 **User List**
 
@@ -96,7 +116,7 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 
 - [ ] Do this
 
-**API and Database:**
+**API and Database: (COMPLETED)**
 
 - [x] Fetch trending anime and store it to database
 - [x] Fetch top anime and store it to database
@@ -108,14 +128,22 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Create anime and manga relation table
 - [x] Create anime and manga recommendation table
 - [x] Create anime theme table
+- [x] Create character full table
+- [x] Fetch character full data and storing it to database
 
-**Filter query and params(mal_id) (PRIORITIZE)**
+**Filter query and params(mal_id) (COMPLETED)**
 
-- [ ] Filter query for anime table
-- [ ] Filter query for manga table
-- [ ] Filter query trending anime api data
-- [ ] Filter query top anime api data
-- [ ] Filter query top manga api data
+- [x] Get anime by mal_id
+- [x] Get manga by mal_id
+- [x] Paginated and Limit query for anime top table
+- [x] Paginated and Limit query for anime trending table
+- [x] Paginated and Limit query for manga top table
+- [x] Paginated and Limit query for anime table
+- [x] Filter query with type and status for anime table
+- [x] Order by query title, rank, score popularity, and year for anime table
+- [x] Paginated and Limit query for manga table
+- [x] Filter query with type and status for manga table
+- [x] Order by query title, rank, score popularity, and year for manga table
 
 **Typescript Type Definition**
 
@@ -125,6 +153,11 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Type definition for recommendation data (Database/API Response)
 - [x] Type definition for anime theme data (database/api response)
 - [x] Tidy up and fix
+
+**Documentations**
+
+- [ ] API documentation
+- [ ] Repositories Documentation
 
 ---
 

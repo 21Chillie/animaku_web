@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="shortcut icon" href="/images/icons/favicon.ico" type="image/x-icon" />
+
+	<!-- Remix Icon -->
+	<link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="/css/tailwindcss/tailwind.css" />
+	<link rel="stylesheet" href="/css/browse.css" />
+
+	<title>Browse Page | AnimaKu</title>
+
+	<script type="module" src="/js/navbar.js" defer></script>
+	<script type="module" src="/js/toggleTheme.js" defer></script>
+	<script type="module" src="/js/filterChange.js" defer></script>
+	<script type="module" src="/js/browseService.js"></script>
+</head>
+
+<body>
+	<header>
+		<%- include('partials/navbar.ejs') %>
+	</header>
+
+	<main class="max-w-7xl mx-auto mt-24 md:mt-28 px-4">
+		<header class="mb-6">
+			<h1 class="header-title font-bold text-2xl md:text-3xl">Browse Title</h1>
+		</header>
+
+		<section id="search-filter-title" class="flex flex-col gap-4 mb-6">
+			<!-- Search Form -->
+			<div class="flex gap-3">
+				<form>
+					<select id="media-filter"
+							class="select appearance-none w-fit border rounded-md text-base shrink-0">
+						<option value="anime">Anime</option>
+						<option value="manga">Manga</option>
+					</select>
+				</form>
+
+				<form class="w-full md:col-span-2" role="search" aria-label="Search title">
+					<label class="search-input input border rounded-md w-full shadow-md">
+						<i class="ri-search-line text-base"></i>
+						<input id="search-filter" type="search" class="text-base" placeholder="Search title..."
+								required />
+					</label>
+				</form>
+
+				<!-- Modal Popup for Filter -->
+				<button class="btn-filter-mobile md:hidden border px-2 rounded-md"
+						onclick="modalFilter.showModal()">
+					<i class="ri-filter-line"></i>
+				</button>
+
+				<dialog id="modalFilter" class="modal">
+					<div class="modal-box rounded-md">
+						<form method="dialog">
+							<button class="btn-modal-close rounded-full absolute right-2 top-2">
+								<i class="ri-close-line"></i>
+							</button>
+						</form>
+						<h3 class="text-lg font-bold mb-2">Filters</h3>
+						<div class="flex flex-col gap-2">
+							<form>
+								<label for="select">
+									<span class="text-sm">Type</span>
+									<select id="type-select-mobile"
+											class="select appearance-none w-full border rounded-md">
+										<option disabled selected value="">Select types</option>
+										<option value="tv">TV</option>
+										<option value="movie">Movie</option>
+										<option value="ova">OVA</option>
+										<option value="special">Special</option>
+										<option value="ona">ONA</option>
+										<option value="pv">PV</option>
+										<option value="tv_special">TV Special</option>
+									</select>
+								</label>
+							</form>
+
+							<form>
+								<label for="select">
+									<span class="text-sm">Status</span>
+									<select id="status-select-mobile"
+											class="select appearance-none w-full border rounded-md">
+										<option disabled selected value="">Select status</option>
+										<option value="finished">Finished Airing</option>
+										<option value="airing">Currently Airing</option>
+									</select>
+								</label>
+							</form>
+
+							<form>
+								<label for="select">
+									<span class="text-sm">Sort by</span>
+									<select id="sort-by-select-mobile"
+											class="select appearance-none w-full border rounded-md">
+										<option value="rank">Rank</option>
+										<option value="score">Score</option>
+										<option value="popularity">Popularity</option>
+										<option value="year">Year</option>
+										<option value="title">Title</option>
+									</select>
+								</label>
+							</form>
+
+							<form>
+								<label for="select">
+									<span class="text-sm">Sort direction</span>
+									<select id="sort-direction-select-mobile"
+											class="select appearance-none w-full border rounded-md">
+										<option value="asc">Ascending</option>
+										<option value="desc">Descending</option>
+									</select>
+								</label>
+							</form>
+
+							<div class="flex gap-3 mt-3">
+								<button id="btn-apply-filter-mobile"
+										class=" border px-3 py-2 rounded-md shadow-md text-sm font-bold" type="button">
+									Apply filters
+								</button>
+
+								<button id="btn-reset-filter-mobile"
+										class="border px-3 py-2 rounded-md shadow-md text-sm font-bold">
+									Reset filters
+								</button>
+							</div>
+						</div>
+					</div>
+					<form method="dialog" class="modal-backdrop">
+						<button>close</button>
+					</form>
+				</dialog>
+			</div>
+
+			<!-- Filter Controls -->
+			<div class="filter-controls p-4 rounded-md shadow-md border hidden md:flex flex-col gap-3">
+				<header class="flex gap-1">
+					<i class="ri-filter-line text-xl md:text-2xl"></i>
+					<h2 class="font-bold text-xl md:text-2xl">Filters</h2>
+				</header>
+
+				<div class="filter-container grid grid-cols-1 md:grid-cols-4 gap-3">
+					<form>
+						<label for="select">
+							<span class="text-sm">Type</span>
+							<select id="type-select" class="select appearance-none w-full border rounded-md">
+								<option disabled selected value="">Select types</option>
+								<option value="tv">TV</option>
+								<option value="movie">Movie</option>
+								<option value="ova">OVA</option>
+								<option value="special">Special</option>
+								<option value="ona">ONA</option>
+								<option value="pv">PV</option>
+								<option value="tv_special">TV Special</option>
+							</select>
+						</label>
+					</form>
+
+					<form>
+						<label for="select">
+							<span class="text-sm">Status</span>
+							<select id="status-select" class="select appearance-none w-full border rounded-md">
+								<option disabled selected value="">Select status</option>
+								<option value="finished">Finished Airing</option>
+								<option value="airing">Currently Airing</option>
+							</select>
+						</label>
+					</form>
+
+					<form>
+						<label for="select">
+							<span class="text-sm">Sort by</span>
+							<select id="sort-by-select" class="select appearance-none w-full border rounded-md">
+								<option value="score">Score</option>
+								<option value="rank">Rank</option>
+								<option value="popularity">Popularity</option>
+								<option value="year">Year</option>
+								<option value="title">Title</option>
+							</select>
+						</label>
+					</form>
+
+					<form>
+						<label for="select">
+							<span class="text-sm">Sort direction</span>
+							<select id="sort-direction-select"
+									class="select appearance-none w-full border rounded-md">
+								<option value="desc">Descending</option>
+								<option value="asc">Ascending</option>
+							</select>
+						</label>
+					</form>
+				</div>
+				<div class="flex gap-3 mt-3 justify-end">
+					<button id="btn-apply-filter"
+							class="border px-3 py-2 rounded-md shadow-md text-sm font-bold">Apply
+						filters</button>
+
+					<button id="btn-reset-filter"
+							class="border px-3 py-2 rounded-md shadow-md text-sm font-bold">
+						Reset filters
+					</button>
+				</div>
+			</div>
+		</section>
+
+		<!-- List Title -->
+		<section id="list-title" class="flex flex-col gap-3">
+			<div id="list-container"
+					class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+				<!-- Title cards will be rendered here -->
+			</div>
+		</section>
+	</main>
+</body>
+
+</html>

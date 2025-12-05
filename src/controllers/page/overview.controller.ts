@@ -1,27 +1,38 @@
 import axios from 'axios';
 import type { Request, Response } from 'express';
-import { JIKAN_BASE_URL } from '../config/env.config';
-import { getAnimeByMalId, insertAnimeDataByMalId } from '../models/anime/animeDBModel';
-import { getAnimeThemesByMalId, insertAnimeThemesByMalId } from '../models/anime/animeTheme.models';
-import { getMangaByMalId, insertMangaDataByMalId } from '../models/manga/mangaDB.model';
+import { JIKAN_BASE_URL } from '../../config/env.config';
+import {
+	getAnimeByMalId,
+	getOldAnime,
+	insertAnimeDataByMalId,
+} from '../../models/anime/animeDBModel';
+import {
+	getAnimeThemesByMalId,
+	insertAnimeThemesByMalId,
+} from '../../models/anime/animeTheme.models';
+import {
+	getMangaByMalId,
+	getOldManga,
+	insertMangaDataByMalId,
+} from '../../models/manga/mangaDB.model';
 import {
 	getAnimeCharactersByMalId,
 	getMangaCharactersByMalId,
 	insertAnimeCharacterByMalId,
 	insertMangaCharacterByMalId,
-} from '../models/other/character.model';
+} from '../../models/other/character.model';
 import {
 	getAnimeRecommendationByMalId,
 	getMangaRecommendationByMalId,
 	insertAnimeRecommendationByMalId,
 	insertMangaRecommendationByMalId,
-} from '../models/other/recommendation.model';
+} from '../../models/other/recommendation.model';
 import {
 	getAnimeRelationByMalId,
 	getMangaRelationByMalId,
 	insertAnimeRelationByMalId,
 	insertMangaRelationByMalId,
-} from '../models/other/relation.model';
+} from '../../models/other/relation.model';
 import {
 	fetchAnimeByMalId,
 	fetchAnimeCharactersByMalId,
@@ -32,14 +43,26 @@ import {
 	fetchMangaCharactersByMalId,
 	fetchMangaRecommendationByMalId,
 	fetchMangaRelationByMalId,
-} from '../services/fetchTitleData';
-import { parseSynopsis, parseThemeString } from '../utils/parseData.utils';
+} from '../../services/fetchTitleData';
+import { parseSynopsis, parseThemeString } from '../../utils/parseData.utils';
 
 const API_URL = JIKAN_BASE_URL;
 
 async function getAnimeData(mal_id: number) {
+	const daysThreshold = 7;
+
 	try {
-		// 1. Get or fetch anime data
+		// Check if the data is older than dayThreshold
+		const OldAnimeData = await getOldAnime(daysThreshold);
+
+		// Update the old data
+		if (OldAnimeData.length !== 0) {
+			console.log('Found old anime data, updating...');
+			const freshData = await fetchAnimeByMalId(mal_id);
+			await insertAnimeDataByMalId(freshData);
+		}
+
+		// Get or fetch anime data
 		let animeData = await getAnimeByMalId(mal_id);
 
 		if (!animeData) {
@@ -52,7 +75,7 @@ async function getAnimeData(mal_id: number) {
 
 		const synopsis = parseSynopsis(animeData.data.synopsis);
 
-		// 2. Get or fetch character data
+		// Get or fetch character data
 		let animeCharacter = await getAnimeCharactersByMalId(mal_id);
 
 		if (!animeCharacter) {
@@ -63,15 +86,7 @@ async function getAnimeData(mal_id: number) {
 			animeCharacter = await getAnimeCharactersByMalId(mal_id);
 		}
 
-		if (animeCharacter.character_data.length <= 6) {
-			await new Promise((resolve) => setTimeout(resolve, 350));
-			console.log('Not enough character, re run fetch anime character');
-			const dataFromAPI = await fetchAnimeCharactersByMalId(mal_id);
-			await insertAnimeCharacterByMalId(mal_id, dataFromAPI);
-			animeCharacter = await getAnimeCharactersByMalId(mal_id);
-		}
-
-		// 3. Get or fetch relation data
+		// Get or fetch relation data
 		let animeRelation = await getAnimeRelationByMalId(mal_id);
 
 		if (!animeRelation) {
@@ -87,7 +102,7 @@ async function getAnimeData(mal_id: number) {
 		const relAdaptation = animeRelation.relation_data.find((rel) => rel.relation === 'Adaptation');
 		const relSideStory = animeRelation.relation_data.find((rel) => rel.relation === 'Side Story');
 
-		// 4. Get or fetch recommendation data
+		// Get or fetch recommendation data
 		let animeRecommendation = await getAnimeRecommendationByMalId(mal_id);
 
 		if (!animeRecommendation) {
@@ -126,7 +141,7 @@ async function getAnimeData(mal_id: number) {
 			console.log('Run fetch anime theme');
 			const dataFromAPI = await fetchAnimeThemeByMalId(mal_id);
 			await insertAnimeThemesByMalId(mal_id, dataFromAPI);
-			animeTheme = await getAnimeThemesByMalId(mal_id)
+			animeTheme = await getAnimeThemesByMalId(mal_id);
 		}
 
 		const parsedOpenings = animeTheme.themes.openings.map(parseThemeString);
@@ -155,16 +170,29 @@ async function getAnimeData(mal_id: number) {
 }
 
 async function getMangaData(mal_id: number) {
+	const daysThreshold = 7;
+
 	try {
+		// Check if the data is older than dayThreshold
+		const oldMangaData = await getOldManga(daysThreshold);
+
+		// Update the old data
+		if (oldMangaData.length !== 0) {
+			await new Promise((resolve) => setTimeout(resolve, 350));
+			console.log('Found old manga data, updating...');
+			const freshData = await fetchMangaByMalId(mal_id);
+			await insertMangaDataByMalId(freshData);
+		}
+
 		// 1. Get or fetch manga data
 		let mangaData = await getMangaByMalId(mal_id);
 
 		if (!mangaData) {
+			await new Promise((resolve) => setTimeout(resolve, 350));
 			console.log('Run fetch manga');
 			const dataFromAPI = await fetchMangaByMalId(mal_id);
 			await insertMangaDataByMalId(dataFromAPI);
 			mangaData = await getMangaByMalId(mal_id);
-			await new Promise((resolve) => setTimeout(resolve, 350));
 		}
 
 		const synopsis = parseSynopsis(mangaData.data.synopsis);
@@ -173,30 +201,22 @@ async function getMangaData(mal_id: number) {
 		let mangaCharacter = await getMangaCharactersByMalId(mal_id);
 
 		if (!mangaCharacter) {
+			await new Promise((resolve) => setTimeout(resolve, 350));
 			console.log('Run fetch manga character');
 			const dataFromAPI = await fetchMangaCharactersByMalId(mal_id);
 			await insertMangaCharacterByMalId(mal_id, dataFromAPI);
 			mangaCharacter = await getMangaCharactersByMalId(mal_id);
-			await new Promise((resolve) => setTimeout(resolve, 350));
-		}
-
-		if (mangaCharacter.character_data.length <= 6) {
-			console.log('Not enough character, re run fetch manga character');
-			const dataFromAPI = await fetchMangaCharactersByMalId(mal_id);
-			await insertMangaCharacterByMalId(mal_id, dataFromAPI);
-			mangaCharacter = await getMangaCharactersByMalId(mal_id);
-			await new Promise((resolve) => setTimeout(resolve, 350));
 		}
 
 		// 3 Get or fetch manga relation data
 		let mangaRelation = await getMangaRelationByMalId(mal_id);
 
 		if (!mangaRelation) {
+			await new Promise((resolve) => setTimeout(resolve, 350));
 			console.log('Run fetch anime relation');
 			const dataFromAPI = await fetchMangaRelationByMalId(mal_id);
 			await insertMangaRelationByMalId(mal_id, dataFromAPI);
 			mangaRelation = await getMangaRelationByMalId(mal_id);
-			await new Promise((resolve) => setTimeout(resolve, 350));
 		}
 
 		const relPrequel = mangaRelation.relation_data.find((rel) => rel.relation === 'Prequel');
@@ -208,23 +228,23 @@ async function getMangaData(mal_id: number) {
 		let mangaRecommendation = await getMangaRecommendationByMalId(mal_id);
 
 		if (!mangaRecommendation) {
+			await new Promise((resolve) => setTimeout(resolve, 350));
 			console.log('Run fetch manga recommendation');
 			const dataFromAPI = await fetchMangaRecommendationByMalId(mal_id);
 			await insertMangaRecommendationByMalId(mal_id, dataFromAPI);
 			mangaRecommendation = await getMangaRecommendationByMalId(mal_id);
-			await new Promise((resolve) => setTimeout(resolve, 350));
 		}
 
 		if (mangaRecommendation.recommendation_data.length <= 6) {
+			await new Promise((resolve) => setTimeout(resolve, 350));
 			console.log('Not enough recommendation, re run fetch manga recommendation');
 			const dataFromAPI = await fetchMangaRecommendationByMalId(mal_id);
 			await insertMangaRecommendationByMalId(mal_id, dataFromAPI);
 			mangaRecommendation = await getMangaRecommendationByMalId(mal_id);
-			await new Promise((resolve) => setTimeout(resolve, 350));
 
 			if (mangaRecommendation.recommendation_data.length <= 6) {
-				console.log('Still not enough recommendation, fetch random manga recommendation');
 				await new Promise((resolve) => setTimeout(resolve, 350));
+				console.log('Still not enough recommendation, fetch random manga recommendation');
 				const response = await axios.get(`${API_URL}/manga/24705/recommendations`);
 				const data = response.data.data.slice(0, 10);
 				mangaRecommendation.recommendation_data = data;

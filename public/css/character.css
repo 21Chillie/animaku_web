@@ -1,0 +1,101 @@
+@import url('colors.css');
+@import url('global.css');
+
+/* Character */
+.image-poster {
+	border-color: var(--primary);
+}
+
+.fav-char {
+	background: var(--error);
+	color: var(--nord5);
+}
+
+.names h1 {
+	color: var(--text-primary);
+}
+
+.names p {
+	color: var(--text-secondary);
+	opacity: 80%;
+}
+
+.nicknames {
+	background: var(--bg-secondary);
+	border: 1px solid var(--border-accent);
+}
+
+.character-about {
+	color: var(--text-secondary);
+	opacity: 80%;
+}
+
+/* Voice Actor */
+#voice-actor-section h2,
+#voice-actor-section h3 {
+	color: var(--text-primary);
+}
+
+.voice-actor-card {
+	background-color: var(--bg-secondary);
+	border: 1px solid var(--border-accent);
+	transition: all 0.2s ease;
+}
+
+.voice-actor-card p {
+	color: var(--text-secondary);
+	opacity: 80%;
+}
+
+.voice-actor-card:hover {
+	background-color: var(--bg-tertiary);
+	border-color: var(--primary);
+}
+
+/* Appears In */
+#anime-section > h2,
+#manga-section > h2 {
+	color: var(--text-primary);
+}
+
+.title-card {
+	background: var(--bg-secondary);
+	color: var(--text-primary);
+	border: 2px solid;
+	border-color: var(--border-accent);
+	position: relative;
+	overflow: hidden;
+	backdrop-filter: blur(6px);
+}
+
+.title-card:hover {
+	.floating-status {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
+	}
+	border-color: var(--border-accent-hover);
+}
+
+.title-card-info h3 {
+	color: var(--text-primary);
+}
+
+.title-card-info p {
+	color: var(--text-secondary);
+	opacity: 80%;
+}
+
+/* Floating badges (rating & status) */
+.bg-float {
+	background-color: var(--bg-secondary);
+	color: var(--text-primary);
+	backdrop-filter: blur(8px);
+	border: 1px solid var(--border-color);
+}
+
+/* For light theme adjustment */
+[data-theme='light'] .bg-float {
+	background: rgba(255, 255, 255, 0.55);
+	color: var(--text-primary);
+}

@@ -35,3 +35,27 @@ export async function getMangaTopLimit(maxRecords: number): Promise<DatabaseMang
 
 	return result.rows;
 }
+
+export async function getMangaTopCount(): Promise<number> {
+	const result = await pool.query(`SELECT COUNT(*) FROM manga_top`);
+	return parseInt(result.rows[0].count);
+}
+
+export async function getMangaTopPaginated(
+	limit: number,
+	offset: number
+): Promise<DatabaseMangaTypes[]> {
+	const client = await pool.connect();
+	try {
+		const result = await client.query(
+			`
+			SELECT * FROM manga_top
+      ORDER BY rank ASC NULLS LAST
+      LIMIT $1 OFFSET $2`,
+			[limit, offset]
+		);
+		return result.rows;
+	} finally {
+		client.release();
+	}
+}

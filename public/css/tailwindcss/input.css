@@ -1,1 +1,5 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@plugin "daisyui" {
+	themes: nord;
+	exclude: navbar;
+}

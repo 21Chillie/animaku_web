@@ -35,3 +35,27 @@ export async function getAnimeTopLimit(maxRecords: number): Promise<DatabaseAnim
 
 	return result.rows;
 }
+
+export async function getAnimeTopCount(): Promise<number> {
+	const result = await pool.query(`SELECT COUNT(*) FROM anime_top`);
+	return parseInt(result.rows[0].count);
+}
+
+export async function getAnimeTopPaginated(
+	limit: number,
+	offset: number
+): Promise<DatabaseAnimeTypes[]> {
+	const client = await pool.connect();
+	try {
+		const result = await client.query(
+			`
+			SELECT * FROM anime_top
+      ORDER BY rank ASC NULLS LAST
+      LIMIT $1 OFFSET $2`,
+			[limit, offset]
+		);
+		return result.rows;
+	} finally {
+		client.release();
+	}
+}
