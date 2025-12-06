@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="shortcut icon" href="/images/icons/favicon.ico" type="image/x-icon" />
+
+	<!-- Remix Icon -->
+	<link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="/css/tailwindcss/tailwind.css" />
+	<link rel="stylesheet" href="/css/auth.css" />
+
+	<title>Login Page | AnimaKU</title>
+
+	<script type="module" src="/js/toggleTheme.js" defer></script>
+	<script type="module" src="/js/passwordToggle.js" defer></script>
+</head>
+
+<body class="min-h-screen flex items-center justify-center px-4">
+
+	<main class="w-full max-w-md">
+		<!-- Back link -->
+		<nav class="mb-8 flex items-center justify-between">
+			<a href="/" class="btn-home inline-flex items-center gap-1 text-base">
+				<i class="ri-arrow-left-line"></i>
+				Back to Home
+			</a>
+		</nav>
+
+		<section id="login-container" class="rounded-xl p-8 shadow-lg border">
+			<header class="text-center mb-8">
+				<h1 class="text-2xl font-semibold">Welcome Back</h1>
+				<p class="text-sm mt-1">Sign in to your account to continue</p>
+			</header>
+
+			<form action="/login" method="POST" class="space-y-4">
+				<!-- Username -->
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend text-sm">Username</legend>
+					<label class="input validator w-full border rounded-md">
+						<i class="ri-user-line"></i>
+						<input id="username" type="text" name="username" placeholder="Enter your username"
+								pattern="[A-Za-z][A-Za-z0-9\_]*" minlength="3" maxlength="30"
+								title="Only letters, numbers or underscore" required />
+					</label>
+					<div class="validator-hint hidden">
+						Must be 3 to 30 characters
+						<br />containing only letters, numbers or underscore
+					</div>
+				</fieldset>
+
+				<!-- Password -->
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend text-sm">Password</legend>
+
+					<label class="input validator w-full border rounded-md">
+						<i class="ri-key-2-line"></i>
+
+						<input id="password" name="password" type="password" placeholder="Enter your password"
+								minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+								title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+								required />
+
+						<!-- Password Toggle Button -->
+						<button type="button" id="toggle-password" class="rounded-full px-1">
+							<i class="ri-eye-line text-base" id="password-eye"></i>
+						</button>
+					</label>
+
+					<p class="validator-hint hidden">
+						Must be more than 8 characters, including
+						<br />At least one number
+						<br />At least one lowercase letter
+						<br />At least one uppercase letter
+					</p>
+				</fieldset>
+
+				<!-- Sign in button -->
+				<button type="submit"
+						class="btn-submit w-full rounded-md py-2 flex items-center justify-center gap-2 text-sm">
+					Sign In
+				</button>
+			</form>
+
+			<!-- Divider -->
+			<div class="form-divider flex items-center gap-4 my-6">
+				<hr class="flex-1" />
+				<span class="text-sm">or</span>
+				<hr class="flex-1" />
+			</div>
+
+			<!-- Google button -->
+			<a href="/auth/google"
+					class="btn-google w-full rounded-md py-2 flex items-center justify-center gap-2 border text-sm">
+				<img class="w-4 h-4" src="/images/icons/google-color.svg" alt="google icon">
+				Continue with Google
+			</a>
+
+			<!-- Sign up -->
+			<p class="text-signup text-center text-sm mt-6">
+				Don't have an account?
+				<a href="/register" class="signup font-bold underline">Sign up</a>
+			</p>
+		</section>
+	</main>
+</body>
+
+</html>
