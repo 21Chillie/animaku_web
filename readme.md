@@ -106,7 +106,14 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 
 **User & Authentication**
 
-- [ ] Do this
+- [x] Design login and sign up page
+- [x] Add validator for all input in login and sign up page
+- [x] Add function for toggle hide/see password
+- [x] Add routes for login and sign up page
+- [ ] Create function for hashing password
+- [ ] Create function for storing password in database
+- [ ] Create function for login with google
+- [ ] And more
 
 **Error Page**
 
