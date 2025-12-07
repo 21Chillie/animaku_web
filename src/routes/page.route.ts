@@ -4,7 +4,7 @@ import {
 	postRegister,
 	renderLogin,
 	renderRegister,
-} from '../controllers/page/authPage.route';
+} from '../controllers/page/auth.route';
 import { renderBrowse } from '../controllers/page/browse.route';
 import { renderCharacter } from '../controllers/page/character.controller';
 import { renderIndex } from '../controllers/page/index.controller';
