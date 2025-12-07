@@ -1,0 +1,28 @@
+// src/types/express-session.d.ts
+import 'express-session';
+
+declare module 'express-session' {
+	interface SessionData {
+		userId?: string;
+		// used during Google signup flow to store profile temporarily
+		oauthProfile?: {
+			provider: string;
+			id: string;
+			email?: string | null;
+			displayName?: string | null;
+			avatarUrl?: string | null;
+		} | null;
+	}
+}
+
+declare global {
+	namespace Express {
+		interface User {
+			id: string;
+			username: string;
+			email?: string | null;
+			google_id?: string | null;
+			avatar_url?: string | null;
+		}
+	}
+}
