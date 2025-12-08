@@ -37,7 +37,7 @@
 				<p class="text-sm mt-1">Sign in to your account to continue</p>
 			</header>
 
-			<form action="/login" method="POST" class="space-y-4">
+			<form action="/auth/login" method="POST" class="space-y-4">
 				<!-- Username -->
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend text-sm">Username</legend>
@@ -56,7 +56,6 @@
 				<!-- Password -->
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend text-sm">Password</legend>
-
 					<label class="input validator w-full border rounded-md">
 						<i class="ri-key-2-line"></i>
 
@@ -80,10 +79,19 @@
 				</fieldset>
 
 				<!-- Sign in button -->
-				<button type="submit"
-						class="btn-submit w-full rounded-md py-2 flex items-center justify-center gap-2 text-sm">
-					Sign In
-				</button>
+				<div class="flex flex-col gap-4">
+					<button type="submit"
+							class="btn-submit w-full rounded-md py-2 flex items-center justify-center gap-2 text-sm font-bold">
+						Sign In
+					</button>
+
+					<% if (error) { %>
+					<div class="flex items-center gap-3  p-2">
+						<i class="ri-error-warning-line error"></i>
+						<p class="text-xs"><%= error %></p>
+					</div>
+					<% } %>
+				</div>
 			</form>
 
 			<!-- Divider -->
@@ -95,7 +103,8 @@
 
 			<!-- Google button -->
 			<a href="/auth/google"
-					class="btn-google w-full rounded-md py-2 flex items-center justify-center gap-2 border text-sm">
+					class="btn-google w-full rounded-md py-2 flex items-center justify-center gap-2 border text-sm"
+					target="_blank">
 				<img class="w-4 h-4" src="/images/icons/google-color.svg" alt="google icon">
 				Continue with Google
 			</a>
@@ -103,7 +112,7 @@
 			<!-- Sign up -->
 			<p class="text-signup text-center text-sm mt-6">
 				Don't have an account?
-				<a href="/register" class="signup font-bold underline">Sign up</a>
+				<a href="/auth/register" class="signup font-bold underline">Sign up</a>
 			</p>
 		</section>
 	</main>
