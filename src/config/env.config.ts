@@ -6,7 +6,6 @@ export const {
 	PORT,
 	NODE_ENV,
 	SESSION_SECRET,
-	CSRF_SECRET,
 	DB_HOST,
 	DB_PORT,
 	DB_NAME,
