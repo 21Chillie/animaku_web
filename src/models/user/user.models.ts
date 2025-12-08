@@ -63,7 +63,7 @@ export async function createGoogleUser(
 	const result: QueryResult<User> = await pool.query(
 		`
 		INSERT INTO users (username, google_id, email, password_hash, avatar_url, is_email_verified) 
-		VALUES ($1, $2, $3, $4, $5 true) 
+		VALUES ($1, $2, $3, $4, $5, true) 
 		RETURNING *
 		`,
 		[username, googleId, email, password_hash ?? null, avatarUrl ?? null]
