@@ -37,7 +37,7 @@
 				<p class="text-sm mt-1">Sign up to start using AnimaKu</p>
 			</header>
 
-			<form action="/register" method="post" class="space-y-4">
+			<form action="/auth/register" method="post" class="space-y-4">
 				<!-- Email -->
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend text-sm">Email</legend>
@@ -90,11 +90,20 @@
 				</fieldset>
 
 
-				<!-- Sign in button -->
-				<button type="submit"
-						class="btn-submit w-full rounded-md py-2 flex items-center justify-center gap-2 text-sm">
-					Sign Up Your Account
-				</button>
+				<!-- Sign up button -->
+				<div class="flex flex-col gap-4">
+					<button type="submit"
+							class="btn-submit w-full rounded-md py-2 flex items-center justify-center gap-2 text-sm font-bold">
+						Create an account
+					</button>
+
+					<% if (success === false) { %>
+					<div class="flex items-center gap-3  p-2">
+						<i class="ri-error-warning-line error"></i>
+						<p class="text-xs"><%= message %></p>
+					</div>
+					<% } %>
+				</div>
 			</form>
 
 			<!-- Divider -->
@@ -106,7 +115,8 @@
 
 			<!-- Google button -->
 			<a href="/auth/google"
-					class="btn-google w-full rounded-md py-2 flex items-center justify-center gap-2 border text-sm">
+					class="btn-google w-full rounded-md py-2 flex items-center justify-center gap-2 border text-sm"
+					target="_blank">
 				<img class="w-4 h-4" src="/images/icons/google-color.svg" alt="google icon">
 				Continue with Google
 			</a>
@@ -114,7 +124,7 @@
 			<!-- Sign up -->
 			<p class="text-signup text-center text-sm mt-6">
 				Already have an account?
-				<a href="/login" class="signup font-bold underline">Login</a>
+				<a href="/auth/login" class="signup font-bold underline">Login</a>
 			</p>
 		</section>
 	</main>
