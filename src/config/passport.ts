@@ -2,7 +2,6 @@ import type { Request } from 'express';
 import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { GOOGLE_CALLBACK_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '../config/env.config';
 import {
 	attachGoogle,
 	getByEmail,
@@ -12,6 +11,7 @@ import {
 } from '../services/user.service';
 import type { User } from '../types/user.types';
 import { verifyPassword } from '../utils/passwordHash.utils';
+import { GOOGLE_CALLBACK_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from './env.config';
 
 passport.use(
 	// Get username and password field from input field in login page
@@ -25,14 +25,18 @@ passport.use(
 			const user: User | null = await getByUsername(username);
 
 			if (!user || !user.password_hash) {
-				return done(null, false, { message: 'Invalid credentials' });
+				return done(null, false, {
+					message: 'Invalid credentials, username or password incorrect',
+				});
 			}
 
 			// If username exist, verify the password
 			const isPasswordValid = await verifyPassword(password, user.password_hash);
 
 			if (!isPasswordValid) {
-				return done(null, false, { message: 'Invalid credentials' });
+				return done(null, false, {
+					message: 'Invalid credentials, username or password incorrect',
+				});
 			}
 
 			// Debug
@@ -66,9 +70,6 @@ passport.use(
 			done: (err: Error | null, user?: User | false) => void
 		) {
 			try {
-				// Debug
-				console.log('Raw Google Profile:', profile);
-
 				// Store google id, email, avatar
 				const googleId = profile.id;
 				const email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
@@ -121,9 +122,7 @@ passport.serializeUser((user: Express.User, done) => {
 
 passport.deserializeUser(async function (id: string, done) {
 	try {
-		console.log('deserializeUser: loading user from DB by ID:', id);
 		const user = await getById(id);
-		console.log('deserializeUser: loaded user:', user);
 
 		return done(null, user ?? false);
 	} catch (err) {
