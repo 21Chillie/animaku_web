@@ -1,11 +1,5 @@
 import express from 'express';
-import {
-	postLogin,
-	postRegister,
-	renderLogin,
-	renderRegister,
-} from '../controllers/page/auth.route';
-import { renderBrowse } from '../controllers/page/browse.route';
+import { renderBrowse } from '../controllers/page/browse.controller';
 import { renderCharacter } from '../controllers/page/character.controller';
 import { renderIndex } from '../controllers/page/index.controller';
 import { renderListTitle } from '../controllers/page/list.controller';
@@ -15,14 +9,6 @@ export const pageRoute = express.Router();
 
 // Index route
 pageRoute.get('/', renderIndex);
-
-// Login Route
-pageRoute.get('/login', renderLogin);
-pageRoute.post('/login', postLogin);
-
-// Sign Up Route
-pageRoute.get('/register', renderRegister);
-pageRoute.post('/register', postRegister);
 
 // Overview Character
 pageRoute.get('/overview/character/:id', renderCharacter);
