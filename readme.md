@@ -115,8 +115,11 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Create function for get user credentials by username, id, email, google id
 - [x] Create function for insert and update user account
 - [x] Setup passport local and google oauth
-- [ ] Create function for login with username and password   
-- [ ] Create function for login with google
+- [x] Create function for login with username and password
+- [x] Create function for login with google
+- [x] All function for local/google signup or login is working
+- [ ] Show profile in navbar when user login
+- [ ] Create logout button so user can logout their account
 - [ ] And more
 
 **Error Page**
