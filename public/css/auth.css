@@ -132,3 +132,16 @@
 	background-color: var(--bg-primary);
 	filter: brightness(1.1);
 }
+
+.input-disable {
+	background-color: var(--bg-primary);
+}
+
+.input-disable input {
+	color: var(--text-secondary);
+	opacity: 60%;
+}
+
+.error {
+	color: var(--error);
+}
