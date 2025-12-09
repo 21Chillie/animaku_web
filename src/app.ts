@@ -43,6 +43,20 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use((req, res, next) => {
+	if (req.user) {
+		res.locals.user = {
+			id: req.user.id,
+			email: req.user.email,
+			username: req.user.username,
+			avatar: req.user.avatar_url,
+		};
+	} else {
+		res.locals.user = null;
+	}
+	next();
+});
+
 // 	Index Route
 app.use('/', pageRoute);
 
