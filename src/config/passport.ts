@@ -78,6 +78,8 @@ passport.use(
 				// Check if user with google id is existing
 				const userAccountGoogle = await getByGoogleId(googleId);
 				if (userAccountGoogle) {
+					// Debug
+					console.log('Google strategy authentication succeeded');
 					return done(null, userAccountGoogle);
 				}
 
@@ -91,6 +93,8 @@ passport.use(
 						// Get updated user account with id, if account exist then user is authenticated
 						const updatedAccount = await getById(existingEmail.id);
 						if (updatedAccount) {
+							// Debug
+							console.log('Google strategy authentication succeeded');
 							return done(null, updatedAccount);
 						}
 					}
@@ -103,7 +107,8 @@ passport.use(
 					email,
 					avatarUrl: avatar,
 				};
-
+				// Debug
+				console.log('Google strategy authentication failed');
 				// No user authenticated
 				return done(null, false);
 			} catch (err) {
@@ -124,7 +129,11 @@ passport.deserializeUser(async function (id: string, done) {
 	try {
 		const user = await getById(id);
 
-		return done(null, user ?? false);
+		if (!user) {
+			return done(null, false);
+		}
+
+		return done(null, user);
 	} catch (err) {
 		done(err as Error);
 	}
