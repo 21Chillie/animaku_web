@@ -62,11 +62,16 @@ authRoute.get('/google', passport.authenticate('google', { scope: ['profile', 'e
 
 authRoute.get('/google/callback', (req, res, next) => {
 	passport.authenticate('google', (err: unknown, user: User, info?: unknown) => {
-		if (err) return next(err);
+		if (err) {
+			console.error(err);
+			return next(err);
+		}
+
 		if (user) {
+			console.log(user);
 			req.login(user, (loginErr) => {
 				if (loginErr) return next(loginErr);
-				req.session.regenerate(() => res.redirect('/'));
+				res.redirect('/');
 			});
 		} else {
 			// no user created yet -> must complete sign up
