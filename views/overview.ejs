@@ -45,7 +45,7 @@
 		<section id="title-section" class="max-w-7xl mx-auto -mt-36">
 			<div class="flex flex-col md:flex-row gap-10 px-4">
 				<!-- Cover & Add to list btn -->
-				<div>
+				<div class="shrink-0">
 					<img src="<%= data.anime?.data?.images?.webp?.large_image_url || data.anime?.data?.images?.webp?.image_url || data.anime?.data?.images?.jpg?.large_image_url ||
 							data?.anime?.data?.images?.jpg?.image_url || data.manga?.data?.images?.webp?.large_image_url || data.manga?.data?.images?.webp?.image_url || data.manga?.data?.images?.jpg?.large_image_url || data.manga?.data?.images?.jpg?.image_url || "/images/no-img-placeholder.webp" %>"
 							alt="<%= data.anime?.title || data.manga.title %> cover"
