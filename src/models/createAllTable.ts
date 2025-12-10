@@ -14,6 +14,7 @@ import {
 	createTableMangaRecommendation,
 } from './other/recommendationDBCreateTable';
 import { createTableAnimeRelation, createTableMangaRelation } from './other/relationDBCreateTable';
+import { createUserTable } from './user/userCreateTable';
 
 async function createAllTables() {
 	try {
@@ -30,6 +31,7 @@ async function createAllTables() {
 		await createTableMangaRecommendation();
 		await createTableAnimeTheme();
 		await createTableCharacterFull();
+		await createUserTable();
 
 		console.log('All table created successfully');
 	} catch (error) {

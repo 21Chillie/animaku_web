@@ -45,17 +45,192 @@
 		<section id="title-section" class="max-w-7xl mx-auto -mt-36">
 			<div class="flex flex-col md:flex-row gap-10 px-4">
 				<!-- Cover & Add to list btn -->
-				<div>
+				<div class="shrink-0 flex flex-col gap-4 items-start md:items-center">
 					<img src="<%= data.anime?.data?.images?.webp?.large_image_url || data.anime?.data?.images?.webp?.image_url || data.anime?.data?.images?.jpg?.large_image_url ||
 							data?.anime?.data?.images?.jpg?.image_url || data.manga?.data?.images?.webp?.large_image_url || data.manga?.data?.images?.webp?.image_url || data.manga?.data?.images?.jpg?.large_image_url || data.manga?.data?.images?.jpg?.image_url || "/images/no-img-placeholder.webp" %>"
 							alt="<%= data.anime?.title || data.manga.title %> cover"
-							class="image-poster w-48 md:w-56 rounded-lg shadow-2xl border-2 mb-4" />
+							class="image-poster w-48 md:w-56 rounded-lg shadow-2xl border-2" />
 
-					<button class="btn-add-to-list w-48 md:w-56 py-2 rounded-md">
+					<% if (user) { %>
+					<button class="btn-add-to-list w-48 md:w-56 py-2 rounded-md"
+							onclick="modalFormList.showModal()">
 						<i class="ri-add-line"></i>
 						<span>Add to list</span>
 					</button>
+
+					<!-- TODO: need to fix this later when already have user list feature -->
+					<p class="text-status text-sm text-center opacity-80 w-48 md:w-56">
+						Already added to list
+					</p>
+					<% } %>
+
+					<% if (!user) { %>
+					<p class="text-status text-center text-sm opacity-80 w-48 md:w-56">
+						You need to login to add this title to your list
+					</p>
+					<% } %>
 				</div>
+
+				<!-- Open the modal using ID.showModal() method -->
+				<% if (user) { %>
+				<dialog id="modalFormList" class="modal py-62">
+					<div class="modal-box rounded-md">
+						<form method="dialog">
+							<button class="btn-close rounded-full px-1 absolute right-3 top-6 md:top-3">
+								<i class="ri-close-line"></i>
+							</button>
+						</form>
+						<h3 class="text-lg font-bold mt-3 md:mt-0 mb-3">Form List</h3>
+
+						<!-- TODO: need to test the add list form -->
+						<!-- Modal Form List -->
+						<form id="formList" action="/my-list/added" method="post">
+							<!-- Input user id -->
+							<input id="inputUserId" name="inputUserId" type="hidden" value="<%= user.id %>">
+
+							<!-- Input Mal id -->
+							<input id="inputMalId" name="inputMalId" type="hidden"
+									value="<%= data.anime?.mal_id || data.manga?.mal_id %>">
+
+							<!-- Input type -->
+							<input type="hidden" name="inputType" id="inputType" value="<%= type %>">
+
+							<!-- Input title (disabled) -->
+							<fieldset class="fieldset">
+								<legend class="fieldset-legend">Title</legend>
+								<input type="text" class="input border rounded-md truncate"
+										value="<%= data.anime?.title || data.manga?.title %>" disabled />
+							</fieldset>
+
+							<fieldset class="fieldset">
+								<legend class="fieldset-legend">Status</legend>
+								<select id="selectStatus" name="selectStatus" class="select border rounded-md">
+									<% if (type === 'anime') { %>
+									<option value="watching">Watching</option>
+									<option value="plan-watch">Plan to watch</option>
+									<% } %>
+
+									<% if (type === 'manga') { %>
+									<option value="reading">Reading</option>
+									<option value="plan-read">Plan to read</option>
+									<% } %>
+									<option value="completed">Completed</option>
+									<option value="paused">Paused</option>
+									<option value="dropped">Dropped</option>
+								</select>
+							</fieldset>
+
+							<!-- Input score -->
+							<fieldset class="fieldset">
+								<legend class="fieldset-legend">Score</legend>
+								<input type="number" name="inputScore" class="input validator border rounded-md"
+										placeholder="Type a score between 0 to 10" min="0" max="10"
+										title="Value must be number and between 0-10" />
+							</fieldset>
+
+							<!-- Input episodes -->
+							<% if (type === 'anime') { %>
+							<fieldset class="fieldset">
+								<legend class="fieldset-legend">Episode progress</legend>
+								<input type="number" name="inputEpisode" class="input validator border rounded-md"
+										placeholder="Type a episodes between 0 to <%= data.anime.data.episodes || 'N/A' %>"
+										min="0" <% if (data.anime.data.episodes) { %>
+										max="<%= data.anime.data.episodes %>" <% } %>
+										title="Value must be a number between 0 to <%= data.anime.data.episodes || 'N/A' %>" />
+							</fieldset>
+							<% } %>
+
+							<!-- Input chapters and volumes -->
+							<% if (type === 'manga') { %>
+							<fieldset class="fieldset">
+								<legend class="fieldset-legend">Chapter progress</legend>
+								<input type="number" name="inputChapter" class="input validator border rounded-md"
+										placeholder="Type a episodes between 0 to <%= data.manga.data.chapters || 'N/A' %>"
+										min="0" <% if (data.manga.data.chapters) { %>
+										max="<%= data.manga.data.chapters %>" <% } %>
+										title="Value must be a number between 0 to <%= data.manga.data.chapters || 'N/A' %>" />
+							</fieldset>
+
+							<fieldset class="fieldset">
+								<legend class="fieldset-legend">Volume progress</legend>
+								<input type="number" name="inputVolume" class="input validator border rounded-md"
+										placeholder="Type a episodes between 0 to <%= data.manga.data.volumes || 'N/A' %>"
+										min="0" <% if (data.manga.data.volumes) { %>
+										max="<%= data.manga.data.volumes %>" <% } %>
+										title="Value must be a number between 0 to <%= data.manga.data.volumes || 'N/A' %>" />
+							</fieldset>
+							<% } %>
+
+							<!-- Input start date -->
+							<fieldset class="fieldset">
+								<legend class="fieldset-legend">Start date</legend>
+								<input type="date" name="inputStartDate" class="input border rounded-md">
+							</fieldset>
+
+							<!-- Input end date -->
+							<fieldset class="fieldset">
+								<legend class="fieldset-legend">Finish date</legend>
+								<input type="date" name="inputFinishDate" class="input border rounded-md">
+							</fieldset>
+
+							<!-- Input Notes -->
+							<fieldset class="fieldset">
+								<legend class="fieldset-legend">Notes</legend>
+								<textarea name="inputNotes" class="textarea h-24 border rounded-md"
+										placeholder="Add a quick note"></textarea>
+							</fieldset>
+
+							<div class="flex gap-4 mt-4 justify-end">
+								<!-- Submit Button -->
+								<button type="submit"
+										class="btn-submit-form-list px-4 py-2 border text-sm font-bold rounded-md">
+									Submit
+								</button>
+
+								<!-- Delete Button Open Modal Confirm -->
+								<button type="button"
+										class="btn-delete-form-list px-4 py-2 border text-sm font-bold rounded-md"
+										onclick="deleteListConfirm.showModal()">
+									Delete list
+								</button>
+							</div>
+						</form>
+					</div>
+
+					<form method="dialog" class="modal-backdrop">
+						<button>close</button>
+					</form>
+				</dialog>
+				<% } %>
+
+				<!-- Modal Delete List Confirm -->
+				<% if (user) { %>
+				<dialog id="deleteListConfirm" class="modal">
+					<div class="modal-box rounded-md">
+						<h3 class="text-lg font-bold">Confirm Delete</h3>
+						<p class="py-4">
+							This action will remove <%= data.anime?.title || data.manga?.title %>
+							(<%= type %>) from your list. Are you sure you want to continue?
+						</p>
+						<div class="modal-action flex gap-6">
+							<!-- Form Delete list -->
+							<!-- TODO: need to test the delete list form -->
+							<form action="/my-list/deleted" method="post">
+								<input type="hidden" name="deleteListUser" value="<%= user.id %>">
+								<input type="hidden" name="deleteListMalId" value="<%= data.anime?.mal_id  %>">
+								<button type="submit" class="btn-delete border px-4 py-2 rounded-md">
+									Delete List
+								</button>
+							</form>
+
+							<form method="dialog">
+								<!-- if there is a button in form, it will close the modal -->
+								<button class="btn-close px-4 py-2 rounded-md">Close</button>
+							</form>
+						</div>
+					</div>
+				</dialog>
+				<% } %>
 
 				<!-- Title Info -->
 				<div class="title-info flex flex-col gap-4">
@@ -330,7 +505,7 @@
 						<div class="flex gap-4">
 							<img src="<%= char.character.images.webp?.image_url || char.character.images.jpg?.image_url || "/images/no-img-placeholder.webp"  %>"
 									alt="<%= char.character.name || "character" %> cover"
-									class="img-character w-20 h-28 object-cover rounded-md" />
+									class="img-character w-18 h-full object-cover rounded-md" />
 
 							<div class="flex flex-col gap-1 py-3">
 								<p class="text-sm">
@@ -340,7 +515,7 @@
 									<%= char.character.name || "N/A" %>
 								</h3>
 								<% if (type === "anime") { %>
-								<p class="text-sm md:text-base">
+								<p class="text-sm md:text-base line-clamp-2">
 									<%= char.voice_actors[0]?.person?.name %>
 								</p>
 								<% } %>
@@ -349,7 +524,7 @@
 
 						<% if (type === "anime") { %>
 						<img src="<%= char.voice_actors[0]?.person?.images?.webp?.image_url || char.voice_actors[0]?.person?.images?.jpg?.image_url || "/images/no-img-placeholder.webp" %>"
-								alt="voice actors cover" class="img-voice-actor w-20 h-28 object-cover" />
+								alt="voice actors cover" class="img-voice-actor w-18 h-full object-cover" />
 						<% } %>
 					</div>
 				</a>
@@ -445,7 +620,7 @@
 					<div class="flex flex-col gap-4 pl-7 pr-4">
 						<!-- Item -->
 						<% data.themes.opening.forEach(opening => { %>
-						<div class="flex justify-between items-center rounded-lg">
+						<div class="flex justify-between items-center rounded-lg flex-wrap">
 							<div>
 								<p class="soundtrack-title font-bold"><%= opening.title %></p>
 								<p class="soundtrack-by text-sm">By <%= opening.singer %></p>
@@ -470,7 +645,7 @@
 					<div class="flex flex-col gap-4 pl-7 pr-4">
 						<!-- Item -->
 						<% data.themes.ending.forEach(opening => { %>
-						<div class="flex justify-between items-center rounded-lg gap-3">
+						<div class="flex justify-between items-center rounded-lg gap-3 flex-wrap">
 							<div>
 								<p class="soundtrack-title font-bold"><%= opening.title %></p>
 								<p class="soundtrack-by text-sm">By <%= opening.singer %></p>
@@ -513,8 +688,9 @@
 						</div>
 
 						<div class="px-2 py-3">
-							<h3 class="text-sm md:text-base font-bold truncate">
-								<%= title.entry.title %></h3>
+							<h3 class="text-sm font-bold line-clamp-1 tooltip tooltip-right">
+								<%= title.entry.title %>
+							</h3>
 						</div>
 					</div>
 				</a>

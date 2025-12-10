@@ -70,7 +70,6 @@ button {
 .btn-filled {
 	background-color: var(--primary);
 	color: var(--bg-primary);
-	padding: 0.4rem 0.9rem;
 	border-radius: 0.5rem;
 	font-weight: 500;
 	transition: filter 0.2s ease;
@@ -92,6 +91,10 @@ button {
 	filter: brightness(1.1);
 }
 
+.dropdown-content {
+	background-color: var(--bg-secondary);
+}
+
 /* Mobile Menu Transition */
 #mobileMenu {
 	background-color: var(--bg-secondary);
@@ -109,4 +112,45 @@ button {
 	padding-bottom: 0.75rem;
 	max-height: 500px; /* enough space for all items */
 	opacity: 1;
+}
+
+#mobileMenu hr {
+	color: var(--bg-tertiary);
+	filter: brightness(1.4);
+}
+
+.mobile-profile p {
+	color: var(--text-primary);
+}
+
+.mobile-profile .text-sm {
+	color: var(--text-secondary);
+	opacity: 70%;
+}
+
+
+/* Modal Logout Confirm */
+#logoutConfirm .modal-box {
+	background-color: var(--bg-secondary);
+	color: var(--text-primary);
+}
+
+#logoutConfirm .btn-close:hover {
+	background-color: var(--bg-secondary);
+	transition: all 200ms ease;
+}
+
+#logoutConfirm .btn-close:hover {
+	background-color: var(--bg-tertiary);
+}
+
+#logoutConfirm .btn-logout {
+	color: var(--error);
+	transition: all 200ms ease;
+}
+
+#logoutConfirm .btn-logout:hover {
+	color: var(--nord4);
+	border-color: var(--error);
+	background-color: var(--error);
 }

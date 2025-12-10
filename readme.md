@@ -97,14 +97,44 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Write logic for fetch character full data and storing it to database
 - [x] Render correct character data by mal_id in character page
 
-**Browse Section (COMPLETE)**
+**Browse Section (COMPLETED)**
 
 - [x] Design browse page (with search filter, order by, filter by type or status,)
 - [x] Make logic when selecting media type (anime/manga) the filter type and status option will change too according to type and status from anime or manga
 - [x] Finish filter button to open modal popup (filters) when mobile
 - [x] Finish javascript logic for fetch data from api
 
-**User & Authentication**
+**User & Authentication (COMPLETED)**
+
+- [x] Design login and sign up page
+- [x] Add validator for all input in login and sign up page
+- [x] Add function for toggle hide/see password
+- [x] Add routes for login and sign up page
+- [x] Create function for hashing password
+- [x] Create function for storing password in database
+- [x] Create function for get user credentials by username, id, email, google id
+- [x] Create function for insert and update user account
+- [x] Setup passport local and google oauth
+- [x] Create function for login with username and password
+- [x] Create function for login with google
+- [x] All function for local/google signup or login is working
+- [x] Show profile in navbar when user login
+- [x] Create logout button so user can logout their account
+
+**User Features and User List**
+
+- [x] Make the add to list features in overview page hidden when user not logged in
+- [x] Add modal form add to list in overview page
+- [x] Test modal form add to list, all value from form show in log when post
+- [x] Add form delete list in overview page
+- [x] Test modal form delete list, all value from form show in log when post
+- [ ] Design my list page
+- [ ] Create table user list in database
+- [ ] Create logic to insert title to user list for each users
+- [ ] Create logic to show user list data in my list page
+- [ ] And more
+
+**Edit Profile**
 
 - [ ] Do this
 
