@@ -123,6 +123,7 @@
 	</div>
 </nav>
 
+<% if (user) { %>
 <dialog id="logoutConfirm" class="modal">
 	<div class="modal-box rounded-md">
 		<h3 class="text-lg font-bold">Confirm Logout</h3>
@@ -139,3 +140,4 @@
 		</div>
 	</div>
 </dialog>
+<% } %>
