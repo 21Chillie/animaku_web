@@ -221,3 +221,123 @@
 	background-color: var(--primary);
 	color: var(--bg-primary);
 }
+
+/* Modal Form List */
+#modalFormList .modal-box {
+	background-color: var(--bg-secondary);
+	color: var(--text-primary);
+}
+
+.modal-box .btn-close:hover {
+	background-color: var(--bg-tertiary);
+	color: var(--text-primary);
+}
+
+.text-status {
+	color: var(--primary);
+}
+
+#formList .input,
+#formList select,
+#formList textarea {
+	background-color: var(--bg-tertiary);
+	border-color: var(--border-color);
+}
+
+#formList .input:focus-within,
+#formList select:focus-within,
+#formList textarea:focus-within {
+	border-color: var(--border-accent);
+}
+
+#formList input,
+#formList select,
+#formList textarea {
+	width: 100%;
+}
+
+.validator {
+	@layer daisyui.l1.l2.l3 {
+		&:user-valid,
+		&:has(:user-valid) {
+			&,
+			&:focus,
+			&:checked,
+			&[aria-checked='true'],
+			&:focus-within {
+				--input-color: var(--success) /* var(--color-success) */;
+			}
+		}
+		&:user-invalid,
+		&:has(:user-invalid),
+		&[aria-invalid]:not([aria-invalid='false']),
+		&:has([aria-invalid]:not([aria-invalid='false'])) {
+			&,
+			&:focus,
+			&:checked,
+			&[aria-checked='true'],
+			&:focus-within {
+				--input-color: var(--error) /* var(--color-error) */;
+			}
+			& ~ .validator-hint {
+				visibility: visible;
+				color: var(--error) /* var(--color-error) */;
+			}
+		}
+	}
+	&:user-invalid,
+	&:has(:user-invalid),
+	&[aria-invalid]:not([aria-invalid='false']),
+	&:has([aria-invalid]:not([aria-invalid='false'])) {
+		& ~ .validator-hint {
+			display: revert-layer;
+		}
+	}
+}
+
+.btn-submit-form-list {
+	background-color: var(--primary);
+	color: var(--bg-primary);
+	transition: all 200ms ease;
+}
+
+.btn-submit-form-list:hover {
+	filter: brightness(1.1);
+}
+
+.btn-delete-form-list {
+	border-color: var(--error);
+	color: var(--error);
+	transition: all 200ms ease;
+}
+
+.btn-delete-form-list:hover {
+	background-color: var(--error);
+	color: var(--nord6);
+}
+
+/* Modal Delete List Confirm */
+#deleteListConfirm .modal-box {
+	background-color: var(--bg-secondary);
+	color: var(--text-primary);
+}
+
+#deleteListConfirm .btn-close:hover {
+	background-color: var(--bg-secondary);
+	transition: all 200ms ease;
+}
+
+#deleteListConfirm .btn-close:hover {
+	background-color: var(--bg-tertiary);
+}
+
+#deleteListConfirm .btn-delete {
+	color: var(--error);
+	transition: all 200ms ease;
+}
+
+#deleteListConfirm .btn-delete:hover {
+	color: var(--nord4);
+	border-color: var(--error);
+	background-color: var(--error);
+}
