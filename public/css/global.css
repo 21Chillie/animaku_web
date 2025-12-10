@@ -128,6 +128,8 @@ button {
 	opacity: 70%;
 }
 
+
+/* Modal Logout Confirm */
 #logoutConfirm .modal-box {
 	background-color: var(--bg-secondary);
 	color: var(--text-primary);
