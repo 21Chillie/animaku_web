@@ -4,6 +4,12 @@ import { renderCharacter } from '../controllers/page/character.controller';
 import { renderIndex } from '../controllers/page/index.controller';
 import { renderListTitle } from '../controllers/page/list.controller';
 import { renderOverview } from '../controllers/page/overview.controller';
+import {
+	postAddTitleToList,
+	postDeleteTitleFromList,
+	renderUserList,
+} from '../controllers/page/userList.controller';
+import { isAuthenticated } from '../middlewares/checkAuth';
 
 export const pageRoute = express.Router();
 
@@ -21,3 +27,12 @@ pageRoute.get('/list/:type/:category', renderListTitle);
 
 // Browse Route
 pageRoute.get('/browse', renderBrowse);
+
+// User List Route
+pageRoute.get('/my-list', isAuthenticated, renderUserList);
+
+// Add title to user list (POST)
+pageRoute.post('/my-list/added', isAuthenticated, postAddTitleToList);
+
+// Delete title from user list (POST)
+pageRoute.post('/my-list/deleted', isAuthenticated, postDeleteTitleFromList);
