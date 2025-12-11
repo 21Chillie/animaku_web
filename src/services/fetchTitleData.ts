@@ -10,7 +10,7 @@ import { JikanRelationsResponse, Relation } from '../types/relationData.types';
 const API_URL = JIKAN_BASE_URL;
 
 // Fetch Anime by mal Id
-export async function fetchAnimeByMalId(mal_id: number): Promise<Anime> {
+export async function fetchAnimeByMalId(mal_id: number): Promise<Anime | null> {
 	try {
 		const response: AxiosResponse<JikanResponseAnimeDataById> = await axios.get(
 			`${API_URL}/anime/${mal_id}/`
@@ -24,19 +24,21 @@ export async function fetchAnimeByMalId(mal_id: number): Promise<Anime> {
 
 		return data;
 	} catch (err) {
-		console.error(`Something went wrong while trying fetch anime data with id `, mal_id);
-
 		if (axios.isAxiosError(err) && err.response?.status === 404) {
-			throw new Error('Anime with that mal_id does not exist');
+			console.error(`Anime with mal id ${mal_id} does not exist`);
+			// throw new Error(`Anime with mal id ${mal_id} does not exist`);
 		}
 
 		if (axios.isAxiosError(err) && err.response?.status === 429) {
 			console.error('Rate limited, please wait in a second and try refresh browser');
-			throw new Error('Rate limited, please wait in a second and refresh the browser');
+			// throw new Error('Rate limited, please wait in a second and refresh the browser');
 		}
 
-		throw new Error('Something went wrong while trying fetch anime data');
+		console.error(`Something went wrong while trying fetch anime data with id `, mal_id);
+		// throw new Error('Something went wrong while trying fetch anime data');
 	}
+
+	return null;
 }
 
 // Fetch anime character by mal id
@@ -143,7 +145,7 @@ export async function fetchAnimeThemeByMalId(mal_id: number): Promise<AnimeTheme
 }
 
 // Fetch Manga by mal id
-export async function fetchMangaByMalId(mal_id: number): Promise<Manga> {
+export async function fetchMangaByMalId(mal_id: number): Promise<Manga | null> {
 	try {
 		const response: AxiosResponse<JikanResponseMangaDataById> = await axios.get(
 			`${API_URL}/manga/${mal_id}/`
@@ -157,18 +159,20 @@ export async function fetchMangaByMalId(mal_id: number): Promise<Manga> {
 
 		return data;
 	} catch (err) {
-		console.error(`Something went wrong while trying fetch manga data with id `, mal_id);
-
 		if (axios.isAxiosError(err) && err.response?.status === 404) {
-			throw new Error('Manga with that mal_id does not exist');
+			console.error('Manga with that mal_id does not exist');
+			// throw new Error('Manga with that mal_id does not exist');
 		}
 
 		if (axios.isAxiosError(err) && err.response?.status === 429) {
 			console.error('Rate limited, please wait in a second and try refresh browser');
-			throw new Error('Rate limited, please wait in a second and refresh the browser');
+			// throw new Error('Rate limited, please wait in a second and refresh the browser');
 		}
 
-		throw new Error('Something went wrong while trying fetch manga data');
+		// throw new Error('Something went wrong while trying fetch manga data');
+		console.error(`Something went wrong while trying fetch manga data with id `, mal_id);
+
+		return null;
 	}
 }
 
