@@ -21,10 +21,13 @@ export async function insertMangaDataByMalId(data: Manga) {
 	}
 }
 
-export async function getOldManga(daysThreshold: number): Promise<DatabaseMangaTypes[]> {
+export async function getOldManga(
+	daysThreshold: number,
+	mal_id: number
+): Promise<DatabaseMangaTypes[]> {
 	const result: QueryResult<DatabaseMangaTypes> = await pool.query(
-		`SELECT * FROM manga WHERE last_updated_at <= NOW() - make_interval(days => $1)`,
-		[daysThreshold]
+		`SELECT * FROM manga WHERE last_updated_at <= NOW() - make_interval(days => $1) AND mal_id = $2`,
+		[daysThreshold, mal_id]
 	);
 
 	return result.rows;
