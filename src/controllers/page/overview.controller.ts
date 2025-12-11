@@ -53,13 +53,15 @@ async function getAnimeData(mal_id: number) {
 
 	try {
 		// Check if the data is older than dayThreshold
-		const OldAnimeData = await getOldAnime(daysThreshold);
+		const OldAnimeData = await getOldAnime(daysThreshold, mal_id);
 
 		// Update the old data
 		if (OldAnimeData.length !== 0) {
 			console.log('Found old anime data, updating...');
-			const freshData = await fetchAnimeByMalId(mal_id);
-			await insertAnimeDataByMalId(freshData);
+			const dataFromAPI = await fetchAnimeByMalId(mal_id);
+			if (dataFromAPI) {
+				await insertAnimeDataByMalId(dataFromAPI);
+			}
 		}
 
 		// Get or fetch anime data
@@ -69,7 +71,9 @@ async function getAnimeData(mal_id: number) {
 			await new Promise((resolve) => setTimeout(resolve, 350));
 			console.log('Run fetch anime');
 			const dataFromAPI = await fetchAnimeByMalId(mal_id);
-			await insertAnimeDataByMalId(dataFromAPI);
+			if (dataFromAPI) {
+				await insertAnimeDataByMalId(dataFromAPI);
+			}
 			animeData = await getAnimeByMalId(mal_id);
 		}
 
@@ -165,7 +169,7 @@ async function getAnimeData(mal_id: number) {
 		};
 	} catch (err) {
 		console.error('Error in getAnimeData:', err);
-		throw err; // Re-throw to let caller handle it
+		throw new Error(`Something went wrong while getting anime data`);
 	}
 }
 
@@ -174,14 +178,16 @@ async function getMangaData(mal_id: number) {
 
 	try {
 		// Check if the data is older than dayThreshold
-		const oldMangaData = await getOldManga(daysThreshold);
+		const oldMangaData = await getOldManga(daysThreshold, mal_id);
 
 		// Update the old data
 		if (oldMangaData.length !== 0) {
 			await new Promise((resolve) => setTimeout(resolve, 350));
 			console.log('Found old manga data, updating...');
-			const freshData = await fetchMangaByMalId(mal_id);
-			await insertMangaDataByMalId(freshData);
+			const dataFromAPI = await fetchMangaByMalId(mal_id);
+			if (dataFromAPI) {
+				await insertMangaDataByMalId(dataFromAPI);
+			}
 		}
 
 		// 1. Get or fetch manga data
@@ -191,7 +197,9 @@ async function getMangaData(mal_id: number) {
 			await new Promise((resolve) => setTimeout(resolve, 350));
 			console.log('Run fetch manga');
 			const dataFromAPI = await fetchMangaByMalId(mal_id);
-			await insertMangaDataByMalId(dataFromAPI);
+			if (dataFromAPI) {
+				await insertMangaDataByMalId(dataFromAPI);
+			}
 			mangaData = await getMangaByMalId(mal_id);
 		}
 
@@ -265,7 +273,7 @@ async function getMangaData(mal_id: number) {
 		};
 	} catch (err) {
 		console.error('Error in getAnimeData:', err);
-		throw err; // Re-throw to let caller handle it
+		throw new Error(`Something went wrong while getting manga data`);
 	}
 }
 
@@ -273,15 +281,23 @@ export async function renderOverview(req: Request, res: Response) {
 	const id = parseInt(req.params.id);
 	const type = req.params.type;
 
-	if (type === 'anime') {
-		const data = await getAnimeData(id);
-		// return res.status(200).json({ type, data });
-		return res.status(200).render('overview', { type, data });
-	}
+	try {
+		if (type === 'anime') {
+			const data = await getAnimeData(id);
+			// return res.status(200).json({ type, data });
+			return res.status(200).render('overview', { type, data });
+		}
 
-	if (type === 'manga') {
-		const data = await getMangaData(id);
-		// return res.status(200).json({ type, data });
-		return res.status(200).render('overview', { type, data });
+		if (type === 'manga') {
+			const data = await getMangaData(id);
+			// return res.status(200).json({ type, data });
+			return res.status(200).render('overview', { type, data });
+		}
+	} catch (err) {
+		if (err instanceof Error) {
+			res
+				.status(500)
+				.json({ status_code: 500, error: 'Internal Server Error', message: err.message });
+		}
 	}
 }
