@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 import { seedTableAnime } from '../../models/anime/animeDBSeedTable';
 
 import {
-	deleteAllOldAnimeTop,
 	getAllAnimeTop,
 	getAnimeTopCount,
 	getAnimeTopPaginated,
 	getOldAnimeTop,
+	deleteAllOldAnimeTop,
 } from '../../models/anime/animeTopModel';
 import { seedTableAnimeTop } from '../../models/anime/animeTopSeedTable';
 import { fetchTopAnimeBatch } from '../../services/fetchTopAnime.service';
@@ -23,6 +23,8 @@ export async function getAnimeTop(req: Request, res: Response) {
 	const offset = (page - 1) * limit;
 
 	try {
+		/**
+		* * Uncomment line below if you want to use 
 		// Check old anime top db
 		const oldAnimeTopDB = await getOldAnimeTop(daysThreshold);
 
@@ -34,12 +36,13 @@ export async function getAnimeTop(req: Request, res: Response) {
 
 			await deleteAllOldAnimeTop();
 		}
+		*/
 
 		// After that will check anime top records
 		let animeTopDB = await getAllAnimeTop();
 
-		// if the records is less or equal than 100, will fetch fresh data from api
-		if (animeTopDB.length === 0) {
+		// if the records is less than x, will fetch fresh data from api
+		if (animeTopDB.length < 26) {
 			console.log(`Table 'anime_top' records is empty, fetch fresh data`);
 
 			// Fetch Data then seed to database (anime_top and anime tables)

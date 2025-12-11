@@ -20,6 +20,8 @@ export async function getMangaTop(req: Request, res: Response) {
 	const offset = (page - 1) * limit;
 
 	try {
+		/** 
+		* * Uncomment line below if you want to use it 
 		const oldMangaTopDB = await getOldMangaTop(daysThreshold);
 		if (oldMangaTopDB.length !== 0) {
 			console.log(
@@ -27,10 +29,11 @@ export async function getMangaTop(req: Request, res: Response) {
 			);
 			await deleteAllOldMangaTop();
 		}
+		*/
 
 		let mangaTopDB = await getAllMangaTop();
 
-		if (mangaTopDB.length === 0) {
+		if (mangaTopDB.length < 26) {
 			console.log(`Table 'manga_top' records is empty, fetch fresh data...`);
 
 			const dataFromAPI = await fetchTopMangaBatch(maxPage);

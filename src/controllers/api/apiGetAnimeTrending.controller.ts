@@ -22,6 +22,8 @@ export async function getAnimeTrending(req: Request, res: Response) {
 	const offset = (page - 1) * limit;
 
 	try {
+		/**
+		* * Uncomment line below if you want to use
 		// Get records from 'anime_trending' table that older than `dayThreshold` days
 		const oldAnimeTrendingDB = await getOldAnimeTrending(daysThreshold);
 
@@ -32,12 +34,13 @@ export async function getAnimeTrending(req: Request, res: Response) {
 			);
 			await deleteAllOldAnimeTrending();
 		}
+		*/
 
 		// Get all records from 'anime_trending' table
 		let animeTrendingDB = await getAllAnimeTrending();
 
-		// If its less or equal than 100, then fetch fresh data and inserting to database
-		if (animeTrendingDB.length <= 100) {
+		// If its less or equal than x, then fetch fresh data and inserting to database
+		if (animeTrendingDB.length < 26) {
 			console.log(`Table 'anime_trending' records is empty, fetch fresh data...`);
 
 			const dataFromAPI = await fetchAnimeTrendingBatch(maxPage);
