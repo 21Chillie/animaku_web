@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { seedTableManga } from '../../models/manga/mangaDBSeedTable';
 
 import {
+	deleteAllOldMangaTop,
 	getAllMangaTop,
 	getMangaTopCount,
 	getMangaTopPaginated,
@@ -20,18 +21,17 @@ export async function getMangaTop(req: Request, res: Response) {
 
 	try {
 		const oldMangaTopDB = await getOldMangaTop(daysThreshold);
-		if (oldMangaTopDB.length > 0) {
-			console.log(`Found ${oldMangaTopDB.length} records older than 30 days, updating data...`);
-			const dataFromAPI = await fetchTopMangaBatch(maxPage);
-			await seedTableMangaTop(dataFromAPI);
-			await seedTableManga(dataFromAPI);
-			console.log(`Successfully update ${oldMangaTopDB.length} records of data`);
+		if (oldMangaTopDB.length !== 0) {
+			console.log(
+				`Found ${oldMangaTopDB.length} records older than ${daysThreshold} days, updating data...`
+			);
+			await deleteAllOldMangaTop();
 		}
 
 		let mangaTopDB = await getAllMangaTop();
 
 		if (mangaTopDB.length === 0) {
-			console.log('Database empty, fetching from api...');
+			console.log(`Table 'manga_top' records is empty, fetch fresh data...`);
 
 			const dataFromAPI = await fetchTopMangaBatch(maxPage);
 			await seedTableMangaTop(dataFromAPI);
