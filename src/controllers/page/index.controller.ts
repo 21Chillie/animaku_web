@@ -28,8 +28,8 @@ async function getAnimeTrending(): Promise<DatabaseAnimeTypes[]> {
 	const daysThreshold = 14;
 	// The value max to 25
 	const maxRecords = 10;
-	// Recommended max 4, but not limited to 4 (Each page has 25 records)
-	const maxPage = 6;
+	// Recommended 4, but not limited to 4 (Each page has 25 records)
+	const maxPage = 1;
 	try {
 		const oldAnimeTrendingDatabase = await getOldAnimeTrending(daysThreshold);
 
@@ -62,7 +62,7 @@ async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 	// The value max to 25
 	const maxRecords = 10;
 	// Recommended 4, but not limited to 4 (Each page has 25 records)
-	const maxPage = 4;
+	const maxPage = 1;
 
 	try {
 		const oldAnimeTopDatabase = await getOldAnimeTop(daysThreshold);
@@ -94,7 +94,7 @@ async function getAnimeTop(): Promise<DatabaseAnimeTypes[]> {
 async function getMangaTop(): Promise<DatabaseMangaTypes[]> {
 	const dayThreshold = 30;
 	const maxRecords = 10;
-	const maxPage = 4;
+	const maxPage = 1;
 
 	try {
 		const oldMangaDB = await getOldMangaTop(dayThreshold);
