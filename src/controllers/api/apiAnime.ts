@@ -56,8 +56,8 @@ export async function getAnime(req: Request, res: Response) {
 
 		if (limit > 30) {
 			res.status(400).json({
-				status: 400,
 				success: false,
+				error: 'Bad Request',
 				message: `The input limit value is ${limit} and it's higher than the configured '30'`,
 			});
 		}
@@ -80,13 +80,14 @@ export async function getAnime(req: Request, res: Response) {
 				orderBy,
 				orderDirection,
 			},
-			source: 'Database',
 		});
 	} catch (err) {
 		console.error(err);
-		res
-			.status(500)
-			.json({ success: false, error: 'Something went wrong while getting anime data' });
+		res.status(500).json({
+			success: false,
+			error: 'Internal Server Error',
+			message: 'Something went wrong while getting anime data',
+		});
 	}
 }
 
@@ -95,7 +96,11 @@ export async function getAnimeById(req: Request, res: Response) {
 
 	if (isNaN(mal_id)) {
 		console.log('Invalid title mal_id');
-		return res.status(401).json({ error: 'Invalid title mal_id, the mal_id must be a number' });
+		return res.status(400).json({
+			success: false,
+			error: 'Bad Request',
+			message: 'Invalid title mal_id, the mal_id must be a number',
+		});
 	}
 
 	try {
@@ -105,15 +110,27 @@ export async function getAnimeById(req: Request, res: Response) {
 			console.log(`Anime title with mal_id ${mal_id} is not found, fetch from API`);
 			const dataFromAPI = await fetchAnimeByMalId(mal_id);
 
+			if (!dataFromAPI) {
+				return res.status(404).json({
+					success: false,
+					error: 'Resource Not Found',
+					message: `Anime with mal id ${mal_id} does not exist`,
+				});
+			}
+
 			await insertAnimeDataByMalId(dataFromAPI);
 			animeData = await getAnimeByMalId(mal_id);
 		}
 
-		res.status(200).json(animeData);
+		res.status(200).json({ success: true, data: animeData });
 	} catch (err) {
 		if (err instanceof Error) {
 			console.error('Error fetching anime:', err);
-			return res.status(500).json({ response: err.name, message: err.message });
+			return res.status(500).json({
+				success: false,
+				error: 'Internal Server Error',
+				message: `Something went wrong while getting anime with mal id ${mal_id}`,
+			});
 		}
 	}
 }
