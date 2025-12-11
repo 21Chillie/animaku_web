@@ -180,6 +180,23 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Type definition for anime theme data (database/api response)
 - [x] Tidy up and fix
 
+**Testing and detect bugs**
+
+- [x] After login or signup with google, the server keep loading indefinitely (critical)
+- [x] Same as above but login or signup with username and password (critical)
+- [x] Slow page and api load due to old media data refresh logic
+
+  > when visit home/index page, list page (e.g anime trending, anime top, manga top), or api (anime trending, anime/manga top),
+  > the server checks for outdated media data (trending anime, top anime/manga). If any outdated record is found, it fetches fresh data from the external API (JIKAN) and tries to update all of them.
+  >
+  > The problem is that if the API does not return matching records for some items, those items remain marked as outdated. This causes the refresh process to run again on every page load, creating repeated API calls and slowing down the server.
+  >
+  > How I fix that?, change the logic and flow like this: detect old media data -> if there is any -> delete all records in table -> fetch fresh data from external api -> insert all data to table.
+
+- [x] Incorrect old media data detection on overview page
+
+  > The overview page should detect and refresh only one outdated media record using its MAL ID. Instead, the system checks all anime/manga records and marks every outdated entry. This causes the overview page to always think old data exists and triggers unnecessary update attempts.
+
 **Documentations**
 
 - [ ] API documentation
