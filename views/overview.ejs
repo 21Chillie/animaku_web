@@ -85,9 +85,6 @@
 						<!-- TODO: need to test the add list form -->
 						<!-- Modal Form List -->
 						<form id="formList" action="/my-list/added" method="post">
-							<!-- Input user id -->
-							<input id="inputUserId" name="inputUserId" type="hidden" value="<%= user.id %>">
-
 							<!-- Input Mal id -->
 							<input id="inputMalId" name="inputMalId" type="hidden"
 									value="<%= data.anime?.mal_id || data.manga?.mal_id %>">
@@ -216,8 +213,9 @@
 							<!-- Form Delete list -->
 							<!-- TODO: need to test the delete list form -->
 							<form action="/my-list/deleted" method="post">
-								<input type="hidden" name="deleteListUser" value="<%= user.id %>">
-								<input type="hidden" name="deleteListMalId" value="<%= data.anime?.mal_id  %>">
+								<input type="hidden" name="deleteListMalId"
+										value="<%= data.anime?.mal_id || data.manga?.mal_id  %>">
+								<input type="hidden" name="deleteListMediaType" value="<%= type %>">
 								<button type="submit" class="btn-delete border px-4 py-2 rounded-md">
 									Delete List
 								</button>
