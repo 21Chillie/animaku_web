@@ -43,7 +43,8 @@
 			<div class="dropdown dropdown-bottom dropdown-end">
 				<button tabindex="0" role="button" class="m-1">
 					<img class="avatar-image w-10 h-10 rounded-full object-cover shrink-0 outline"
-							src="<%= user.avatar %>" alt="avatar profile">
+							src="<%= user.avatar %>" alt="avatar profile"
+							onerror="this.src='/images/portrait-placeholder.webp'">
 				</button>
 				<ul tabindex="-1"
 						class="dropdown-content menu bg-base-100 rounded-md z-1 w-52 p-2 shadow-md">
