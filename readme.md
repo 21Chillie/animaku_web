@@ -182,8 +182,8 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 
 **Testing and detect bugs**
 
-- [x] After login or signup with google, the server keep loading indefinitely (critical)
-- [x] Same as above but login or signup with username and password (critical)
+- [x] After login or signup with google, the server keep loading indefinitely
+- [x] Same as above but login or signup with username and password
 - [x] Slow page and api load due to old media data refresh logic
 
   > when visit home/index page, list page (e.g anime trending, anime top, manga top), or api (anime trending, anime/manga top),
