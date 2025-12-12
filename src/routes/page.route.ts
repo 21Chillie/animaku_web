@@ -7,6 +7,7 @@ import { renderOverview } from '../controllers/page/overview.controller';
 import {
 	postAddTitleToList,
 	postDeleteTitleFromList,
+	postEditTitleFromList,
 	renderUserList,
 } from '../controllers/page/userList.controller';
 import { isAuthenticated } from '../middlewares/checkAuth';
@@ -36,3 +37,6 @@ pageRoute.post('/my-list/added', isAuthenticated, postAddTitleToList);
 
 // Delete title from user list (POST)
 pageRoute.post('/my-list/deleted', isAuthenticated, postDeleteTitleFromList);
+
+// Edit title from user list (POST)
+pageRoute.post('/my-list/edited', isAuthenticated, postEditTitleFromList);
