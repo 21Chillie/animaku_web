@@ -45,6 +45,8 @@ import {
 	fetchMangaRelationByMalId,
 } from '../../services/fetchTitleData';
 import { parseSynopsis, parseThemeString } from '../../utils/parseData.utils';
+import { findUserListType, MediaType } from '../../types/user.types';
+import { getUserList } from '../../services/userList.service';
 
 const API_URL = JIKAN_BASE_URL;
 
@@ -277,21 +279,48 @@ async function getMangaData(mal_id: number) {
 	}
 }
 
-export async function renderOverview(req: Request, res: Response) {
+export async function renderOverview(req: Request<{ id: string; type: MediaType }>, res: Response) {
 	const id = parseInt(req.params.id);
 	const type = req.params.type;
+	const user = req.user?.id;
+
+	let userListAvailable: boolean = false;
+
+	const dataForCheckUserList: findUserListType = {
+		userId: user ?? '',
+		mediaMalId: id,
+		mediaType: type,
+	};
+
+	if (user) {
+		const userList = await getUserList(dataForCheckUserList);
+		if (userList) userListAvailable = true;
+	}
 
 	try {
 		if (type === 'anime') {
 			const data = await getAnimeData(id);
-			// return res.status(200).json({ type, data });
-			return res.status(200).render('overview', { type, data });
+			// return res.status(200).json({ type, data, userListAvailable });
+			if (userListAvailable === true) {
+				const userListData = await getUserList(dataForCheckUserList);
+				console.log(userListData?.start_date);
+				return res.status(200).render('overview', { type, data, userListAvailable, userListData });
+			}
+			return res
+				.status(200)
+				.render('overview', { type, data, userListAvailable, userListData: null });
 		}
 
 		if (type === 'manga') {
 			const data = await getMangaData(id);
-			// return res.status(200).json({ type, data });
-			return res.status(200).render('overview', { type, data });
+			// return res.status(200).json({ type, data, userListAvailable });
+			if (userListAvailable === true) {
+				const userListData = await getUserList(dataForCheckUserList);
+				return res.status(200).render('overview', { type, data, userListAvailable, userListData });
+			}
+			return res
+				.status(200)
+				.render('overview', { type, data, userListAvailable, userListData: null });
 		}
 	} catch (err) {
 		if (err instanceof Error) {
