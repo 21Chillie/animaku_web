@@ -26,7 +26,7 @@ export async function createUserTable() {
       `
 		);
 
-		console.log("Success creating 'user' table");
+		console.log("Successfully created 'user' table");
 	} catch (err) {
 		console.log("Error while create 'user' table");
 	} finally {
