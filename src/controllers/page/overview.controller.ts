@@ -303,7 +303,6 @@ export async function renderOverview(req: Request<{ id: string; type: MediaType 
 			// return res.status(200).json({ type, data, userListAvailable });
 			if (userListAvailable === true) {
 				const userListData = await getUserList(dataForCheckUserList);
-				console.log(userListData?.start_date);
 				return res.status(200).render('overview', { type, data, userListAvailable, userListData });
 			}
 			return res
