@@ -129,9 +129,11 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Add form delete list in overview page
 - [x] Test modal form delete list, all value from form show in log when post
 - [ ] Design my list page
-- [ ] Create table user list in database
-- [ ] Create logic to insert title to user list for each users
-- [ ] Create logic to show user list data in my list page
+- [x] Create table user list in database
+- [x] Create logic to insert title to user list for each users
+- [x] Create logic to update title to user list for each users
+- [x] Create logic to delete title to user list for each users
+- [x] Create logic to get user list data in my list page
 - [ ] And more
 
 **Edit Profile**
