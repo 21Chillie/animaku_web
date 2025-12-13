@@ -2,8 +2,15 @@ import {
 	deleteListFromDatabase,
 	findUserList,
 	insertListToDatabase,
+	updateListFromDatabase,
 } from '../models/user/userList.models';
-import type { AddListType, DeleteListType, findUserListType, UserList } from '../types/user.types';
+import type {
+	AddListType,
+	DeleteListType,
+	findUserListType,
+	UpdateListType,
+	UserList,
+} from '../types/user.types';
 
 export async function getUserList(inputValue: findUserListType): Promise<UserList | null> {
 	return findUserList(inputValue);
@@ -19,4 +26,8 @@ export async function deleteTitleFromUserList(
 	return deleteListFromDatabase(inputValue);
 }
 
-// TODO: Create Update List Function
+export async function updateTitleFromUserList(
+	inputValue: UpdateListType
+): Promise<UserList | null> {
+	return updateListFromDatabase(inputValue);
+}
