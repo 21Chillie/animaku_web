@@ -3,6 +3,7 @@ import {
 	addTitleToUserList,
 	deleteTitleFromUserList,
 	getUserList,
+	updateTitleFromUserList,
 } from '../../services/userList.service';
 import {
 	AddListRequestBody,
@@ -10,6 +11,7 @@ import {
 	DeleteListRequestBody,
 	DeleteListType,
 	findUserListType,
+	UpdateListRequestBody,
 } from '../../types/user.types';
 
 export async function renderUserList(req: Request, res: Response) {
@@ -161,8 +163,80 @@ export async function postDeleteTitleFromList(
 	}
 }
 
-export async function postEditTitleFromList(req: Request, res: Response) {
-	// TODO: need to finish edit logic
+export async function postEditTitleFromList(
+	req: Request<{}, {}, UpdateListRequestBody>,
+	res: Response
+) {
+	const {
+		inputMalId,
+		inputType,
+		selectStatus,
+		inputScore,
+		inputEpisode,
+		inputChapter,
+		inputVolume,
+		inputStartDate,
+		inputFinishDate,
+		inputNotes,
+	} = req.body;
 
-	res.json({ message: 'This is post edited' });
+	const user = req.user?.id ?? null;
+
+	// Convert numeric fields
+	const mediaMalId = Number(inputMalId);
+	const score = inputScore ? Number(inputScore) : null;
+	const episode = inputEpisode ? Number(inputEpisode) : 0;
+	const chapter = inputChapter ? Number(inputChapter) : 0;
+	const volume = inputVolume ? Number(inputVolume) : 0;
+
+	// Convert date fields
+	const startDate = inputStartDate ? new Date(inputStartDate) : null;
+	const finishDate = inputFinishDate ? new Date(inputFinishDate) : null;
+
+	// Store all input fields in data object
+	const data: AddListType = {
+		userId: user,
+		mediaMalId: mediaMalId,
+		mediaType: inputType,
+		status: selectStatus,
+		score: score,
+		progressEpisodes: episode,
+		progressChapters: chapter,
+		progressVolumes: volume,
+		startDate: startDate,
+		finishDate: finishDate,
+		notes: inputNotes,
+	};
+
+	const dataForCheckUserList: findUserListType = {
+		userId: data.userId,
+		mediaMalId: data.mediaMalId,
+		mediaType: data.mediaType,
+	};
+
+	try {
+		if (!data.userId && !data.mediaMalId) {
+			console.error(`Missing required fields to update list`);
+			return res.redirect(`/overview/${data.mediaType}/${data.mediaMalId}`);
+		}
+
+		const checkUserList = await getUserList(dataForCheckUserList);
+
+		if (checkUserList) {
+			const updatedList = await updateTitleFromUserList(data);
+			updatedList
+				? res.redirect('/my-list')
+				: res.redirect(`/overview/${data.mediaType}/${data.mediaMalId}`);
+		}
+	} catch (err) {
+		if (err instanceof Error) {
+			console.error(err.message, err.stack);
+
+			return res.status(500).json({
+				status_code: 500,
+				error: 'Internal Server Error',
+				message: err.message,
+			});
+		}
+	}
 }
