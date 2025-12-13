@@ -4,6 +4,7 @@ import type {
 	AddListType,
 	DeleteListType,
 	findUserListType,
+	UpdateListType,
 	UserList,
 } from '../../types/user.types';
 
@@ -89,4 +90,51 @@ export async function deleteListFromDatabase(inputValue: DeleteListType): Promis
 	}
 }
 
-// TODO: Create Update List Function
+export async function updateListFromDatabase(inputValue: UpdateListType): Promise<UserList | null> {
+	const client = await pool.connect();
+	const data = { ...inputValue };
+
+	try {
+		const result: QueryResult<UserList> = await client.query(
+			`
+			UPDATE user_list
+			SET
+					status = $1,
+					score = $2,
+					progress_episodes = $3,
+					progress_chapters = $4,
+					progress_volumes = $5,
+					start_date = $6,
+					finish_date = $7,
+					notes = $8,
+					updated_at = NOW()
+			WHERE user_id = $9
+					AND media_mal_id = $10
+					AND media_type = $11
+			RETURNING *
+			`,
+			[
+				data.status,
+				data.score,
+				data.progressEpisodes,
+				data.progressChapters,
+				data.progressVolumes,
+				data.startDate,
+				data.finishDate,
+				data.notes,
+				data.userId,
+				data.mediaMalId,
+				data.mediaType,
+			]
+		);
+
+		return result.rows[0];
+	} catch (err) {
+		console.error(
+			`Something went wrong while update ${data.mediaType} with MAL ID ${data.mediaMalId} from user list: `,
+			err
+		);
+
+		throw new Error('Something went wrong while update list from user list');
+	}
+}
