@@ -70,6 +70,10 @@ export interface AddListType {
 }
 
 export interface UpdateListType {
+	userId: string | null;
+	mediaMalId: number;
+	mediaType: MediaType;
+
 	status?: UserListStatus;
 	score?: number | null;
 
@@ -91,6 +95,24 @@ export interface DeleteListType {
 
 // REQUEST BODY TYPE
 export interface AddListRequestBody {
+	userId: string;
+	inputMalId: string;
+	inputType: MediaType;
+
+	selectStatus: UserListStatus;
+
+	inputScore?: string | null;
+	inputEpisode?: string;
+	inputChapter?: string;
+	inputVolume?: string;
+
+	inputStartDate?: string | null;
+	inputFinishDate?: string | null;
+
+	inputNotes?: string | null;
+}
+
+export interface UpdateListRequestBody {
 	userId: string;
 	inputMalId: string;
 	inputType: MediaType;
