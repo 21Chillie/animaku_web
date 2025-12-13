@@ -39,4 +39,4 @@ pageRoute.post('/my-list/added', isAuthenticated, postAddTitleToList);
 pageRoute.post('/my-list/deleted', isAuthenticated, postDeleteTitleFromList);
 
 // Edit title from user list (POST)
-pageRoute.post('/my-list/edited', isAuthenticated, postEditTitleFromList);
+pageRoute.post('/my-list/updated', isAuthenticated, postEditTitleFromList);
