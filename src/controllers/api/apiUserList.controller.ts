@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express';
-import { UserListPaginated } from '../../models/user/userList.models';
 import { getUserListPaginated } from '../../services/userList.service';
 
 export async function getListEachUser(req: Request, res: Response) {
