@@ -12,26 +12,9 @@
 	color: var(--text-primary);
 }
 
-.search-input {
-	background-color: var(--bg-secondary);
-	border-color: var(--border-accent);
-	transition: all 0.2s ease;
-}
-
-.search-input:focus-within,
 .select:focus-within {
 	border-color: var(--border-accent-hover);
 	filter: brightness(1.1);
-}
-
-.search-input input::placeholder {
-	color: var(--text-secondary);
-	opacity: 60%;
-}
-
-.search-input input,
-.search-input i {
-	color: var(--text-primary);
 }
 
 /* Filter Container */
@@ -184,4 +167,57 @@
 
 .error-message {
 	color: var(--error);
+}
+
+/* Table List */
+#list-table > header > p {
+	color: var(--text-primary);
+}
+
+#list-table > div {
+	border-color: var(--border-accent);
+}
+
+table {
+	color: var(--text-primary);
+}
+
+thead > tr,
+thead > th,
+tbody tr {
+	background-color: var(--bg-secondary);
+}
+
+tbody tr td,
+tbody tr th {
+	border-bottom: 1px solid var(--border-color);
+}
+
+.title-link {
+	color: var(--text-primary);
+	transition: all 200ms ease;
+}
+
+.title-link:hover {
+	color: var(--primary);
+}
+
+.btn-edit-list {
+	visibility: hidden;
+	opacity: 0;
+	background-color: var(--primary);
+	color: var(--bg-primary);
+	transition: all 200ms ease;
+}
+
+tbody tr:hover {
+	background-color: var(--bg-tertiary);
+	.btn-edit-list {
+		visibility: unset;
+		opacity: 100;
+	}
+}
+
+.ri-star-fill {
+	color: var(--warning);
 }
