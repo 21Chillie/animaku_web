@@ -3,6 +3,7 @@ import {
 	findUserList,
 	insertListToDatabase,
 	updateListFromDatabase,
+	UserListPaginated,
 } from '../models/user/userList.models';
 import type {
 	AddListType,
@@ -30,4 +31,24 @@ export async function updateTitleFromUserList(
 	inputValue: UpdateListType
 ): Promise<UserList | null> {
 	return updateListFromDatabase(inputValue);
+}
+
+export async function getUserListPaginated(
+	userId: string,
+	limit: number,
+	offset: number,
+	orderBy: 'title' | 'recent' | 'score' = 'title',
+	orderDirection: 'ASC' | 'DESC' = 'ASC',
+	filterType?: 'anime' | 'manga',
+	filterStatus?: string
+): Promise<{ list: UserList[]; totalRecords: number }> {
+	return UserListPaginated(
+		userId,
+		limit,
+		offset,
+		orderBy,
+		orderDirection,
+		filterType,
+		filterStatus
+	);
 }
