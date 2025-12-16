@@ -138,3 +138,101 @@ export async function updateListFromDatabase(inputValue: UpdateListType): Promis
 		throw new Error('Something went wrong while update list from user list');
 	}
 }
+
+// Get paginated anime records with search, filters, and sorting
+export async function UserListPaginated(
+	userId: string,
+	limit: number,
+	offset: number,
+	orderBy: 'title' | 'recent' | 'score' = 'title',
+	orderDirection: 'ASC' | 'DESC' = 'ASC',
+	filterType?: 'anime' | 'manga',
+	filterStatus?: string
+): Promise<{ list: UserList[]; totalRecords: number }> {
+	const client = await pool.connect();
+	try {
+		const conditions: string[] = ['ul.user_id = $1'];
+		const params: any[] = [userId];
+		let index = 1;
+
+		if (filterType) {
+			index++;
+			conditions.push(`ul.media_type = $${index}`);
+			params.push(filterType);
+		}
+
+		if (filterStatus) {
+			index++;
+			conditions.push(`ul.status = $${index}`);
+			params.push(filterStatus);
+		}
+
+		const whereClause = `WHERE ${conditions.join(' AND ')}`;
+
+		let orderClause = '';
+
+		switch (orderBy) {
+			case 'title':
+				orderClause = `
+      ORDER BY COALESCE(a.title, m.title) ${orderDirection},
+               ul.id ASC
+    `;
+				break;
+
+			case 'recent':
+				orderClause = ` ORDER BY ul.created_at ${orderDirection}`;
+				break;
+
+			case 'score':
+				orderClause = ` ORDER BY ul.score ${orderDirection} NULLS LAST`;
+				break;
+		}
+
+		const countQuery = `
+		SELECT COUNT(*)
+    FROM user_list ul
+    ${whereClause}
+		`;
+
+		const countResult = await client.query(countQuery, params);
+		const totalRecords = Number(countResult.rows[0].count);
+
+		// Main query
+		const dataQuery = `
+		  SELECT
+      ul.*,
+      COALESCE(a.title, m.title) AS title,
+			COALESCE(a.type, m.type) AS sub_type,
+			(a.data->>'episodes')::int AS episodes,
+			(m.data->>'chapters')::int AS chapters,
+			(m.data->>'volumes')::int AS volumes,
+      COALESCE(
+        a.data->'images'->'webp'->>'image_url',
+        m.data->'images'->'webp'->>'image_url'
+    	) AS image_url
+      FROM user_list ul
+      LEFT JOIN anime a
+      	ON ul.media_type = 'anime'
+      AND ul.media_mal_id = a.mal_id
+      LEFT JOIN manga m
+      	ON ul.media_type = 'manga'
+        AND ul.media_mal_id = m.mal_id
+        ${whereClause}
+        ${orderClause}
+        LIMIT $${index + 1}
+        OFFSET $${index + 2}
+		`;
+
+		const result = await client.query(dataQuery, [...params, limit, offset]);
+
+		return {
+			list: result.rows,
+			totalRecords,
+		};
+	} catch (err) {
+		console.error(err);
+		throw new Error(`Something went wrong while getting user list paginated`);
+	} finally {
+		client.release();
+	}
+}
