@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { JIKAN_BASE_URL } from '../config/env.config';
 import { CharacterFull, JikanCharacterFullResponse } from '../types/characterFullData.types';
+import { jikanLimiter } from '../middlewares/bottleneck';
 
 const API_URL = JIKAN_BASE_URL;
 
@@ -8,10 +9,11 @@ export async function fetchCharacterFullData(mal_id: number): Promise<CharacterF
 	try {
 		await new Promise((resolve) => setTimeout(resolve, 500));
 
-		const response: AxiosResponse<JikanCharacterFullResponse> = await axios.get(
-			`${API_URL}/characters/${mal_id}/full`,
-			{
-				timeout: 3000,
+		const response: AxiosResponse<JikanCharacterFullResponse> = await jikanLimiter.schedule(
+			async () => {
+				return await axios.get(`${API_URL}/characters/${mal_id}/full`, {
+					timeout: 3000,
+				});
 			}
 		);
 
