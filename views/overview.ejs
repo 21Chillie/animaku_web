@@ -121,8 +121,8 @@
 											<%= userListData?.status === 'watching' ? 'selected' : '' %>>
 										Watching
 									</option>
-									<option
-											value="plan-watch <%= userListData?.status === 'plan-watch' ? 'selected' : '' %>">
+									<option value="plan_watch"
+											<%= userListData?.status === 'plan_watch' ? 'selected' : '' %>>
 										Plan to watch
 									</option>
 									<% } %>
@@ -132,8 +132,8 @@
 											<%= userListData?.status === 'reading' ? 'selected' : '' %>>
 										Reading
 									</option>
-									<option value="plan-read"
-											<%= userListData?.status === 'plan-read' ? 'selected' : '' %>>
+									<option value="plan_read"
+											<%= userListData?.status === 'plan_read' ? 'selected' : '' %>>
 										Plan to read
 									</option>
 									<% } %>
