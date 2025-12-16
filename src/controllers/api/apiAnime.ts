@@ -55,7 +55,7 @@ export async function getAnime(req: Request, res: Response) {
 		const totalPages = Math.ceil(totalRecords / limit);
 
 		if (limit > 30) {
-			res.status(400).json({
+			return res.status(400).json({
 				success: false,
 				error: 'Bad Request',
 				message: `The input limit value is ${limit} and it's higher than the configured '30'`,
