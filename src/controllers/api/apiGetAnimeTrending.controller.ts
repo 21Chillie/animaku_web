@@ -10,6 +10,7 @@ import {
 } from '../../models/anime/animeTrendingModel';
 import { seedTableAnimeTrending } from '../../models/anime/animeTrendingSeedTable';
 import { fetchAnimeTrendingBatch } from '../../services/fetchAnimeTrending.service';
+import { batchMediaLocks } from '../../utils/fetchLock.utils';
 
 export async function getAnimeTrending(req: Request, res: Response) {
 	// 2 weeks
@@ -41,14 +42,19 @@ export async function getAnimeTrending(req: Request, res: Response) {
 
 		// If its less or equal than x, then fetch fresh data and inserting to database
 		if (animeTrendingDB.length < 26) {
-			console.log(`Table 'anime_trending' records is empty, fetch fresh data...`);
+			await batchMediaLocks(async () => {
+				const recheck = await getAllAnimeTrending();
+				if (recheck.length >= 26) return;
 
-			const dataFromAPI = await fetchAnimeTrendingBatch(maxPage);
-			await seedTableAnimeTrending(dataFromAPI);
-			await seedTableAnime(dataFromAPI);
-			animeTrendingDB = await getAllAnimeTrending();
+				console.log(`Table 'anime_trending' records is empty, fetch fresh data...`);
 
-			console.log('Successfully inserting into database');
+				const dataFromAPI = await fetchAnimeTrendingBatch(maxPage);
+				await seedTableAnimeTrending(dataFromAPI);
+				await seedTableAnime(dataFromAPI);
+				animeTrendingDB = await getAllAnimeTrending();
+
+				console.log('Successfully inserting into database');
+			});
 		}
 
 		const paginatedTrendingAnime = await getAnimeTrendingPaginated(limit, offset);

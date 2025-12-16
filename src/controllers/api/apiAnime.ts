@@ -9,6 +9,7 @@ import {
 import { seedTableAnime } from '../../models/anime/animeDBSeedTable';
 import { fetchAnimeByMalId } from '../../services/fetchTitleData';
 import { fetchTopAnimeBatch } from '../../services/fetchTopAnime.service';
+import { batchMediaLocks } from '../../utils/fetchLock.utils';
 
 export async function getAnime(req: Request, res: Response) {
 	// the higher the number, the longer and more data will be retrieved
@@ -32,14 +33,19 @@ export async function getAnime(req: Request, res: Response) {
 	try {
 		let animeDatabase = await getAllAnime();
 
-		if (animeDatabase.length <= 1000) {
-			console.log('Database empty, fetching from api...');
+		if (animeDatabase.length < 1000) {
+			await batchMediaLocks(async () => {
+				const recheck = await getAllAnime();
+				if (recheck.length >= 1000) return;
 
-			// Fetch Data then seed to database
-			const dataFromAPI = await fetchTopAnimeBatch(maxPage);
-			await seedTableAnime(dataFromAPI);
-			animeDatabase = await getAllAnime();
-			console.log('Successfully inserting into database');
+				console.log('Database empty, fetching from api...');
+
+				// Fetch Data then seed to database
+				const dataFromAPI = await fetchTopAnimeBatch(maxPage);
+				await seedTableAnime(dataFromAPI);
+				animeDatabase = await getAllAnime();
+				console.log('Successfully inserting into database');
+			});
 		}
 
 		// Get paginated results with search, filters, and sorting

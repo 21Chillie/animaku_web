@@ -10,6 +10,7 @@ import {
 } from '../../models/manga/mangaTopModel';
 import { seedTableMangaTop } from '../../models/manga/mangaTopSeedTable';
 import { fetchTopMangaBatch } from '../../services/fetchTopManga.service';
+import { batchMediaLocks, mediaLocks } from '../../utils/fetchLock.utils';
 
 export async function getMangaTop(req: Request, res: Response) {
 	const daysThreshold = 30;
@@ -34,14 +35,19 @@ export async function getMangaTop(req: Request, res: Response) {
 		let mangaTopDB = await getAllMangaTop();
 
 		if (mangaTopDB.length < 26) {
-			console.log(`Table 'manga_top' records is empty, fetch fresh data...`);
+			await batchMediaLocks(async () => {
+				const recheck = await getAllMangaTop();
+				if (recheck.length >= 26) return;
 
-			const dataFromAPI = await fetchTopMangaBatch(maxPage);
-			await seedTableMangaTop(dataFromAPI);
-			await seedTableManga(dataFromAPI);
-			mangaTopDB = await getAllMangaTop();
+				console.log(`Table 'manga_top' records is empty, fetch fresh data...`);
 
-			console.log('Successfully inserting data into database');
+				const dataFromAPI = await fetchTopMangaBatch(maxPage);
+				await seedTableMangaTop(dataFromAPI);
+				await seedTableManga(dataFromAPI);
+				mangaTopDB = await getAllMangaTop();
+
+				console.log('Successfully inserting data into database');
+			});
 		}
 
 		const paginatedTopManga = await getMangaTopPaginated(limit, offset);

@@ -9,6 +9,7 @@ import {
 import { seedTableManga } from '../../models/manga/mangaDBSeedTable';
 import { fetchMangaByMalId } from '../../services/fetchTitleData';
 import { fetchTopMangaBatch } from '../../services/fetchTopManga.service';
+import { batchMediaLocks } from '../../utils/fetchLock.utils';
 
 export async function getManga(req: Request, res: Response) {
 	// the higher the number, the longer and more data will be retrieved
@@ -32,14 +33,19 @@ export async function getManga(req: Request, res: Response) {
 	try {
 		let mangaDatabase = await getAllManga();
 
-		if (mangaDatabase.length <= 1000) {
-			console.log('Database empty, fetching from api...');
+		if (mangaDatabase.length < 1000) {
+			await batchMediaLocks(async () => {
+				const recheck = await getAllManga();
+				if (recheck.length >= 1000) return;
 
-			// Fetch Data then seed to database
-			const dataFromAPI = await fetchTopMangaBatch(maxPage);
-			await seedTableManga(dataFromAPI);
-			mangaDatabase = await getAllManga();
-			console.log('Successfully inserting into database');
+				console.log('Database empty, fetching from api...');
+
+				// Fetch Data then seed to database
+				const dataFromAPI = await fetchTopMangaBatch(maxPage);
+				await seedTableManga(dataFromAPI);
+				mangaDatabase = await getAllManga();
+				console.log('Successfully inserting into database');
+			});
 		}
 
 		// Get paginated results with search, filters, and sorting

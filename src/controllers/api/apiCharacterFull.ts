@@ -5,6 +5,7 @@ import {
 	insertCharacterFullByMalId,
 } from '../../models/character/characterFull.model';
 import { fetchCharacterFullData } from '../../services/fetchCharacterFull.service';
+import { mediaLocks } from '../../utils/fetchLock.utils';
 
 export async function getCharacterFull(req: Request, res: Response) {
 	const id = parseInt(req.params.id);
@@ -16,23 +17,22 @@ export async function getCharacterFull(req: Request, res: Response) {
 
 	try {
 		// Check old character record
-		const oldCharacterData = await getOldCharacterFullByMalId(id, daysThreshold);
+		await mediaLocks(id, async () => {
+			// Re-check inside the lock
+			const oldCharacterData = await getOldCharacterFullByMalId(id, daysThreshold);
+			let characterFullData = await getCharacterFullByMalId(id);
 
-		// If character record is older than daysThreshold then fetch and inserting to database
-		if (oldCharacterData) {
-			const dataFromAPI = await fetchCharacterFullData(id);
-			await insertCharacterFullByMalId(dataFromAPI);
-		}
+			// Fetch if missing OR there is old character data
+			if (!characterFullData || oldCharacterData) {
+				const dataFromAPI = await fetchCharacterFullData(id);
+				await insertCharacterFullByMalId(dataFromAPI);
+			}
+		});
 
 		// Get character data
-		let characterFullData = await getCharacterFullByMalId(id);
+		const characterFullData = await getCharacterFullByMalId(id);
 
 		// If there is no character record with specific mal_id, then fetch fresh data from api and insert to database
-		if (!characterFullData) {
-			const dataFromAPI = await fetchCharacterFullData(id);
-			await insertCharacterFullByMalId(dataFromAPI);
-			characterFullData = await getCharacterFullByMalId(id);
-		}
 
 		res.status(200).json({ success: true, data: characterFullData });
 	} catch (err) {

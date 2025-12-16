@@ -10,6 +10,7 @@ import {
 } from '../../models/anime/animeTopModel';
 import { seedTableAnimeTop } from '../../models/anime/animeTopSeedTable';
 import { fetchTopAnimeBatch } from '../../services/fetchTopAnime.service';
+import { batchMediaLocks } from '../../utils/fetchLock.utils';
 
 export async function getAnimeTop(req: Request, res: Response) {
 	// 30 days or 1 month
@@ -43,14 +44,19 @@ export async function getAnimeTop(req: Request, res: Response) {
 
 		// if the records is less than x, will fetch fresh data from api
 		if (animeTopDB.length < 26) {
-			console.log(`Table 'anime_top' records is empty, fetch fresh data`);
+			await batchMediaLocks(async () => {
+				const recheck = await getAllAnimeTop();
+				if (recheck.length >= 26) return;
 
-			// Fetch Data then seed to database (anime_top and anime tables)
-			const dataFromAPI = await fetchTopAnimeBatch(maxPage);
-			await seedTableAnimeTop(dataFromAPI);
-			await seedTableAnime(dataFromAPI);
-			animeTopDB = await getAllAnimeTop();
-			console.log('Successfully inserting into database');
+				console.log(`Table 'anime_top' records is empty, fetch fresh data`);
+
+				// Fetch Data then seed to database (anime_top and anime tables)
+				const dataFromAPI = await fetchTopAnimeBatch(maxPage);
+				await seedTableAnimeTop(dataFromAPI);
+				await seedTableAnime(dataFromAPI);
+				animeTopDB = await getAllAnimeTop();
+				console.log('Successfully inserting into database');
+			});
 		}
 
 		const paginatedTopAnime = await getAnimeTopPaginated(limit, offset);
