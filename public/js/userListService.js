@@ -108,13 +108,16 @@ function renderTable(result) {
 				score,
 				progress_episodes,
 				progress_chapters,
+				progress_volumes,
 				start_date,
 				finish_date,
 				episodes,
 				chapters,
+				volumes,
 				media_type,
 				image_url,
 				sub_type,
+				notes,
 			} = media;
 
 			const statusLabel = STATUS_LABELS[status] ?? status;
@@ -122,10 +125,19 @@ function renderTable(result) {
 			return `
 <tr
    data-mal-id="${media_mal_id}"
+	 data-title="${title}"
    data-type="${media_type}"
+	 data-episodes="${episodes || ''}"
+	 data-chapters="${chapters || ''}"
+	 data-volumes="${volumes || ''}"
+	 data-episode-progress="${progress_episodes || ''}"
+	 data-chapter-progress="${progress_chapters || ''}"
+	 data-volume-progress="${progress_volumes || ''}"
+	 data-score="${score || ''}"
    data-status="${status}"
    data-start-date="${start_date ? start_date.split('T')[0] : ''}"
    data-finish-date="${finish_date ? finish_date.split('T')[0] : ''}"
+	 data-notes="${notes || ''}"
    >
    <th>
       <button class="btn-edit-list px-2 py-1 rounded-md">
