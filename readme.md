@@ -121,20 +121,27 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Show profile in navbar when user login
 - [x] Create logout button so user can logout their account
 
-**User Features and User List**
+**User Features and User List (COMPLETED) **
 
 - [x] Make the add to list features in overview page hidden when user not logged in
 - [x] Add modal form add to list in overview page
 - [x] Test modal form add to list, all value from form show in log when post
 - [x] Add form delete list in overview page
 - [x] Test modal form delete list, all value from form show in log when post
-- [ ] Design my list page
+- [x] Design my list page
 - [x] Create table user list in database
 - [x] Create logic to insert title to user list for each users
 - [x] Create logic to update title to user list for each users
 - [x] Create logic to delete title to user list for each users
 - [x] Create logic to get user list data in my list page
-- [ ] And more
+- [x] Render all user list in my list page
+- [x] Create logic for filter the user list based on media type
+- [x] Create logic for sort and sort direction
+- [x] Create logic for limit page
+- [x] Create logic for pagination
+- [x] Create form for edit user list for each media title
+- [x] Create form for delete user list for each media title
+- [x] Test all the features
 
 **Edit Profile**
 
@@ -180,6 +187,8 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Type definition for relation data (Database/API Response)
 - [x] Type definition for recommendation data (Database/API Response)
 - [x] Type definition for anime theme data (database/api response)
+- [x] Type definition for user (database response)
+- [x] Type definition for user list (database/api response)
 - [x] Tidy up and fix
 
 **Testing and detect bugs**
@@ -198,6 +207,14 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Incorrect old media data detection on overview page
 
   > The overview page should detect and refresh only one outdated media record using its MAL ID. Instead, the system checks all anime/manga records and marks every outdated entry. This causes the overview page to always think old data exists and triggers unnecessary update attempts.
+
+- [x] Race condition bugs when fetch media title and other data from external API.
+
+  > When multiple users open pages (such as overview, overview character, or list top/trending media) for media not yet stored in the database, the server triggers concurrent fetches to the Jikan API, exceeding its 3 requests/second limit and causing rate-limit errors.
+
+  > This was resolved by adding request throttling (Bottleneck) to control API call frequency and a locking mechanism to ensure missing media data is fetched sequentially, preventing concurrent fetches and rate-limit violations.
+
+- [x] In browse and my list page, both have filter form. The filter work in desktop but in mobile it seems some input doesn't work. So I remove the filter in mobile device for now.
 
 **Documentations**
 
