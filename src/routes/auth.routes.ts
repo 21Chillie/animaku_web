@@ -68,7 +68,6 @@ authRoute.get('/google/callback', (req, res, next) => {
 		}
 
 		if (user) {
-			console.log(user);
 			req.login(user, (loginErr) => {
 				if (loginErr) return next(loginErr);
 				res.redirect('/');

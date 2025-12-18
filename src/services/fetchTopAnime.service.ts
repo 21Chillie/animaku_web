@@ -1,21 +1,20 @@
 import axios, { type AxiosResponse } from 'axios';
 import { JIKAN_BASE_URL } from '../config/env.config';
 import type { Anime, JikanResponse } from '../types/animeData.types';
+import { jikanLimiter } from '../middlewares/bottleneck';
 
 const API_URL = JIKAN_BASE_URL;
 
 export async function fetchTopAnimeBatch(maxPage: number = 20): Promise<Anime[]> {
 	const topAnimeList: Anime[] = [];
-	const requestsPerSecond = 3;
-	const delayMs = 3000 / requestsPerSecond;
 
 	for (let page = 1; page <= maxPage; page++) {
-		const startTime = Date.now();
-
 		try {
-			const response: AxiosResponse<JikanResponse> = await axios.get(`${API_URL}/top/anime`, {
-				params: { page },
-				timeout: 20000, // Increased timeout for larger pages
+			const response: AxiosResponse<JikanResponse> = await jikanLimiter.schedule(async () => {
+				return await axios.get(`${API_URL}/top/anime`, {
+					params: { page },
+					timeout: 20000, // Increased timeout for larger pages
+				});
 			});
 
 			const topAnimeData: Anime[] = response.data.data;
@@ -40,12 +39,6 @@ export async function fetchTopAnimeBatch(maxPage: number = 20): Promise<Anime[]>
 				await new Promise((resolve) => setTimeout(resolve, 5000));
 			}
 			continue;
-		}
-
-		// Ensure minimum delay between requests
-		const elapsed = Date.now() - startTime;
-		if (elapsed < delayMs && page < maxPage) {
-			await new Promise((resolve) => setTimeout(resolve, delayMs - elapsed));
 		}
 	}
 

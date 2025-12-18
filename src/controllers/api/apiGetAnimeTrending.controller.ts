@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { seedTableAnime } from '../../models/anime/animeDBSeedTable';
 
 import {
+	deleteAllOldAnimeTrending,
 	getAllAnimeTrending,
 	getAnimeTrendingCount,
 	getAnimeTrendingPaginated,
@@ -9,10 +10,11 @@ import {
 } from '../../models/anime/animeTrendingModel';
 import { seedTableAnimeTrending } from '../../models/anime/animeTrendingSeedTable';
 import { fetchAnimeTrendingBatch } from '../../services/fetchAnimeTrending.service';
+import { batchMediaLocks } from '../../utils/fetchLock.utils';
 
 export async function getAnimeTrending(req: Request, res: Response) {
 	// 2 weeks
-	const daysThreshold = 7;
+	const daysThreshold = 14;
 	// Recommended 6,
 	const maxPage = 6;
 
@@ -21,33 +23,38 @@ export async function getAnimeTrending(req: Request, res: Response) {
 	const offset = (page - 1) * limit;
 
 	try {
+		/**
+		* * Uncomment line below if you want to use
 		// Get records from 'anime_trending' table that older than `dayThreshold` days
 		const oldAnimeTrendingDB = await getOldAnimeTrending(daysThreshold);
 
 		// If there is any old records within `daysThreshold` days, will be deleted.
-		if (oldAnimeTrendingDB.length > 0) {
+		if (oldAnimeTrendingDB.length !== 0) {
 			console.log(
-				`Found ${oldAnimeTrendingDB.length} records older than 7 days, updating data...`
+				`Found ${oldAnimeTrendingDB.length} records older than ${daysThreshold} days, deleting data...`
 			);
-			const dataFromAPI = await fetchAnimeTrendingBatch(maxPage);
-			await seedTableAnimeTrending(dataFromAPI);
-			await seedTableAnime(dataFromAPI);
-			console.log(`Successfully update ${oldAnimeTrendingDB.length} records of data`);
+			await deleteAllOldAnimeTrending();
 		}
+		*/
 
 		// Get all records from 'anime_trending' table
 		let animeTrendingDB = await getAllAnimeTrending();
 
-		// If its less or equal than 100, then fetch fresh data and inserting to database
-		if (animeTrendingDB.length <= 100) {
-			console.log('Database empty, fetching from api...');
+		// If its less or equal than x, then fetch fresh data and inserting to database
+		if (animeTrendingDB.length < 26) {
+			await batchMediaLocks(async () => {
+				const recheck = await getAllAnimeTrending();
+				if (recheck.length >= 26) return;
 
-			const dataFromAPI = await fetchAnimeTrendingBatch(maxPage);
-			await seedTableAnimeTrending(dataFromAPI);
-			await seedTableAnime(dataFromAPI);
-			animeTrendingDB = await getAllAnimeTrending();
+				console.log(`Table 'anime_trending' records is empty, fetch fresh data...`);
 
-			console.log('Successfully inserting into database');
+				const dataFromAPI = await fetchAnimeTrendingBatch(maxPage);
+				await seedTableAnimeTrending(dataFromAPI);
+				await seedTableAnime(dataFromAPI);
+				animeTrendingDB = await getAllAnimeTrending();
+
+				console.log('Successfully inserting into database');
+			});
 		}
 
 		const paginatedTrendingAnime = await getAnimeTrendingPaginated(limit, offset);

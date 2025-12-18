@@ -15,6 +15,9 @@
 	<title>User List | AnimaKu</title>
 	<script type="module" src="/js/navbar.js" defer></script>
 	<script type="module" src="/js/toggleTheme.js" defer></script>
+	<script type="module" src="/js/userListUI.js" defer></script>
+	<script type="module" src="/js/userListService.js" defer></script>
+	<script type="module" src="/js/populateModalFormUserList.js" defer></script>
 </head>
 
 <body>
@@ -22,12 +25,349 @@
 		<%- include('partials/navbar.ejs') %>
 	</header>
 
-	<!-- TODO: Design user list page -->
-	<main class="mt-36">
-		<h1 class="font-bold text-2xl text-white">
-			This is my list page
-		</h1>
+	<main class="max-w-7xl mx-auto mt-24 md:mt-28 px-4 flex flex-col gap-6">
+		<header>
+			<h1 class="header-title font-bold text-2xl md:text-3xl">
+				My List
+			</h1>
+		</header>
+
+		<section id="filter-list" class="flex flex-col gap-4">
+			<!-- Media type form -->
+			<div class="flex gap-3">
+				<form class="w-full md:hidden">
+					<select id="type-select-mobile"
+							class="select appearance-none border rounded-md text-base w-full">
+						<option value="">All media types</option>
+						<option value="anime">Anime</option>
+						<option value="manga">Manga</option>
+					</select>
+				</form>
+
+				<!-- ! Modal Popup filter (mobile) form doesn't work (bug), for now the button and form filter will hide, fix later -->
+				<button class="btn-filter-mobile md:hidden border px-2 rounded-md shrink-0 hidden"
+						onclick="modalFilter.showModal()">
+					<i class="ri-filter-line"></i>
+				</button>
+
+				<!-- ! Filter Form (mobile) -->
+				<dialog id="modalFilter" class="modal hidden">
+					<div class="modal-box rounded-md">
+						<form method="dialog">
+							<button class="btn-modal-close rounded-full absolute right-2 top-2">
+								<i class="ri-close-line"></i>
+							</button>
+						</form>
+						<h3 class="text-lg font-bold mb-2">Filters</h3>
+						<div class="flex flex-col gap-2">
+							<form>
+								<label for="select">
+									<span class="text-sm">Status</span>
+									<select id="status-select-mobile"
+											class="select appearance-none w-full border rounded-md">
+										<option value="">All status</option>
+										<option value="watching">Watching</option>
+										<option value="plan_watch">Plan to watch</option>
+										<option value="reading">Reading</option>
+										<option value="plan_read">Plan to read</option>
+										<option value="completed">Completed</option>
+										<option value="paused">Paused</option>
+										<option value="dropped">Dropped</option>
+									</select>
+								</label>
+							</form>
+
+							<form>
+								<label for="select">
+									<span class="text-sm">Sort by</span>
+									<select id="sort-by-select-mobile"
+											class="select appearance-none w-full border rounded-md">
+										<option value="title">Title</option>
+										<option value="score">Score</option>
+										<option value="recent">Recently Added</option>
+									</select>
+								</label>
+							</form>
+
+							<form>
+								<label for="select">
+									<span class="text-sm">Sort direction</span>
+									<select id="sort-direction-select-mobile"
+											class="select appearance-none w-full border rounded-md">
+										<option value="asc">Ascending</option>
+										<option value="desc">Descending</option>
+									</select>
+								</label>
+							</form>
+
+							<div class="modal-action flex gap-3 mt-3">
+								<button id="btn-apply-filter-mobile"
+										class=" border px-3 py-2 rounded-md shadow-md text-sm font-bold" type="button">
+									Apply filters
+								</button>
+
+								<button id="btn-reset-filter-mobile"
+										class="border px-3 py-2 rounded-md shadow-md text-sm font-bold">
+									Reset filters
+								</button>
+							</div>
+						</div>
+					</div>
+					<form method="dialog" class="modal-backdrop">
+						<button>close</button>
+					</form>
+				</dialog>
+			</div>
+
+			<!-- Filter Controls -->
+			<div class="filter-controls p-4 rounded-md shadow-md border hidden md:flex flex-col gap-3">
+				<header class="flex gap-1">
+					<i class="ri-filter-line text-xl md:text-2xl"></i>
+					<h2 class="font-bold text-xl md:text-2xl">Filters</h2>
+				</header>
+
+				<div class="filter-container grid grid-cols-1 md:grid-cols-4 gap-3">
+					<form>
+						<label for="select">
+							<span class="text-sm">Media type</span>
+							<select id="type-select" class="select appearance-none w-full border rounded-md">
+								<option value="">All media types</option>
+								<option value="anime">Anime</option>
+								<option value="manga">Manga</option>
+							</select>
+						</label>
+					</form>
+
+					<form>
+						<label for="select">
+							<span class="text-sm">Status</span>
+							<select id="status-select" class="select appearance-none w-full border rounded-md">
+								<option value="">All status</option>
+								<option value="watching">Watching</option>
+								<option value="plan_watch">Plan to watch</option>
+								<option value="reading">Reading</option>
+								<option value="plan_read">Plan to read</option>
+								<option value="completed">Completed</option>
+								<option value="paused">Paused</option>
+								<option value="dropped">Dropped</option>
+							</select>
+						</label>
+					</form>
+
+					<form>
+						<label for="select">
+							<span class="text-sm">Sort by</span>
+							<select id="sort-by-select" class="select appearance-none w-full border rounded-md">
+								<option value="title">Title</option>
+								<option value="score">Score</option>
+								<option value="recent">Recently Added</option>
+							</select>
+						</label>
+					</form>
+
+					<form>
+						<label for="select">
+							<span class="text-sm">Sort direction</span>
+							<select id="sort-direction-select"
+									class="select appearance-none w-full border rounded-md">
+								<option value="asc">Ascending</option>
+								<option value="desc">Descending</option>
+							</select>
+						</label>
+					</form>
+				</div>
+				<div class="flex gap-3 mt-3 justify-end">
+					<button id="btn-apply-filter"
+							class="border px-3 py-2 rounded-md shadow-md text-sm font-bold">Apply
+						filters</button>
+
+					<button id="btn-reset-filter"
+							class="border px-3 py-2 rounded-md shadow-md text-sm font-bold">
+						Reset filters
+					</button>
+				</div>
+			</div>
+		</section>
+
+		<section id="list-table" class="flex flex-col gap-4">
+			<header class="flex justify-between items-center">
+				<p id="total-records-info" class="text-sm md:text-base">30 records</p>
+
+				<select id="limit-select" class="select border rounded-md w-fit">
+					<option disabled selected>Limit records</option>
+					<option value="30">30</option>
+					<option value="15">15</option>
+					<option value="10">10</option>
+				</select>
+			</header>
+
+			<div id="table-container" class="flex items-center justify-center">
+				<div class="overflow-x-auto w-full max-h-[480px] md:max-h-[768px] border rounded-md">
+					<table class="table table-xs md:table-md table-pin-rows ">
+						<thead>
+							<tr class="shadow">
+								<th></th>
+								<td>Title</td>
+								<td>Type</td>
+								<td>Score</td>
+								<td>Progress</td>
+								<td>Status</td>
+							</tr>
+						</thead>
+						<tbody id="table-body">
+							<!-- Table row will show here -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+
+		<section id="pagination" class="flex flex-col items-center gap-3">
+			<div class="pagination-container join flex rounded-md border">
+				<button id="btn-prev" class="join-item px-4 py-2">«</button>
+				<div class="flex items-center">
+					<input type="number" name="currentPage" id="input-current-page" class="max-w-8 w-fit"
+							min="1">
+					<span>/</span>
+					<input type="number" name="maxPage" id="input-max-page" class="max-w-8 w-fit" min="1"
+							disabled>
+				</div>
+				<button id="btn-next" class="join-item px-4 py-2">»</button>
+			</div>
+		</section>
 	</main>
+
+	<!-- Modal Form -->
+	<dialog id="modalFormList" class="modal py-62">
+		<div class="modal-box rounded-md">
+			<form method="dialog">
+				<button class="btn-close rounded-full px-1 absolute right-3 top-6 md:top-3">
+					<i class="ri-close-line"></i>
+				</button>
+			</form>
+
+			<h3 class="text-lg font-bold mt-3 md:mt-0 mb-3">
+				Form List (Updated)
+			</h3>
+
+			<form id="formList" action="/my-list/updated" method="post">
+				<!-- Input Mal id -->
+				<input id="inputMalId" name="inputMalId" type="hidden" value="">
+
+				<!-- Input type -->
+				<input type="hidden" name="inputType" id="inputType" value="">
+
+				<!-- Input title (disabled) -->
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend">Title</legend>
+					<input id="inputTitle" type="text" class="input border rounded-md truncate" value=""
+							disabled />
+				</fieldset>
+
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend">Status</legend>
+					<select id="selectStatus" name="selectStatus" class="select border rounded-md">
+						<option value="watching">Watching</option>
+						<option value="plan_watch">Plan to watch</option>
+						<option value="reading">Reading</option>
+						<option value="plan_read">Plan to read</option>
+						<option value="completed">Completed</option>
+						<option value="paused">Paused</option>
+						<option value="dropped">Dropped</option>
+					</select>
+				</fieldset>
+
+				<!-- Input score -->
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend">Score</legend>
+					<input type="number" name="inputScore" class="input validator border rounded-md"
+							placeholder="Type a score between 0 to 10" min="0" max="10"
+							title="Value must be number and between 0-10" />
+				</fieldset>
+
+				<!-- Episode / Chapter / Volume inputs (static, controlled via JS) -->
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend">Episode progress</legend>
+					<input type="number" name="inputEpisode" class="input validator border rounded-md"
+							min="0" />
+				</fieldset>
+
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend">Chapter progress</legend>
+					<input type="number" name="inputChapter" class="input validator border rounded-md"
+							min="0" />
+				</fieldset>
+
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend">Volume progress</legend>
+					<input type="number" name="inputVolume" class="input validator border rounded-md"
+							min="0" />
+				</fieldset>
+
+				<!-- Input start date -->
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend">Start date</legend>
+					<input type="date" name="inputStartDate" class="input border rounded-md" value="" />
+				</fieldset>
+
+				<!-- Input end date -->
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend">Finish date</legend>
+					<input type="date" name="inputFinishDate" class="input border rounded-md" value="" />
+				</fieldset>
+
+				<!-- Input Notes -->
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend">Notes</legend>
+					<textarea name="inputNotes" class="textarea h-24 border rounded-md"
+							placeholder="Add a quick note"></textarea>
+				</fieldset>
+
+				<div class="flex gap-4 mt-4 justify-end">
+					<button type="submit"
+							class="btn-submit-form-list px-4 py-2 border text-sm font-bold rounded-md">
+						Submit
+					</button>
+
+					<button type="button"
+							class="btn-delete-form-list px-4 py-2 border text-sm font-bold rounded-md"
+							onclick="deleteListConfirm.showModal()">
+						Delete list
+					</button>
+				</div>
+			</form>
+		</div>
+
+		<form method="dialog" class="modal-backdrop">
+			<button>close</button>
+		</form>
+	</dialog>
+
+	<!-- Modal Delete Confirm -->
+	<dialog id="deleteListConfirm" class="modal">
+		<div class="modal-box rounded-md">
+			<h3 class="text-lg font-bold">Confirm Delete</h3>
+			<p class="py-4">
+				This action will remove the title from your list. Are you sure you want to continue?
+			</p>
+			<div class="modal-action flex gap-6">
+				<!-- Form Delete list -->
+
+				<form action="/my-list/deleted" method="post">
+					<input type="hidden" name="deleteListMalId" value="">
+					<input type="hidden" name="deleteListMediaType" value="">
+					<button type="submit" class="btn-delete border px-4 py-2 rounded-md">
+						Delete List
+					</button>
+				</form>
+
+				<form method="dialog">
+					<!-- if there is a button in form, it will close the modal -->
+					<button class="btn-close px-4 py-2 rounded-md">Close</button>
+				</form>
+			</div>
+		</div>
+	</dialog>
 </body>
 
 </html>

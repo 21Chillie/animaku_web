@@ -6,9 +6,11 @@ import {
 	getAnimeTopCount,
 	getAnimeTopPaginated,
 	getOldAnimeTop,
+	deleteAllOldAnimeTop,
 } from '../../models/anime/animeTopModel';
 import { seedTableAnimeTop } from '../../models/anime/animeTopSeedTable';
 import { fetchTopAnimeBatch } from '../../services/fetchTopAnime.service';
+import { batchMediaLocks } from '../../utils/fetchLock.utils';
 
 export async function getAnimeTop(req: Request, res: Response) {
 	// 30 days or 1 month
@@ -22,31 +24,39 @@ export async function getAnimeTop(req: Request, res: Response) {
 	const offset = (page - 1) * limit;
 
 	try {
+		/**
+		* * Uncomment line below if you want to use 
 		// Check old anime top db
 		const oldAnimeTopDB = await getOldAnimeTop(daysThreshold);
 
 		// if there is records that has older than 30 days, delete the data
-		if (oldAnimeTopDB.length > 0) {
-			console.log(`Found ${oldAnimeTopDB.length} records older than 30 days, updating data...`);
-			const dataFromAPI = await fetchTopAnimeBatch(maxPage);
-			await seedTableAnimeTop(dataFromAPI);
-			await seedTableAnime(dataFromAPI);
-			console.log(`Successfully update ${oldAnimeTopDB.length} records of data`);
+		if (oldAnimeTopDB.length !== 0) {
+			console.log(
+				`Found ${oldAnimeTopDB.length} records older than ${daysThreshold} days, deleting data...`
+			);
+
+			await deleteAllOldAnimeTop();
 		}
+		*/
 
 		// After that will check anime top records
 		let animeTopDB = await getAllAnimeTop();
 
-		// if the records is less or equal than 100, will fetch fresh data from api
-		if (animeTopDB.length === 0) {
-			console.log('Database empty, fetching from api...');
+		// if the records is less than x, will fetch fresh data from api
+		if (animeTopDB.length < 26) {
+			await batchMediaLocks(async () => {
+				const recheck = await getAllAnimeTop();
+				if (recheck.length >= 26) return;
 
-			// Fetch Data then seed to database (anime_top and anime tables)
-			const dataFromAPI = await fetchTopAnimeBatch(maxPage);
-			await seedTableAnimeTop(dataFromAPI);
-			await seedTableAnime(dataFromAPI);
-			animeTopDB = await getAllAnimeTop();
-			console.log('Successfully inserting into database');
+				console.log(`Table 'anime_top' records is empty, fetch fresh data`);
+
+				// Fetch Data then seed to database (anime_top and anime tables)
+				const dataFromAPI = await fetchTopAnimeBatch(maxPage);
+				await seedTableAnimeTop(dataFromAPI);
+				await seedTableAnime(dataFromAPI);
+				animeTopDB = await getAllAnimeTop();
+				console.log('Successfully inserting into database');
+			});
 		}
 
 		const paginatedTopAnime = await getAnimeTopPaginated(limit, offset);

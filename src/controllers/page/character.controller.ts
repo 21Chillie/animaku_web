@@ -6,39 +6,56 @@ import {
 } from '../../models/character/characterFull.model';
 import { fetchCharacterFullData } from '../../services/fetchCharacterFull.service';
 import { parseSynopsis } from '../../utils/parseData.utils';
+import { mediaLocks } from '../../utils/fetchLock.utils';
+
+async function getMediaCharacterFullData(id: number, daysThreshold: number) {
+	return mediaLocks(id, async () => {
+		try {
+			// Check old character record
+			const oldCharacterData = await getOldCharacterFullByMalId(id, daysThreshold);
+
+			// If character record is older than daysThreshold then fetch and inserting to database
+			if (oldCharacterData) {
+				const dataFromAPI = await fetchCharacterFullData(id);
+				await insertCharacterFullByMalId(dataFromAPI);
+			}
+
+			// Get character data
+			let characterFullData = await getCharacterFullByMalId(id);
+
+			// If there is no character record with specific mal_id, then fetch fresh data from api and insert to database
+			if (!characterFullData) {
+				const dataFromAPI = await fetchCharacterFullData(id);
+				await insertCharacterFullByMalId(dataFromAPI);
+				characterFullData = await getCharacterFullByMalId(id);
+			}
+
+			const aboutCharacter = characterFullData?.data.about ?? null;
+
+			const parseAboutCharacter = parseSynopsis(aboutCharacter);
+
+			return {
+				data: characterFullData,
+				about: parseAboutCharacter,
+			};
+		} catch (err) {
+			console.error;
+			throw new Error(`Something went wrong while getting character full data`);
+		}
+	});
+}
 
 export async function renderCharacter(req: Request, res: Response) {
 	const id = parseInt(req.params.id);
 	const daysThreshold = 30;
 
 	try {
-		// Check old character record
-		const oldCharacterData = await getOldCharacterFullByMalId(id, daysThreshold);
+		const { data, about } = await getMediaCharacterFullData(id, daysThreshold);
 
-		// If character record is older than daysThreshold then fetch and inserting to database
-		if (oldCharacterData) {
-			const dataFromAPI = await fetchCharacterFullData(id);
-			await insertCharacterFullByMalId(dataFromAPI);
-		}
-
-		// Get character data
-		let characterFullData = await getCharacterFullByMalId(id);
-
-		// If there is no character record with specific mal_id, then fetch fresh data from api and insert to database
-		if (!characterFullData) {
-			const dataFromAPI = await fetchCharacterFullData(id);
-			await insertCharacterFullByMalId(dataFromAPI);
-			characterFullData = await getCharacterFullByMalId(id);
-		}
-
-		const aboutCharacter = characterFullData?.data.about ?? null;
-
-		const parseAboutCharacter = parseSynopsis(aboutCharacter);
-
-		res.render('character', { data: characterFullData, about: parseAboutCharacter });
+		res.render('character', { data, about });
 	} catch (err) {
-		res
-			.status(500)
-			.json({ success: false, error: 'Something went wrong while getting character full data' });
+		if (err instanceof Error) {
+			return res.status(500).json({ success: false, error: err.message });
+		}
 	}
 }

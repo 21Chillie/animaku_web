@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { seedTableManga } from '../../models/manga/mangaDBSeedTable';
 
 import {
+	deleteAllOldMangaTop,
 	getAllMangaTop,
 	getMangaTopCount,
 	getMangaTopPaginated,
@@ -9,6 +10,7 @@ import {
 } from '../../models/manga/mangaTopModel';
 import { seedTableMangaTop } from '../../models/manga/mangaTopSeedTable';
 import { fetchTopMangaBatch } from '../../services/fetchTopManga.service';
+import { batchMediaLocks, mediaLocks } from '../../utils/fetchLock.utils';
 
 export async function getMangaTop(req: Request, res: Response) {
 	const daysThreshold = 30;
@@ -19,26 +21,33 @@ export async function getMangaTop(req: Request, res: Response) {
 	const offset = (page - 1) * limit;
 
 	try {
+		/** 
+		* * Uncomment line below if you want to use it 
 		const oldMangaTopDB = await getOldMangaTop(daysThreshold);
-		if (oldMangaTopDB.length > 0) {
-			console.log(`Found ${oldMangaTopDB.length} records older than 30 days, updating data...`);
-			const dataFromAPI = await fetchTopMangaBatch(maxPage);
-			await seedTableMangaTop(dataFromAPI);
-			await seedTableManga(dataFromAPI);
-			console.log(`Successfully update ${oldMangaTopDB.length} records of data`);
+		if (oldMangaTopDB.length !== 0) {
+			console.log(
+				`Found ${oldMangaTopDB.length} records older than ${daysThreshold} days, updating data...`
+			);
+			await deleteAllOldMangaTop();
 		}
+		*/
 
 		let mangaTopDB = await getAllMangaTop();
 
-		if (mangaTopDB.length === 0) {
-			console.log('Database empty, fetching from api...');
+		if (mangaTopDB.length < 26) {
+			await batchMediaLocks(async () => {
+				const recheck = await getAllMangaTop();
+				if (recheck.length >= 26) return;
 
-			const dataFromAPI = await fetchTopMangaBatch(maxPage);
-			await seedTableMangaTop(dataFromAPI);
-			await seedTableManga(dataFromAPI);
-			mangaTopDB = await getAllMangaTop();
+				console.log(`Table 'manga_top' records is empty, fetch fresh data...`);
 
-			console.log('Successfully inserting data into database');
+				const dataFromAPI = await fetchTopMangaBatch(maxPage);
+				await seedTableMangaTop(dataFromAPI);
+				await seedTableManga(dataFromAPI);
+				mangaTopDB = await getAllMangaTop();
+
+				console.log('Successfully inserting data into database');
+			});
 		}
 
 		const paginatedTopManga = await getMangaTopPaginated(limit, offset);

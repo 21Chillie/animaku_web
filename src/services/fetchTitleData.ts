@@ -6,14 +6,17 @@ import { JikanCharacter, JikanCharactersResponse } from '../types/characterData.
 import { JikanResponseMangaDataById, Manga } from '../types/mangaData.types';
 import { JikanRecommendationsResponse, Recommendation } from '../types/recommendationData.types';
 import { JikanRelationsResponse, Relation } from '../types/relationData.types';
+import { jikanLimiter } from '../middlewares/bottleneck';
 
 const API_URL = JIKAN_BASE_URL;
 
 // Fetch Anime by mal Id
-export async function fetchAnimeByMalId(mal_id: number): Promise<Anime> {
+export async function fetchAnimeByMalId(mal_id: number): Promise<Anime | null> {
 	try {
-		const response: AxiosResponse<JikanResponseAnimeDataById> = await axios.get(
-			`${API_URL}/anime/${mal_id}/`
+		const response: AxiosResponse<JikanResponseAnimeDataById> = await jikanLimiter.schedule(
+			async () => {
+				return await axios.get(`${API_URL}/anime/${mal_id}/`);
+			}
 		);
 
 		const data: Anime = response.data.data;
@@ -24,26 +27,30 @@ export async function fetchAnimeByMalId(mal_id: number): Promise<Anime> {
 
 		return data;
 	} catch (err) {
-		console.error(`Something went wrong while trying fetch anime data with id `, mal_id);
-
 		if (axios.isAxiosError(err) && err.response?.status === 404) {
-			throw new Error('Anime with that mal_id does not exist');
+			console.error(`Anime with mal id ${mal_id} does not exist`);
+			// throw new Error(`Anime with mal id ${mal_id} does not exist`);
 		}
 
 		if (axios.isAxiosError(err) && err.response?.status === 429) {
 			console.error('Rate limited, please wait in a second and try refresh browser');
-			throw new Error('Rate limited, please wait in a second and refresh the browser');
+			// throw new Error('Rate limited, please wait in a second and refresh the browser');
 		}
 
-		throw new Error('Something went wrong while trying fetch anime data');
+		console.error(`Something went wrong while trying fetch anime data with id `, mal_id);
+		// throw new Error('Something went wrong while trying fetch anime data');
 	}
+
+	return null;
 }
 
 // Fetch anime character by mal id
 export async function fetchAnimeCharactersByMalId(mal_id: number): Promise<JikanCharacter[]> {
 	try {
-		const response: AxiosResponse<JikanCharactersResponse> = await axios.get(
-			`${API_URL}/anime/${mal_id}/characters/`
+		const response: AxiosResponse<JikanCharactersResponse> = await jikanLimiter.schedule(
+			async () => {
+				return await axios.get(`${API_URL}/anime/${mal_id}/characters/`);
+			}
 		);
 
 		const data: JikanCharacter[] = response.data.data;
@@ -67,8 +74,10 @@ export async function fetchAnimeCharactersByMalId(mal_id: number): Promise<Jikan
 // Fetch anime relation by mal id
 export async function fetchAnimeRelationByMalId(mal_id: number): Promise<Relation[]> {
 	try {
-		const response: AxiosResponse<JikanRelationsResponse> = await axios.get(
-			`${API_URL}/anime/${mal_id}/relations`
+		const response: AxiosResponse<JikanRelationsResponse> = await jikanLimiter.schedule(
+			async () => {
+				return await axios.get(`${API_URL}/anime/${mal_id}/relations`);
+			}
 		);
 
 		const data: Relation[] = response.data.data;
@@ -92,8 +101,10 @@ export async function fetchAnimeRelationByMalId(mal_id: number): Promise<Relatio
 // Fetch anime recommendation by mal id
 export async function fetchAnimeRecommendationByMalId(mal_id: number): Promise<Recommendation[]> {
 	try {
-		const response: AxiosResponse<JikanRecommendationsResponse> = await axios.get(
-			`${API_URL}/anime/${mal_id}/recommendations`
+		const response: AxiosResponse<JikanRecommendationsResponse> = await jikanLimiter.schedule(
+			async () => {
+				return await axios.get(`${API_URL}/anime/${mal_id}/recommendations`);
+			}
 		);
 
 		const data = response.data.data;
@@ -120,14 +131,16 @@ export async function fetchAnimeRecommendationByMalId(mal_id: number): Promise<R
 // Fetch anime OST by mal id
 export async function fetchAnimeThemeByMalId(mal_id: number): Promise<AnimeThemes> {
 	try {
-		const response: AxiosResponse<JikanAnimeThemesResponse> = await axios.get(
-			`${API_URL}/anime/${mal_id}/themes`
+		const response: AxiosResponse<JikanAnimeThemesResponse> = await jikanLimiter.schedule(
+			async () => {
+				return await axios.get(`${API_URL}/anime/${mal_id}/themes`);
+			}
 		);
 
 		const data: AnimeThemes = response.data.data;
 
 		if (data) {
-			console.log('Sucessfully fetch anime themes data from api');
+			console.log('Successfully fetch anime themes data from api');
 		}
 
 		return data;
@@ -143,10 +156,12 @@ export async function fetchAnimeThemeByMalId(mal_id: number): Promise<AnimeTheme
 }
 
 // Fetch Manga by mal id
-export async function fetchMangaByMalId(mal_id: number): Promise<Manga> {
+export async function fetchMangaByMalId(mal_id: number): Promise<Manga | null> {
 	try {
-		const response: AxiosResponse<JikanResponseMangaDataById> = await axios.get(
-			`${API_URL}/manga/${mal_id}/`
+		const response: AxiosResponse<JikanResponseMangaDataById> = await jikanLimiter.schedule(
+			async () => {
+				return await axios.get(`${API_URL}/manga/${mal_id}/`);
+			}
 		);
 
 		const data: Manga = response.data.data;
@@ -157,26 +172,30 @@ export async function fetchMangaByMalId(mal_id: number): Promise<Manga> {
 
 		return data;
 	} catch (err) {
-		console.error(`Something went wrong while trying fetch manga data with id `, mal_id);
-
 		if (axios.isAxiosError(err) && err.response?.status === 404) {
-			throw new Error('Manga with that mal_id does not exist');
+			console.error('Manga with that mal_id does not exist');
+			// throw new Error('Manga with that mal_id does not exist');
 		}
 
 		if (axios.isAxiosError(err) && err.response?.status === 429) {
 			console.error('Rate limited, please wait in a second and try refresh browser');
-			throw new Error('Rate limited, please wait in a second and refresh the browser');
+			// throw new Error('Rate limited, please wait in a second and refresh the browser');
 		}
 
-		throw new Error('Something went wrong while trying fetch manga data');
+		// throw new Error('Something went wrong while trying fetch manga data');
+		console.error(`Something went wrong while trying fetch manga data with id `, mal_id);
+
+		return null;
 	}
 }
 
 // Fetch manga character by mal id
 export async function fetchMangaCharactersByMalId(mal_id: number): Promise<JikanCharacter[]> {
 	try {
-		const response: AxiosResponse<JikanCharactersResponse> = await axios.get(
-			`${API_URL}/manga/${mal_id}/characters/`
+		const response: AxiosResponse<JikanCharactersResponse> = await jikanLimiter.schedule(
+			async () => {
+				return await axios.get(`${API_URL}/manga/${mal_id}/characters/`);
+			}
 		);
 
 		const data: JikanCharacter[] = response.data.data;
@@ -200,8 +219,10 @@ export async function fetchMangaCharactersByMalId(mal_id: number): Promise<Jikan
 // Fetch manga relation by mal id
 export async function fetchMangaRelationByMalId(mal_id: number): Promise<Relation[]> {
 	try {
-		const response: AxiosResponse<JikanRelationsResponse> = await axios.get(
-			`${API_URL}/manga/${mal_id}/relations`
+		const response: AxiosResponse<JikanRelationsResponse> = await jikanLimiter.schedule(
+			async () => {
+				return await axios.get(`${API_URL}/manga/${mal_id}/relations`);
+			}
 		);
 
 		const data: Relation[] = response.data.data;
@@ -225,8 +246,10 @@ export async function fetchMangaRelationByMalId(mal_id: number): Promise<Relatio
 // Fetch manga recommendation by mal id
 export async function fetchMangaRecommendationByMalId(mal_id: number): Promise<Recommendation[]> {
 	try {
-		const response: AxiosResponse<JikanRecommendationsResponse> = await axios.get(
-			`${API_URL}/manga/${mal_id}/recommendations`
+		const response: AxiosResponse<JikanRecommendationsResponse> = await jikanLimiter.schedule(
+			async () => {
+				return await axios.get(`${API_URL}/manga/${mal_id}/recommendations`);
+			}
 		);
 
 		const data = response.data.data;

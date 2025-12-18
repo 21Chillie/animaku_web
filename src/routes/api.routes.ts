@@ -5,6 +5,8 @@ import { getAnimeTop } from '../controllers/api/apiGetAnimeTop.controller';
 import { getAnimeTrending } from '../controllers/api/apiGetAnimeTrending.controller';
 import { getMangaTop } from '../controllers/api/apiGetMangaTop.controller';
 import { getManga, getMangaById } from '../controllers/api/apiManga';
+import { getListEachUser } from '../controllers/api/apiUserList.controller';
+import { isAuthenticated } from '../middlewares/checkAuth';
 
 export const apiRoutes = express.Router();
 
@@ -21,3 +23,6 @@ apiRoutes.get('/top/manga', getMangaTop);
 
 // * Character *
 apiRoutes.get('/character/:id/full', getCharacterFull);
+
+// * User List *
+apiRoutes.get('/user/list', getListEachUser);

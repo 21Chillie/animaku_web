@@ -9,6 +9,7 @@ import {
 import { seedTableManga } from '../../models/manga/mangaDBSeedTable';
 import { fetchMangaByMalId } from '../../services/fetchTitleData';
 import { fetchTopMangaBatch } from '../../services/fetchTopManga.service';
+import { batchMediaLocks } from '../../utils/fetchLock.utils';
 
 export async function getManga(req: Request, res: Response) {
 	// the higher the number, the longer and more data will be retrieved
@@ -32,14 +33,19 @@ export async function getManga(req: Request, res: Response) {
 	try {
 		let mangaDatabase = await getAllManga();
 
-		if (mangaDatabase.length <= 1000) {
-			console.log('Database empty, fetching from api...');
+		if (mangaDatabase.length < 1000) {
+			await batchMediaLocks(async () => {
+				const recheck = await getAllManga();
+				if (recheck.length >= 1000) return;
 
-			// Fetch Data then seed to database
-			const dataFromAPI = await fetchTopMangaBatch(maxPage);
-			await seedTableManga(dataFromAPI);
-			mangaDatabase = await getAllManga();
-			console.log('Successfully inserting into database');
+				console.log('Database empty, fetching from api...');
+
+				// Fetch Data then seed to database
+				const dataFromAPI = await fetchTopMangaBatch(maxPage);
+				await seedTableManga(dataFromAPI);
+				mangaDatabase = await getAllManga();
+				console.log('Successfully inserting into database');
+			});
 		}
 
 		// Get paginated results with search, filters, and sorting
@@ -84,9 +90,11 @@ export async function getManga(req: Request, res: Response) {
 		});
 	} catch (err) {
 		console.error(err);
-		res
-			.status(500)
-			.json({ success: false, error: 'Something went wrong while getting manga data' });
+		res.status(500).json({
+			success: false,
+			error: 'Internal Server Error',
+			message: 'Something went wrong while getting manga data',
+		});
 	}
 }
 
@@ -95,7 +103,11 @@ export async function getMangaById(req: Request, res: Response) {
 
 	if (isNaN(mal_id)) {
 		console.log('Invalid title mal_id');
-		return res.status(401).json({ error: 'Invalid title mal_id, the mal_id must be a number' });
+		return res.status(401).json({
+			success: false,
+			error: 'Bad Request',
+			message: 'Invalid title mal_id, the mal_id must be a number',
+		});
 	}
 
 	try {
@@ -104,15 +116,28 @@ export async function getMangaById(req: Request, res: Response) {
 		if (!mangaData) {
 			console.log(`Manga title with mal_id ${mal_id} is not found, fetch from API`);
 			const dataFromAPI = await fetchMangaByMalId(mal_id);
+
+			if (!dataFromAPI) {
+				return res.status(404).json({
+					success: false,
+					error: 'Resource Not Found',
+					message: `Manga with mal id ${mal_id} does not exist`,
+				});
+			}
+
 			await insertMangaDataByMalId(dataFromAPI);
 			mangaData = await getMangaByMalId(mal_id);
 		}
 
-		res.status(200).json(mangaData);
+		res.status(200).json({ success: true, data: mangaData });
 	} catch (err) {
 		if (err instanceof Error) {
 			console.error('Error fetching manga:', err);
-			return res.status(500).json({ response: err.name, message: err.message });
+			return res.status(500).json({
+				success: false,
+				error: 'Internal Server Error',
+				message: `Something went wrong while getting manga with mal id ${mal_id}`,
+			});
 		}
 	}
 }

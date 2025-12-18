@@ -67,14 +67,12 @@ export async function postRegister(req: Request, res: Response): Promise<void> {
 			return res.redirect('/auth/login');
 		}
 
-		res.redirect('/')
+		res.redirect('/');
 	});
 }
 
 export async function getGoogleComplete(req: Request, res: Response): Promise<void> {
 	const oauth = req.session.oauthProfile;
-
-	console.log(oauth);
 
 	if (!oauth || oauth.provider !== 'google') {
 		return res.redirect('/auth/login');
@@ -89,7 +87,6 @@ export async function getGoogleComplete(req: Request, res: Response): Promise<vo
 
 export async function postGoogleComplete(req: Request, res: Response): Promise<void> {
 	const oauth = req.session.oauthProfile;
-	console.log(oauth)
 	const { username, password } = req.body as { username?: string; password?: string };
 
 	if (!oauth || oauth.provider !== 'google') {
@@ -144,6 +141,6 @@ export async function postGoogleComplete(req: Request, res: Response): Promise<v
 			res.redirect('/auth/login');
 			return;
 		}
-		res.redirect('/')
+		res.redirect('/');
 	});
 }

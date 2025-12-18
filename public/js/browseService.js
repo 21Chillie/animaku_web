@@ -87,8 +87,6 @@ function buildSearchParams() {
 		params.append('limit', `${limit}`);
 	}
 
-	console.log(params);
-
 	return params;
 }
 
