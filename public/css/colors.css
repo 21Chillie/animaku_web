@@ -27,6 +27,7 @@
 	--nord12: #d08770;
 	--nord13: #ebcb8b;
 	--nord14: #a3be8c;
+		--nord16: #6ea73c;
 	--nord15: #b48ead;
 }
 
@@ -83,7 +84,7 @@
 
 	/* Accent colors */
 	--primary: var(--nord10);
-	--success: var(--nord14);
+	--success: var(--nord16);
 	--warning: var(--nord12);
 	--error: var(--nord11);
 	--info: var(--nord9);
