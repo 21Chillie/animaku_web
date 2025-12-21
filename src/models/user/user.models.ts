@@ -105,3 +105,43 @@ export async function linkGoogleToUser(
 		client.release();
 	}
 }
+
+export async function updateUsername(id: string, username: string) {
+	const client = await pool.connect();
+
+	try {
+		await client.query(
+			`
+			UPDATE users
+			SET username = $1
+			WHERE id = $2
+			`,
+			[username, id]
+		);
+	} catch {
+		console.error();
+		throw new Error('Failed to update username');
+	} finally {
+		client.release();
+	}
+}
+
+export async function updatePassword(id: string, newPasswordHash: string) {
+	const client = await pool.connect();
+
+	try {
+		await client.query(
+			`
+			UPDATE users
+			SET password_hash = $1
+			WHERE id = $2
+			`,
+			[newPasswordHash, id]
+		);
+	} catch {
+		console.error();
+		throw new Error('Failed to update password');
+	} finally {
+		client.release();
+	}
+}
