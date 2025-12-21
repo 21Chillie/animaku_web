@@ -11,6 +11,7 @@ import {
 	renderUserList,
 } from '../controllers/page/userList.controller';
 import { isAuthenticated } from '../middlewares/checkAuth';
+import { renderUserProfile, userProfileUpdated } from '../controllers/page/userProfile.controller';
 
 export const pageRoute = express.Router();
 
@@ -40,3 +41,9 @@ pageRoute.post('/my-list/deleted', isAuthenticated, postDeleteTitleFromList);
 
 // Edit title from user list (POST)
 pageRoute.post('/my-list/updated', isAuthenticated, postEditTitleFromList);
+
+// Profile route
+pageRoute.get('/profile', renderUserProfile);
+
+// Profile Updated
+pageRoute.post('/profile/updated', userProfileUpdated);
