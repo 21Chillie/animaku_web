@@ -143,9 +143,14 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Create form for delete user list for each media title
 - [x] Test all the features
 
-**Edit Profile**
+**User Profile**
 
-- [ ] Do this
+- [x] Design user profile page
+- [x] Make all updated profile input to send to backend
+- [x] Create function for update username
+- [x] Create function for validate old password
+- [x] Create function for validate new password and change password
+- [x] Test the features
 
 **Error Page**
 
@@ -189,6 +194,7 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Type definition for anime theme data (database/api response)
 - [x] Type definition for user (database response)
 - [x] Type definition for user list (database/api response)
+- [x] Type definition for request body
 - [x] Tidy up and fix
 
 **Testing and detect bugs**
@@ -218,9 +224,8 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 
 **Documentations**
 
-- [ ] API documentation
 - [ ] Repositories Documentation
 
 ---
 
-Holy fck there so much to do ....
+Almost finishhh ....
