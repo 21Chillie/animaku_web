@@ -1,5 +1,5 @@
 @import 'tailwindcss';
 @plugin "daisyui" {
-	themes: nord, night;
+	themes: false;
 	exclude: navbar;
 }
