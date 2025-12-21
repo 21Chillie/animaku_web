@@ -1,7 +1,7 @@
 export interface User {
 	id: string;
 	email?: string | null;
-	password_hash?: string | null;
+	password_hash: string;
 	google_id?: string | null;
 	username: string;
 	avatar_url?: string | null;
@@ -133,4 +133,10 @@ export interface UpdateListRequestBody {
 export interface DeleteListRequestBody {
 	deleteListMalId: string;
 	deleteListMediaType: MediaType;
+}
+
+export interface EditProfileRequestBody {
+	username: string;
+	oldPassword: string;
+	newPassword: string;
 }
