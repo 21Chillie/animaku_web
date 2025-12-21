@@ -154,7 +154,7 @@ function renderTable(result) {
             </div>
          </div>
          <div class="max-sm:w-32">
-            <a class="title-link hover:underline font-bold" href="#">${title}</a>
+            <a class="title-link hover:underline font-bold" href="/overview/${media_type}/${media_mal_id}">${title}</a>
          </div>
       </div>
    </td>
