@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="shortcut icon" href="/images/icons/favicon.ico" type="image/x-icon" />
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="/css/tailwindcss/tailwind.css" />
+	<link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+	<link rel="stylesheet" href="/css/userProfile.css" />
+
+	<title>User Profile | Animaku</title>
+
+	<script type="module" src="/js/navbar.js" defer></script>
+	<script type="module" src="/js/toggleTheme.js" defer></script>
+	<script type="module" src="/js/userProfileUI.js" defer></script>
+</head>
+
+<body>
+	<header>
+		<%- include('partials/navbar.ejs') %>
+	</header>
+
+	<main class="max-w-7xl mx-auto mt-24 md:mt-28 px-4">
+		<div id="header-container" class="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+			<!-- Avatar -->
+			<div class="relative">
+				<img src="<%= avatar %>" alt="Profile avatar" id="img-avatar-profile"
+						class="h-24 w-24 rounded-full object-cover border-2" />
+			</div>
+
+			<!-- User Info -->
+			<div>
+				<h1 class="text-2xl font-bold"><%= username %></h1>
+				<p class="text-sm opacity-70"><%= email %></p>
+				<p class="text-xs opacity-50 mt-1">Member since <%= accountAge %></p>
+			</div>
+		</div>
+
+		<!-- Content -->
+		<div class="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
+			<!-- Profile -->
+			<div class="card border rounded-md">
+				<div id="profile-info" class="card-body gap-6">
+					<div class="flex items-center justify-between">
+						<h2 class="card-title text-lg">Profile Settings</h2>
+						<button id="btn-edit" class="px-2 py-1 rounded-md">
+							<i class="ri-pencil-line text-base"></i>
+						</button>
+					</div>
+
+					<div class="space-y-4 text-sm">
+						<div>
+							<div class="flex gap-2">
+								<i class="ri-mail-line opacity-60"></i>
+								<p class="opacity-60">Email</p>
+							</div>
+							<p class="font-medium"><%= email %></p>
+						</div>
+
+						<div class="divider my-1"></div>
+
+						<div>
+							<div class="flex gap-2">
+								<i class="ri-user-line opacity-60"></i>
+								<p class="opacity-60">Username</p>
+							</div>
+							<p class="font-medium"><%= username %></p>
+						</div>
+
+						<div class="divider my-1"></div>
+
+						<div>
+							<div class="flex gap-2">
+								<i class="ri-lock-line opacity-60"></i>
+								<p class="opacity-60">Password</p>
+							</div>
+							<p class="tracking-widest">••••••••••</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Edit Profile -->
+				<div id="profile-edit" class="hidden card-body gap-6">
+					<div class="flex items-center justify-between">
+						<h2 class="card-title text-lg">Edit Profile</h2>
+						<button id="btn-close" class="px-2 py-1 rounded-md">
+							<i class="ri-close-line text-base"></i>
+						</button>
+					</div>
+
+					<form class="space-y-4 text-sm" action="/profile/updated" method="post">
+						<fieldset class="fieldset">
+							<legend class="fieldset-legend text-sm">Username</legend>
+							<label class="input validator border rounded-md">
+								<i class="ri-user-line"></i>
+								<input id="username" type="text" name="username" placeholder="Enter your username"
+										pattern="^[A-Za-z0-9_]+$" minlength="3" maxlength="50"
+										title="Only letters, numbers or underscore" />
+							</label>
+							<div class="validator-hint hidden">
+								Must be 3 to 30 characters
+								<br />containing only letters, numbers or underscore
+							</div>
+						</fieldset>
+
+						<fieldset class="fieldset">
+							<legend class="fieldset-legend text-sm">Old Password</legend>
+
+							<label class="input validator border rounded-md">
+								<i class="ri-key-2-line"></i>
+
+								<input id="old-password" name="oldPassword" type="password"
+										placeholder="Enter your old password" minlength="8"
+										pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+										title="Must be more than 8 characters, including number, lowercase letter, uppercase letter" />
+
+								<!-- Password Toggle Button -->
+								<button type="button" id="toggle-old-password" class="rounded-full px-1">
+									<i class="ri-eye-line text-base" id="old-password-eye"></i>
+								</button>
+							</label>
+
+							<p class="validator-hint hidden">
+								Must be more than 8 characters, including
+								<br />At least one number
+								<br />At least one lowercase letter
+								<br />At least one uppercase letter
+							</p>
+						</fieldset>
+
+						<fieldset class="fieldset">
+							<legend class="fieldset-legend text-sm">New Password</legend>
+
+							<label class="input validator border rounded-md">
+								<i class="ri-key-2-line"></i>
+
+								<input id="new-password" name="newPassword" type="password"
+										placeholder="Enter your new password" minlength="8"
+										pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+										title="Must be more than 8 characters, including number, lowercase letter, uppercase letter and old password are required" />
+
+								<!-- Password Toggle Button -->
+								<button type="button" id="toggle-new-password" class="rounded-full px-1">
+									<i class="ri-eye-line text-base" id="new-password-eye"></i>
+								</button>
+							</label>
+
+							<p class="validator-hint hidden">
+								Must be more than 8 characters, including
+								<br />At least one number
+								<br />At least one lowercase letter
+								<br />At least one uppercase letter
+							</p>
+						</fieldset>
+
+						<div class="divider my-1"></div>
+
+						<button type="submit" class="btn-submit border px-4 py-2 rounded-md">Submit</button>
+					</form>
+				</div>
+
+			</div>
+
+			<!-- Anime Stats Card (Coming Soon) -->
+			<div class="card border rounded-md relative overflow-hidden">
+				<div class="card-body">
+					<h2 class="card-title text-lg">Anime Stats</h2>
+
+					<!-- Placeholder -->
+					<div class="flex h-48 flex-col items-center justify-center gap-3 opacity-60">
+						<span class="text-lg font-medium">Coming Soon</span>
+						<p class="text-sm text-center max-w-xs">
+							Anime statistics and progress tracking will be available in a future update.
+						</p>
+					</div>
+				</div>
+
+				<!-- Overlay effect -->
+				<div class="absolute inset-0 bg-base-200/40 pointer-events-none"></div>
+			</div>
+		</div>
+	</main>
+
+	<!-- Toast -->
+	<% if (message) { %>
+	<div id="toast"
+			class="toast toast-end transition-opacity duration-300 border-0 rounded-md shadow-md">
+		<div class="alert alert-success border-0">
+			<span class="font-bold"><%= message %></span>
+		</div>
+	</div>
+	<% } %>
+</body>
+
+</html>
