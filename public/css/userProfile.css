@@ -1,0 +1,105 @@
+@import url('colors.css');
+@import url('global.css');
+
+#header-container {
+	color: var(--text-primary);
+}
+
+#img-avatar-profile {
+	border-color: var(--primary);
+}
+
+.card {
+	background-color: var(--bg-secondary);
+	border-color: var(--border-accent);
+	color: var(--text-primary);
+}
+
+#btn-edit,
+#btn-close {
+	background-color: transparent;
+	color: var(--text-primary);
+	transition: all 200ms ease;
+}
+
+#btn-edit:hover,
+#btn-close:hover {
+	background-color: var(--bg-tertiary);
+	color: var(--primary);
+}
+
+/* Change Profile */
+.input {
+	background-color: var(--bg-tertiary);
+	border-color: var(--border-color);
+	color: var(--text-primary);
+}
+
+.input i {
+	color: var(--text-secondary);
+	opacity: 60%;
+}
+
+.input::placeholder {
+	color: var(--text-secondary);
+	opacity: 60%;
+}
+
+.input.validator:focus-within {
+	border-color: var(--border-accent);
+}
+
+.validator {
+	@layer daisyui.l1.l2.l3 {
+		&:user-valid,
+		&:has(:user-valid) {
+			&,
+			&:focus,
+			&:checked,
+			&[aria-checked='true'],
+			&:focus-within {
+				--input-color: var(--success) /* var(--color-success) */;
+			}
+		}
+		&:user-invalid,
+		&:has(:user-invalid),
+		&[aria-invalid]:not([aria-invalid='false']),
+		&:has([aria-invalid]:not([aria-invalid='false'])) {
+			&,
+			&:focus,
+			&:checked,
+			&[aria-checked='true'],
+			&:focus-within {
+				--input-color: var(--error) /* var(--color-error) */;
+			}
+			& ~ .validator-hint {
+				visibility: visible;
+				color: var(--error) /* var(--color-error) */;
+			}
+		}
+	}
+	&:user-invalid,
+	&:has(:user-invalid),
+	&[aria-invalid]:not([aria-invalid='false']),
+	&:has([aria-invalid]:not([aria-invalid='false'])) {
+		& ~ .validator-hint {
+			display: revert-layer;
+		}
+	}
+}
+
+.btn-submit {
+	background-color: var(--primary);
+	color: var(--bg-primary);
+	transition: all 200ms ease;
+}
+
+.btn-submit:hover {
+	filter: brightness(1.1);
+}
+
+.toast {
+	background-color: var(--error);
+	color: var(--text-primary);
+}
+
