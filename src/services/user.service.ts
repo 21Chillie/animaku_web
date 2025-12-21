@@ -1,5 +1,6 @@
 import * as userModel from '../models/user/user.models';
 import type { User } from '../types/user.types';
+import { hashPassword } from '../utils/passwordHash.utils';
 
 export async function getByUsername(username: string): Promise<User | null> {
 	return userModel.findUserByUsername(username);
@@ -41,4 +42,14 @@ export async function attachGoogle(
 	avatar_url?: string | null
 ): Promise<void> {
 	return userModel.linkGoogleToUser(id, googleId, avatar_url);
+}
+
+export async function changeUsername(id: string, username: string) {
+	return userModel.updateUsername(id, username);
+}
+
+export async function changePassword(id: string, newPassword: string) {
+	const newPasswordHash = await hashPassword(newPassword);
+
+	return userModel.updatePassword(id, newPasswordHash);
 }
