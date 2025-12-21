@@ -379,3 +379,23 @@ tbody tr:hover {
 .hidden-form {
 	display: none;
 }
+
+.watching {
+	color: var(--primary);
+}
+
+.completed {
+	color: var(--success)
+}
+
+.dropped {
+	color: var(--error);
+}
+
+.paused {
+	color: var(--warning);
+}
+
+.plan_watch, .plan_read {
+	color: var(--text-primary);
+}
