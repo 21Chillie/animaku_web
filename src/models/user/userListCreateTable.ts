@@ -60,4 +60,4 @@ export async function createUserListTable(): Promise<void> {
 	}
 }
 
-createUserListTable();
+
