@@ -1,4 +1,4 @@
-# Still on development for v.2.0.0
+# Development completed for v.2.0.0, tidy up some code and make docs
 
 If you want see the old source code just head to branch release/v1.0.0 or click [here](https://github.com/21Chillie/animaku_web/tree/release/v1.0.0)
 
@@ -143,7 +143,7 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Create form for delete user list for each media title
 - [x] Test all the features
 
-**User Profile**
+**User Profile(COMPLETED)**
 
 - [x] Design user profile page
 - [x] Make all updated profile input to send to backend
@@ -152,9 +152,10 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 - [x] Create function for validate new password and change password
 - [x] Test the features
 
-**Error Page**
+**Error Page(COMPLETED)**
 
-- [ ] Do this
+- [x] Design error page
+- [x] Make sure all page can render error ejs page when there is an error
 
 **API and Database: (COMPLETED)**
 
@@ -228,4 +229,4 @@ AnimaKu is a web application built with Node.js, Express, EJS, TailwindCSS, and 
 
 ---
 
-Almost finishhh ....
+It's Finishhh
