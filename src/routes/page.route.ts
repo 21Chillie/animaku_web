@@ -43,7 +43,7 @@ pageRoute.post('/my-list/deleted', isAuthenticated, postDeleteTitleFromList);
 pageRoute.post('/my-list/updated', isAuthenticated, postEditTitleFromList);
 
 // Profile route
-pageRoute.get('/profile', renderUserProfile);
+pageRoute.get('/profile', isAuthenticated, renderUserProfile);
 
 // Profile Updated
-pageRoute.post('/profile/updated', userProfileUpdated);
+pageRoute.post('/profile/updated', isAuthenticated, userProfileUpdated);
