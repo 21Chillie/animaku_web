@@ -66,4 +66,25 @@ app.use('/auth', authRoute);
 // Api routes
 app.use('/api', apiRoutes);
 
+app.use((req, res) => {
+	if (req.originalUrl.startsWith('/api')) {
+		return res.render('error', {
+			success: false,
+			status_code: 404,
+			error: 'Page Not Found',
+			message: 'API endpoint does not exist',
+			path: req.originalUrl,
+		});
+	}
+
+	return res.render('error', {
+		success: false,
+		status_code: 404,
+		error: 'Page Not Found',
+		message:
+			"The page you're looking for doesn't exist or has been moved. Don't worry, even the best explorers get lost sometimes.",
+		path: req.originalUrl,
+	});
+});
+
 export default app;
