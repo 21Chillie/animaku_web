@@ -12,22 +12,24 @@ export async function renderUserProfile(req: Request, res: Response) {
 	const user = req.user?.id;
 
 	if (!user) {
-		return res.status(403).json({
+		return res.render('error', {
 			success: false,
 			status_code: 403,
 			error: 'Forbidden',
 			message: 'You need to login/signup to access this page or content',
+			path: null,
 		});
 	}
 
 	const userData = await getById(user);
 
 	if (!userData) {
-		return res.status(404).json({
+		return res.render('error', {
 			success: false,
 			status_code: 404,
 			error: 'Not Found',
 			message: `User data with id ${user} not found`,
+			path: null,
 		});
 	}
 
@@ -55,18 +57,19 @@ export async function userProfileUpdated(
 	const user = req.user;
 
 	if (!user) {
-		return res.status(403).json({
+		return res.render('error', {
 			success: false,
 			status_code: 403,
 			error: 'Forbidden',
 			message: 'You need to login/signup to access this page or content',
+			path: null,
 		});
 	}
 
 	const userData = await getById(user.id);
 
 	if (!userData) {
-		return res.status(404).json({
+		return res.render('error', {
 			success: false,
 			status_code: 404,
 			error: 'Not Found',

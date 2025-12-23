@@ -101,10 +101,12 @@ export async function postAddTitleToList(req: Request<{}, {}, AddListRequestBody
 			console.error(err.message, err.stack);
 		}
 
-		res.status(500).json({
+		return res.render('error', {
+			success: false,
 			status_code: 500,
 			error: 'Internal Server Error',
 			message: 'Something went wrong while trying to insert media to user list',
+			path: req.originalUrl,
 		});
 	}
 }
@@ -155,10 +157,12 @@ export async function postDeleteTitleFromList(
 			console.error(err.message, err.stack);
 		}
 
-		res.status(500).json({
+		return res.render('error', {
+			success: false,
 			status_code: 500,
 			error: 'Internal Server Error',
-			message: 'Something went wrong while trying to insert media to user list',
+			message: 'Something went wrong while trying to delete media to user list',
+			path: req.originalUrl,
 		});
 	}
 }
@@ -231,11 +235,12 @@ export async function postEditTitleFromList(
 	} catch (err) {
 		if (err instanceof Error) {
 			console.error(err.message, err.stack);
-
-			return res.status(500).json({
+			return res.render('error', {
+				success: false,
 				status_code: 500,
 				error: 'Internal Server Error',
-				message: err.message,
+				message: 'Something went wrong while trying to updated media to user list',
+				path: req.originalUrl,
 			});
 		}
 	}

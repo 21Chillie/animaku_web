@@ -135,9 +135,13 @@ export async function renderIndex(req: Request, res: Response) {
 	} catch (err) {
 		if (err instanceof Error) {
 			console.error('Error while rendering index page:', err);
-			return res
-				.status(500)
-				.json({ status_code: 500, error: 'Internal Server Error', message: err.message });
+			return res.render('error', {
+				success: false,
+				status_code: 500,
+				error: 'Internal Server Error',
+				message: err.message,
+				path: req.originalUrl,
+			});
 		}
 	}
 }

@@ -52,10 +52,28 @@ export async function renderCharacter(req: Request, res: Response) {
 	try {
 		const { data, about } = await getMediaCharacterFullData(id, daysThreshold);
 
+		if (!data || about) {
+			return res.render('error', {
+				success: false,
+				status_code: 500,
+				error: 'Internal Server Error',
+				message: 'Something went wrong while getting character data',
+				path: req.originalUrl,
+			});
+		}
+
 		res.render('character', { data, about });
 	} catch (err) {
 		if (err instanceof Error) {
-			return res.status(500).json({ success: false, error: err.message });
+			console.error(err);
 		}
+
+		res.render('error', {
+			success: false,
+			status_code: 500,
+			error: 'Internal Server Error',
+			message: 'Ooops something went wrong (unknown error)',
+			path: req.originalUrl,
+		});
 	}
 }

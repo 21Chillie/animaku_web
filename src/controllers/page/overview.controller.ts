@@ -337,9 +337,13 @@ export async function renderOverview(req: Request<{ id: string; type: MediaType 
 		}
 	} catch (err) {
 		if (err instanceof Error) {
-			res
-				.status(500)
-				.json({ status_code: 500, error: 'Internal Server Error', message: err.message });
+			return res.render('error', {
+				success: false,
+				status_code: 500,
+				error: 'Internal Server Error',
+				message: err.message,
+				path: req.originalUrl,
+			});
 		}
 	}
 }
