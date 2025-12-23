@@ -1,0 +1,24 @@
+@import url('colors.css');
+@import url('global.css');
+
+#status-code,
+#status-code-small {
+	color: var(--primary);
+}
+
+#error {
+  color: var(--text-primary);
+}
+
+.message {
+  color: var(--text-secondary);
+}
+
+.path-message {
+  color: var(--text-primary);
+}
+
+code {
+  background-color: var(--bg-tertiary);
+  color: var(--primary);
+}
