@@ -52,7 +52,7 @@ export async function renderCharacter(req: Request, res: Response) {
 	try {
 		const { data, about } = await getMediaCharacterFullData(id, daysThreshold);
 
-		if (!data || about) {
+		if (!data || !about) {
 			return res.render('error', {
 				success: false,
 				status_code: 500,
