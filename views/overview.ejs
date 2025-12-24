@@ -26,9 +26,9 @@
 <body>
 	<header><%- include('partials/navbar.ejs') %></header>
 
-	<main>
+	<main class="mt-64">
 		<!-- Banner -->
-		<section id="banner-section" class="mt-16 md:mt-18 lg:mt-20">
+		<section id="banner-section">
 			<div class="-z-10 relative h-300px md:h-400px overflow-hidden">
 				<img src="<%= data.anime?.data?.images?.webp?.large_image_url || data.anime?.data?.images?.webp?.image_url || data.anime?.data?.images?.jpg?.large_image_url ||
 							data?.anime?.data?.images?.jpg?.image_url || data.manga?.data?.images?.webp?.large_image_url || data.manga?.data?.images?.webp?.image_url || data.manga?.data?.images?.jpg?.large_image_url || data.manga?.data?.images?.jpg?.image_url || "/images/no-img-placeholder.webp" %>"
