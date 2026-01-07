@@ -1,40 +1,41 @@
-import cors from 'cors';
-import express from 'express';
-import session from 'express-session';
-import passport from 'passport';
-import path from 'path';
-import { basicSecurityHeaders } from './config/basicSecurity.config';
-import { NODE_ENV, SESSION_SECRET } from './config/env.config';
-import './config/passport';
-import { apiRoutes } from './routes/api.routes';
-import { authRoute } from './routes/auth.routes';
-import { pageRoute } from './routes/page.route';
+import cors from "cors";
+import express from "express";
+import session from "express-session";
+import passport from "passport";
+import path from "path";
+import { basicSecurityHeaders } from "./config/basicSecurity.config";
+import { NODE_ENV, SESSION_SECRET } from "./config/env.config";
+import "./config/passport";
+import { apiRoutes } from "./routes/api.routes";
+import { authRoute } from "./routes/auth.routes";
+import { pageRoute } from "./routes/page.route";
+import { corsOptions } from "./config/cors";
 
 // Initialize express app
 const app = express();
 
 // Static files - relative to project root
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, "../public")));
 
 // View engine setup
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '../views'));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "../views"));
 
 // Middleware
-// app.use(basicSecurityHeaders); // remove if not needed
-app.use(cors());
+app.use(basicSecurityHeaders); // remove if not needed
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
 	session({
-		secret: SESSION_SECRET || 'secretpassworddefault',
+		secret: SESSION_SECRET || "secretpassworddefault",
 		resave: false,
 		saveUninitialized: false,
 		cookie: {
 			httpOnly: true,
-			secure: NODE_ENV === 'production',
-			sameSite: 'lax',
+			secure: NODE_ENV === "production",
+			sameSite: "lax",
 			maxAge: 1000 * 60 * 60 * 24 * 7,
 		},
 	})
@@ -58,29 +59,29 @@ app.use((req, res, next) => {
 });
 
 // 	Index Route
-app.use('/', pageRoute);
+app.use("/", pageRoute);
 
 // Auth Route
-app.use('/auth', authRoute);
+app.use("/auth", authRoute);
 
 // Api routes
-app.use('/api', apiRoutes);
+app.use("/api", apiRoutes);
 
 app.use((req, res) => {
-	if (req.originalUrl.startsWith('/api')) {
-		return res.render('error', {
+	if (req.originalUrl.startsWith("/api")) {
+		return res.render("error", {
 			success: false,
 			status_code: 404,
-			error: 'Page Not Found',
-			message: 'API endpoint does not exist',
+			error: "Page Not Found",
+			message: "API endpoint does not exist",
 			path: req.originalUrl,
 		});
 	}
 
-	return res.render('error', {
+	return res.render("error", {
 		success: false,
 		status_code: 404,
-		error: 'Page Not Found',
+		error: "Page Not Found",
 		message:
 			"The page you're looking for doesn't exist or has been moved. Don't worry, even the best explorers get lost sometimes.",
 		path: req.originalUrl,
