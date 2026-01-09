@@ -1,10 +1,6 @@
-# Animaku Web
-
 ## Table of Contents
 
 - [Animaku Web](#animaku-web)
-  - [Table of Contents](#table-of-contents)
-- [Animaku Web](#animaku-web-1)
   - [Page List](#page-list)
   - [Improvements in v2.0.0](#improvements-in-v200)
     - [Main Goal](#main-goal)
