@@ -1,8 +1,8 @@
-import { PORT } from "./env.config";
+import { DOMAIN_NAME, PORT } from "./env.config";
 
 // Allowed origins
 const allowedOrigins = [
-	"https://animaku.chillie.dpdns.org", // Cloudflare tunnel
+	`${DOMAIN_NAME}`, // Cloudflare tunnel
 	`http://localhost:${PORT}`, // Local dev
 ];
 

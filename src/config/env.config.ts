@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config({ quiet: true });
 
@@ -15,4 +15,5 @@ export const {
 	GOOGLE_CLIENT_ID,
 	GOOGLE_CLIENT_SECRET,
 	GOOGLE_CALLBACK_URL,
+	DOMAIN_NAME,
 } = process.env;
