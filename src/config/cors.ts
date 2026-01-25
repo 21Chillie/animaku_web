@@ -2,7 +2,7 @@ import { DOMAIN_NAME, PORT } from "./env.config";
 
 // Allowed origins
 const allowedOrigins = [
-	`${DOMAIN_NAME}`, // Cloudflare tunnel
+	DOMAIN_NAME, // Cloudflare tunnel
 	`http://localhost:${PORT}`, // Local dev
 ];
 
@@ -10,7 +10,7 @@ const allowedOrigins = [
 export const corsOptions = {
 	origin: function (
 		origin: string | undefined,
-		callback: (err: Error | null, allow?: boolean) => void
+		callback: (err: Error | null, allow?: boolean) => void,
 	) {
 		// Allow requests with no origin (like mobile apps, curl, or server-to-server requests)
 		if (!origin) return callback(null, true);
