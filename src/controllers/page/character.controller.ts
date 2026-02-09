@@ -1,12 +1,12 @@
-import type { Request, Response } from 'express';
+import type { Request, Response } from "express";
 import {
 	getCharacterFullByMalId,
 	getOldCharacterFullByMalId,
 	insertCharacterFullByMalId,
-} from '../../models/character/characterFull.model';
-import { fetchCharacterFullData } from '../../services/fetchCharacterFull.service';
-import { parseSynopsis } from '../../utils/parseData.utils';
-import { mediaLocks } from '../../utils/fetchLock.utils';
+} from "../../models/character/characterFull.model";
+import { fetchCharacterFullData } from "../../services/fetchCharacterFull.service";
+import { parseSynopsis } from "../../utils/parseData.utils";
+import { mediaLocks } from "../../utils/fetchLock.utils";
 
 async function getMediaCharacterFullData(id: number, daysThreshold: number) {
 	return mediaLocks(id, async () => {
@@ -46,33 +46,33 @@ async function getMediaCharacterFullData(id: number, daysThreshold: number) {
 }
 
 export async function renderCharacter(req: Request, res: Response) {
-	const id = parseInt(req.params.id);
+	const id = parseInt(req.params.id as string);
 	const daysThreshold = 30;
 
 	try {
 		const { data, about } = await getMediaCharacterFullData(id, daysThreshold);
 
 		if (!data || !about) {
-			return res.render('error', {
+			return res.render("error", {
 				success: false,
 				status_code: 500,
-				error: 'Internal Server Error',
-				message: 'Something went wrong while getting character data',
+				error: "Internal Server Error",
+				message: "Something went wrong while getting character data",
 				path: req.originalUrl,
 			});
 		}
 
-		res.render('character', { data, about });
+		res.render("character", { data, about });
 	} catch (err) {
 		if (err instanceof Error) {
 			console.error(err);
 		}
 
-		res.render('error', {
+		res.render("error", {
 			success: false,
 			status_code: 500,
-			error: 'Internal Server Error',
-			message: 'Ooops something went wrong (unknown error)',
+			error: "Internal Server Error",
+			message: "Ooops something went wrong (unknown error)",
 			path: req.originalUrl,
 		});
 	}

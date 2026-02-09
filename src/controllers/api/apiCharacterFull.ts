@@ -8,7 +8,7 @@ import { fetchCharacterFullData } from '../../services/fetchCharacterFull.servic
 import { mediaLocks } from '../../utils/fetchLock.utils';
 
 export async function getCharacterFull(req: Request, res: Response) {
-	const id = parseInt(req.params.id);
+	const id = parseInt(req.params.id as string);
 	const daysThreshold = 30;
 
 	if (isNaN(id)) {

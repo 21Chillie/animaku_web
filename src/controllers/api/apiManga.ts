@@ -99,7 +99,7 @@ export async function getManga(req: Request, res: Response) {
 }
 
 export async function getMangaById(req: Request, res: Response) {
-	const mal_id = parseInt(req.params.id);
+	const mal_id = parseInt(req.params.id as string);
 
 	if (isNaN(mal_id)) {
 		console.log('Invalid title mal_id');

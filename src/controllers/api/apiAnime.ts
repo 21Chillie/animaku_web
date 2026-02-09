@@ -1,15 +1,15 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
 import {
 	getAllAnime,
 	getAnimeByMalId,
 	getAnimePaginated,
 	insertAnimeDataByMalId,
-} from '../../models/anime/animeDBModel';
-import { seedTableAnime } from '../../models/anime/animeDBSeedTable';
-import { fetchAnimeByMalId } from '../../services/fetchTitleData';
-import { fetchTopAnimeBatch } from '../../services/fetchTopAnime.service';
-import { batchMediaLocks } from '../../utils/fetchLock.utils';
+} from "../../models/anime/animeDBModel";
+import { seedTableAnime } from "../../models/anime/animeDBSeedTable";
+import { fetchAnimeByMalId } from "../../services/fetchTitleData";
+import { fetchTopAnimeBatch } from "../../services/fetchTopAnime.service";
+import { batchMediaLocks } from "../../utils/fetchLock.utils";
 
 export async function getAnime(req: Request, res: Response) {
 	// the higher the number, the longer and more data will be retrieved
@@ -22,13 +22,13 @@ export async function getAnime(req: Request, res: Response) {
 	const offset = (page - 1) * limit;
 
 	// Search filter, order by, order direction
-	const search = (req.query.search as string) || '';
-	const orderBy = (req.query.order_by as string) || 'rank';
-	const orderDirection = (req.query.order_direction as string) || 'ASC';
+	const search = (req.query.search as string) || "";
+	const orderBy = (req.query.order_by as string) || "rank";
+	const orderDirection = (req.query.order_direction as string) || "ASC";
 
 	// filter by type/status
-	const type = (req.query.type as string) || '';
-	const status = (req.query.status as string) || '';
+	const type = (req.query.type as string) || "";
+	const status = (req.query.status as string) || "";
 
 	try {
 		let animeDatabase = await getAllAnime();
@@ -38,13 +38,13 @@ export async function getAnime(req: Request, res: Response) {
 				const recheck = await getAllAnime();
 				if (recheck.length >= 1000) return;
 
-				console.log('Database empty, fetching from api...');
+				console.log("Database empty, fetching from api...");
 
 				// Fetch Data then seed to database
 				const dataFromAPI = await fetchTopAnimeBatch(maxPage);
 				await seedTableAnime(dataFromAPI);
 				animeDatabase = await getAllAnime();
-				console.log('Successfully inserting into database');
+				console.log("Successfully inserting into database");
 			});
 		}
 
@@ -56,14 +56,14 @@ export async function getAnime(req: Request, res: Response) {
 			orderBy,
 			orderDirection,
 			type,
-			status
+			status,
 		);
 		const totalPages = Math.ceil(totalRecords / limit);
 
 		if (limit > 30) {
 			return res.status(400).json({
 				success: false,
-				error: 'Bad Request',
+				error: "Bad Request",
 				message: `The input limit value is ${limit} and it's higher than the configured '30'`,
 			});
 		}
@@ -91,21 +91,21 @@ export async function getAnime(req: Request, res: Response) {
 		console.error(err);
 		res.status(500).json({
 			success: false,
-			error: 'Internal Server Error',
-			message: 'Something went wrong while getting anime data',
+			error: "Internal Server Error",
+			message: "Something went wrong while getting anime data",
 		});
 	}
 }
 
 export async function getAnimeById(req: Request, res: Response) {
-	const mal_id = parseInt(req.params.id);
+	const mal_id = parseInt(req.params.id as string);
 
 	if (isNaN(mal_id)) {
-		console.log('Invalid title mal_id');
+		console.log("Invalid title mal_id");
 		return res.status(400).json({
 			success: false,
-			error: 'Bad Request',
-			message: 'Invalid title mal_id, the mal_id must be a number',
+			error: "Bad Request",
+			message: "Invalid title mal_id, the mal_id must be a number",
 		});
 	}
 
@@ -119,7 +119,7 @@ export async function getAnimeById(req: Request, res: Response) {
 			if (!dataFromAPI) {
 				return res.status(404).json({
 					success: false,
-					error: 'Resource Not Found',
+					error: "Resource Not Found",
 					message: `Anime with mal id ${mal_id} does not exist`,
 				});
 			}
@@ -131,10 +131,10 @@ export async function getAnimeById(req: Request, res: Response) {
 		res.status(200).json({ success: true, data: animeData });
 	} catch (err) {
 		if (err instanceof Error) {
-			console.error('Error fetching anime:', err);
+			console.error("Error fetching anime:", err);
 			return res.status(500).json({
 				success: false,
-				error: 'Internal Server Error',
+				error: "Internal Server Error",
 				message: `Something went wrong while getting anime with mal id ${mal_id}`,
 			});
 		}
