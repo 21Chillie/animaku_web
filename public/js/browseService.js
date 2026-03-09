@@ -1,21 +1,21 @@
-const searchInput = document.getElementById('search-filter');
-const mediaFilter = document.getElementById('media-filter');
+const searchInput = document.getElementById("search-filter");
+const mediaFilter = document.getElementById("media-filter");
 
 // Desktop DOM Selector
-const typeFilter = document.querySelector('#type-select');
-const statusFilter = document.querySelector('#status-select');
-const sortByFilter = document.querySelector('#sort-by-select');
-const sortDirectionFilter = document.querySelector('#sort-direction-select');
+const typeFilter = document.querySelector("#type-select");
+const statusFilter = document.querySelector("#status-select");
+const sortByFilter = document.querySelector("#sort-by-select");
+const sortDirectionFilter = document.querySelector("#sort-direction-select");
 
-const btnApplyFilter = document.querySelector('#btn-apply-filter');
-const btnResetFilter = document.querySelector('#btn-reset-filter');
+const btnApplyFilter = document.querySelector("#btn-apply-filter");
+const btnResetFilter = document.querySelector("#btn-reset-filter");
 
-const listContainer = document.getElementById('list-container');
+const listContainer = document.getElementById("list-container");
 
 let timeoutId;
 let searchValue;
 
-searchInput.addEventListener('input', (e) => {
+searchInput.addEventListener("input", (e) => {
 	searchValue = e.target.value.trim().toLowerCase();
 
 	// Clear the previous timeout
@@ -27,23 +27,23 @@ searchInput.addEventListener('input', (e) => {
 	}, 1000);
 });
 
-searchInput.addEventListener('keypress', (e) => {
-	if (e.key === 'Enter') {
+searchInput.addEventListener("keypress", (e) => {
+	if (e.key === "Enter") {
 		searchValue = e.target.value.trim().toLowerCase();
 		fetchTitle();
 		e.preventDefault();
 	}
 });
 
-btnApplyFilter.addEventListener('click', () => {
+btnApplyFilter.addEventListener("click", () => {
 	fetchTitle();
 });
 
-btnResetFilter.addEventListener('click', () => {
+btnResetFilter.addEventListener("click", () => {
 	fetchTitle();
 });
 
-mediaFilter.addEventListener('change', () => {
+mediaFilter.addEventListener("change", () => {
 	fetchTitle();
 });
 
@@ -52,39 +52,39 @@ function buildSearchParams() {
 
 	// List parameters
 	const searchParams = searchValue;
-	const typeParams = typeFilter ? typeFilter.value : '';
-	const statusParams = statusFilter ? statusFilter.value : '';
-	const sortByParams = sortByFilter ? sortByFilter.value : 'rank';
-	const sortDirectionParams = sortDirectionFilter ? sortDirectionFilter.value : 'asc';
+	const typeParams = typeFilter ? typeFilter.value : "";
+	const statusParams = statusFilter ? statusFilter.value : "";
+	const sortByParams = sortByFilter ? sortByFilter.value : "rank";
+	const sortDirectionParams = sortDirectionFilter ? sortDirectionFilter.value : "asc";
 	const page = 1;
 	const limit = 30;
 
 	if (searchParams) {
-		params.append('search', searchParams);
+		params.append("search", searchParams);
 	}
 
 	if (typeParams) {
-		params.append('type', typeParams);
+		params.append("type", typeParams);
 	}
 
 	if (statusParams) {
-		params.append('status', statusParams);
+		params.append("status", statusParams);
 	}
 
 	if (sortByParams) {
-		params.append('order_by', sortByParams);
+		params.append("order_by", sortByParams);
 	}
 
 	if (sortDirectionParams) {
-		params.append('order_direction', sortDirectionParams);
+		params.append("order_direction", sortDirectionParams);
 	}
 
 	if (page) {
-		params.append('page', `${page}`);
+		params.append("page", `${page}`);
 	}
 
 	if (limit) {
-		params.append('limit', `${limit}`);
+		params.append("limit", `${limit}`);
 	}
 
 	return params;
@@ -92,8 +92,6 @@ function buildSearchParams() {
 
 async function fetchTitle() {
 	showLoading();
-
-	await new Promise((resolve) => setTimeout(resolve, 500));
 
 	const params = buildSearchParams();
 	const mediaType = mediaFilter.value;
@@ -148,13 +146,13 @@ function renderTitle(result, mediaType) {
 						<div
 								class="absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold bg-float flex items-center gap-1">
 							<i class="ri-star-fill icon-star"></i>
-							<span>${title.data.score || 'N/A'}</span>
+							<span>${title.data.score || "N/A"}</span>
 						</div>
 
 						<div
 								class="absolute top-2 left-2 rounded-md px-2 py-1 text-xs font-semibold bg-float flex items-center gap-1">
 							<i class="ri-heart-fill icon-love"></i>
-							<span>#${title.data.popularity || 'N/A'}</span>
+							<span>#${title.data.popularity || "N/A"}</span>
 						</div>
 
 							<div
@@ -171,12 +169,10 @@ function renderTitle(result, mediaType) {
 								<p class="text-sm opacity-80">
 									${title.data.type} - 
                 ${
-									(title.data.episodes ?? title.data.chapters ?? 'N/A') +
-									(title.data.episodes != null
-										? ' Episodes'
-										: title.data.chapters != null
-										? ' Chapters'
-										: '')
+									(title.data.episodes ?? title.data.chapters ?? "N/A") +
+									(title.data.episodes != null ? " Episodes"
+									: title.data.chapters != null ? " Chapters"
+									: "")
 								}
 
 								</p>
@@ -186,7 +182,7 @@ function renderTitle(result, mediaType) {
 				</a>
     `;
 		})
-		.join('');
+		.join("");
 
 	listContainer.innerHTML = header + cards;
 }
